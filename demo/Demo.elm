@@ -21,6 +21,7 @@ import Material.Scheme as Scheme
 
 import Demo.Buttons
 import Demo.Menus
+import Demo.Tables
 import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
@@ -72,6 +73,7 @@ type alias Model =
   , snackbar : Demo.Snackbar.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
+  , tables : Demo.Tables.Model
   }
 
 
@@ -87,6 +89,7 @@ model =
   , snackbar = Demo.Snackbar.model
   --, template = Demo.Template.model
   , selectedTab = 0
+  , tables = Demo.Tables.model
   }
 
 
@@ -109,6 +112,7 @@ type Msg
   | TextfieldMsg Demo.Textfields.Msg
   | SnackbarMsg Demo.Snackbar.Msg
   | TogglesMsg Demo.Toggles.Msg
+  | TablesMsg Demo.Tables.Msg
 --  | TemplateMsg Demo.Template.Msg
 
 
@@ -165,9 +169,10 @@ update action model =
 --
     TogglesMsg    a -> lift .toggles   (\m x->{m|toggles    =x}) TogglesMsg Demo.Toggles.update   a model
 --
+    TablesMsg   a -> lift  .tables    (\m x->{m|tables   =x}) TablesMsg  Demo.Tables.update    a model
+
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
 
-        
 
 -- VIEW
 
@@ -216,7 +221,7 @@ tabs =
   , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
   , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
   --, ("Template", "tempate", .template >> Demo.Template.view >> App.map TemplateMsg)
-  --    Demo.Template.view (Signal.forwardTo addr TemplateMsg) model.template)
+  , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
   ]
 
 
