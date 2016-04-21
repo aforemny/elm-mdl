@@ -9896,6 +9896,9 @@ Elm.DOM.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var className = A2($Json$Decode.at,
+   _U.list(["className"]),
+   $Json$Decode.string);
    var Rectangle = F4(function (a,b,c,d) {
       return {top: a,left: b,width: c,height: d};
    });
@@ -9917,6 +9920,33 @@ Elm.DOM.make = function (_elm) {
    var offsetWidth = A2($Json$Decode._op[":="],
    "offsetWidth",
    $Json$Decode.$float);
+   var childNodes = function (decoder) {
+      var loop = F2(function (idx,xs) {
+         return A2($Json$Decode.andThen,
+         $Json$Decode.maybe(A2($Json$Decode._op[":="],
+         $Basics.toString(idx),
+         decoder)),
+         function (_p0) {
+            return A2($Maybe.withDefault,
+            $Json$Decode.succeed(xs),
+            A2($Maybe.map,
+            function (x) {
+               return A2(loop,idx + 1,A2($List._op["::"],x,xs));
+            },
+            _p0));
+         });
+      });
+      return A2($Json$Decode.map,
+      $List.reverse,
+      A2($Json$Decode._op[":="],"childNodes",A2(loop,0,_U.list([]))));
+   };
+   var childNode = function (idx) {
+      return $Json$Decode.at(_U.list(["childNodes"
+                                     ,$Basics.toString(idx)]));
+   };
+   var parentElement = function (decoder) {
+      return A2($Json$Decode._op[":="],"parentElement",decoder);
+   };
    var offsetParent = F2(function (x,decoder) {
       return $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],
                                         "offsetParent",
@@ -9935,19 +9965,19 @@ Elm.DOM.make = function (_elm) {
       scrollTop,
       offsetLeft,
       offsetTop),
-      function (_p0) {
-         var _p1 = _p0;
-         var _p3 = _p1._1;
-         var _p2 = _p1._0;
+      function (_p1) {
+         var _p2 = _p1;
+         var _p4 = _p2._1;
+         var _p3 = _p2._0;
          return A2(offsetParent,
-         {ctor: "_Tuple2",_0: _p2,_1: _p3},
-         A2(position,_p2,_p3));
+         {ctor: "_Tuple2",_0: _p3,_1: _p4},
+         A2(position,_p3,_p4));
       });
    });
    var boundingClientRect = A4($Json$Decode.object3,
-   F3(function (_p4,width,height) {
-      var _p5 = _p4;
-      return {top: _p5._1,left: _p5._0,width: width,height: height};
+   F3(function (_p5,width,height) {
+      var _p6 = _p5;
+      return {top: _p6._1,left: _p6._0,width: width,height: height};
    }),
    A2(position,0,0),
    offsetWidth,
@@ -9958,6 +9988,9 @@ Elm.DOM.make = function (_elm) {
    return _elm.DOM.values = {_op: _op
                             ,target: target
                             ,offsetParent: offsetParent
+                            ,parentElement: parentElement
+                            ,childNode: childNode
+                            ,childNodes: childNodes
                             ,offsetWidth: offsetWidth
                             ,offsetHeight: offsetHeight
                             ,offsetLeft: offsetLeft
@@ -9965,6 +9998,7 @@ Elm.DOM.make = function (_elm) {
                             ,scrollLeft: scrollLeft
                             ,scrollTop: scrollTop
                             ,boundingClientRect: boundingClientRect
+                            ,className: className
                             ,Rectangle: Rectangle};
 };
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -12315,7 +12349,7 @@ Elm.Material.Style.make = function (_elm) {
    var collect = A2($List.foldl,
    collect1,
    {classes: _U.list([]),css: _U.list([]),attrs: _U.list([])});
-   var styled = F3(function (ctor,styles,attrs$) {
+   var styled = F2(function (ctor,styles) {
       var _p4 = collect(styles);
       var classes = _p4.classes;
       var css = _p4.css;
@@ -12324,13 +12358,13 @@ Elm.Material.Style.make = function (_elm) {
       $Html$Attributes.style(css),
       A2($List._op["::"],
       $Html$Attributes.$class(A2($String.join," ",classes)),
-      A2($List.append,attrs,attrs$))));
+      attrs)));
    });
    var div = F2(function (styles,elems) {
-      return A4(styled,$Html.div,styles,_U.list([]),elems);
+      return A3(styled,$Html.div,styles,elems);
    });
    var span = F2(function (styles,elems) {
-      return A4(styled,$Html.span,styles,_U.list([]),elems);
+      return A3(styled,$Html.span,styles,elems);
    });
    var Summary = F3(function (a,b,c) {
       return {attrs: a,classes: b,css: c};
@@ -12413,18 +12447,15 @@ Elm.Material.Icon.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var view = F3(function (name,styling,attrs) {
-      return A4($Material$Style.styled,
+   var view = F2(function (name,styling) {
+      return A3($Material$Style.styled,
       $Html.i,
       A2($List._op["::"],
       $Material$Style.cs("material-icons"),
       styling),
-      attrs,
       _U.list([$Html.text(name)]));
    });
-   var i = function (name) {
-      return A3(view,name,_U.list([]),_U.list([]));
-   };
+   var i = function (name) {    return A2(view,name,_U.list([]));};
    var size48 = A2($Material$Style.css,"font-size","48px");
    var size36 = A2($Material$Style.css,"font-size","36px");
    var size24 = A2($Material$Style.css,"font-size","24px");
@@ -12853,10 +12884,13 @@ Elm.Material.Helpers.make = function (_elm) {
       $Basics.always($Task.succeed(x)),
       $Task.sleep(t)));
    });
+   var fx = function (_p0) {
+      return $Effects.task($Task.succeed(_p0));
+   };
    var lift = F6(function (get,set,fwd,update,action,model) {
-      var _p0 = A2(update,action,get(model));
-      var submodel$ = _p0._0;
-      var e = _p0._1;
+      var _p1 = A2(update,action,get(model));
+      var submodel$ = _p1._0;
+      var e = _p1._1;
       return {ctor: "_Tuple2"
              ,_0: A2(set,model,submodel$)
              ,_1: A2($Effects.map,fwd,e)};
@@ -12866,21 +12900,21 @@ Elm.Material.Helpers.make = function (_elm) {
              ,_0: A2(set,model,A2(update,action,get(model)))
              ,_1: $Effects.none};
    });
-   var map2nd = F2(function (f,_p1) {
-      var _p2 = _p1;
-      return {ctor: "_Tuple2",_0: _p2._0,_1: f(_p2._1)};
+   var map2nd = F2(function (f,_p2) {
+      var _p3 = _p2;
+      return {ctor: "_Tuple2",_0: _p3._0,_1: f(_p3._1)};
    });
-   var map1st = F2(function (f,_p3) {
-      var _p4 = _p3;
-      return {ctor: "_Tuple2",_0: f(_p4._0),_1: _p4._1};
+   var map1st = F2(function (f,_p4) {
+      var _p5 = _p4;
+      return {ctor: "_Tuple2",_0: f(_p5._0),_1: _p5._1};
    });
-   var map2 = F2(function (f,_p5) {
-      var _p6 = _p5;
-      return {ctor: "_Tuple3",_0: _p6._0,_1: f(_p6._1),_2: _p6._2};
+   var map2 = F2(function (f,_p6) {
+      var _p7 = _p6;
+      return {ctor: "_Tuple3",_0: _p7._0,_1: f(_p7._1),_2: _p7._2};
    });
-   var map1 = F2(function (f,_p7) {
-      var _p8 = _p7;
-      return {ctor: "_Tuple3",_0: f(_p8._0),_1: _p8._1,_2: _p8._2};
+   var map1 = F2(function (f,_p8) {
+      var _p9 = _p8;
+      return {ctor: "_Tuple3",_0: f(_p9._0),_1: _p9._1,_2: _p9._2};
    });
    var blurOn = function (evt) {
       return A2($Html$Attributes.attribute,
@@ -12890,17 +12924,17 @@ Elm.Material.Helpers.make = function (_elm) {
    var clip = F3(function (lower,upper,k) {
       return A2($Basics.max,lower,A2($Basics.min,k,upper));
    });
-   var mapFx = F2(function (f,_p9) {
-      var _p10 = _p9;
+   var mapFx = F2(function (f,_p10) {
+      var _p11 = _p10;
       return {ctor: "_Tuple2"
-             ,_0: _p10._0
-             ,_1: A2($Effects.map,f,_p10._1)};
+             ,_0: _p11._0
+             ,_1: A2($Effects.map,f,_p11._1)};
    });
-   var addFx = F2(function (effect1,_p11) {
-      var _p12 = _p11;
+   var addFx = F2(function (effect1,_p12) {
+      var _p13 = _p12;
       return {ctor: "_Tuple2"
-             ,_0: _p12._0
-             ,_1: $Effects.batch(_U.list([effect1,_p12._1]))};
+             ,_0: _p13._0
+             ,_1: $Effects.batch(_U.list([effect1,_p13._1]))};
    });
    var effect = F2(function (e,x) {
       return {ctor: "_Tuple2",_0: x,_1: e};
@@ -12925,6 +12959,7 @@ Elm.Material.Helpers.make = function (_elm) {
                                          ,map2nd: map2nd
                                          ,lift$: lift$
                                          ,lift: lift
+                                         ,fx: fx
                                          ,delay: delay};
 };
 Elm.Material = Elm.Material || {};
@@ -13014,10 +13049,8 @@ Elm.Material.Grid.make = function (_elm) {
    });
    var Cell = function (a) {    return {ctor: "Cell",_0: a};};
    var cell = F2(function (styling,elms) {
-      return Cell(A4($Material$Style.styled,
-      $Html.div,
+      return Cell(A2($Material$Style.div,
       A2($List._op["::"],$Material$Style.cs("mdl-cell"),styling),
-      _U.list([]),
       elms));
    });
    var Phone = {ctor: "Phone"};
@@ -13025,10 +13058,8 @@ Elm.Material.Grid.make = function (_elm) {
    var Desktop = {ctor: "Desktop"};
    var All = {ctor: "All"};
    var grid = F2(function (styling,cells) {
-      return A4($Material$Style.styled,
-      $Html.div,
+      return A2($Material$Style.div,
       A2($List._op["::"],$Material$Style.cs("mdl-grid"),styling),
-      _U.list([]),
       A2($List.map,
       function (_p5) {
          var _p6 = _p5;
@@ -13758,7 +13789,7 @@ Elm.Material.Button.make = function (_elm) {
       observers);
    });
    var view = F5(function (kind,addr,model,styling,html) {
-      return A4($Material$Style.styled,
+      return A3($Material$Style.styled,
       $Html.button,
       A2($List._op["::"],
       $Material$Style.cs("mdl-button"),
@@ -13770,10 +13801,13 @@ Elm.Material.Button.make = function (_elm) {
       !_U.eq(model,S($Maybe.Nothing))),
       A2($List._op["::"],
       A2($Material$Style.cs$,kind,!_U.eq(kind,"")),
-      styling)))),
-      _U.list([$Material$Helpers.blurOn("mouseup")
-              ,$Material$Helpers.blurOn("mouseleave")
-              ,A2($Html$Events.onClick,addr,Click)]),
+      A2($List._op["::"],
+      $Material$Style.attribute($Material$Helpers.blurOn("mouseup")),
+      A2($List._op["::"],
+      $Material$Style.attribute($Material$Helpers.blurOn("mouseleave")),
+      A2($List._op["::"],
+      $Material$Style.attribute(A2($Html$Events.onClick,addr,Click)),
+      styling))))))),
       function () {
          var _p4 = model;
          if (_p4._0.ctor === "Just") {
@@ -14064,10 +14098,9 @@ Elm.Demo.Page.make = function (_elm) {
    };
    var header = function (str) {    return $Html.text(str);};
    var title = function (t) {
-      return A4($Material$Style.styled,
+      return A3($Material$Style.styled,
       $Html.h1,
       _U.list([$Material$Color.text($Material$Color.primary)]),
-      _U.list([]),
       _U.list([$Html.text(t)]));
    };
    var from = F3(function (title,url,body) {
@@ -14233,12 +14266,11 @@ Elm.Demo.Badges.make = function (_elm) {
                    ,c(_U.list([A2($Material$Style.span,
                    _U.list([$Material$Badge.withBadge("♥")]),
                    _U.list([$Html.text("Symbol")]))]))
-                   ,c(_U.list([A3($Material$Icon.view,
+                   ,c(_U.list([A2($Material$Icon.view,
                    "flight_takeoff",
                    _U.list([$Material$Icon.size24
                            ,$Material$Badge.withBadge("33")
-                           ,$Material$Badge.overlap]),
-                   _U.list([]))]))]))]));
+                           ,$Material$Badge.overlap]))]))]))]));
    return _elm.Demo.Badges.values = {_op: _op
                                     ,c: c
                                     ,view: view
@@ -14592,7 +14624,7 @@ Elm.Demo.Grid.make = function (_elm) {
       A2($Maybe.withDefault,
       $Material$Color.Teal,
       A2($Array.get,
-      A2($Basics._op["%"],k + 11,$Array.length($Material$Color.hues)),
+      A2($Basics._op["%"],k + 0,$Array.length($Material$Color.hues)),
       $Material$Color.hues))));
    };
    var style = function (h) {
@@ -14683,69 +14715,6 @@ Elm.Demo.Grid.make = function (_elm) {
                                   ,srcUrl: srcUrl
                                   ,references: references};
 };
-var make = function(elm) {
-  elm.Native = elm.Native || {};
-  elm.Native.Menu = elm.Native.Menu || {};
-
-  var Utils = Elm.Native.Utils.make(elm);
-
-  var fromArray = Utils.list;
-
-  var decode = function(e) {
-
-    var button     = e.target;                // element_
-    var container  = button.nextSibling;      // container_
-    var menu       = container.childNodes[1]; // forElement_
-
-    var offsetTops = [];
-    var items      = menu.childNodes;
-    for (var i = 0; i < items.length; i++) {
-      offsetTops.push(items[i].offsetTop);
-    }
-
-    var offsetHeights = [];
-    var items      = menu.childNodes;
-    for (var i = 0; i < items.length; i++) {
-      offsetHeights.push(items[i].offsetHeight);
-    }
-
-    var result = {
-      button: {
-        offsetTop: button.offsetTop,
-        offsetLeft: button.offsetLeft,
-        offsetHeight: button.offsetHeight,
-        bounds: button.getBoundingClientRect()
-      },
-      menu: {
-        offsetTop: menu.offsetTop,
-        offsetLeft: menu.offsetLeft,
-        offsetHeight: menu.offsetHeight,
-        bounds: menu.getBoundingClientRect()
-      },
-      container: {
-        offsetTop: container.offsetTop,
-        offsetLeft: container.offsetLeft,
-        offsetHeight: container.offsetHeight,
-        bounds: container.getBoundingClientRect()
-      },
-      offsetTops: fromArray(offsetTops),
-      offsetHeights: fromArray(offsetHeights)
-    };
-    return result;
-
-  };
-
-
-  if (elm.Native.Menu.values) return elm.Native.Menu.values;
-
-  return elm.Native.Menu.values = {
-    'decode': decode
-  };
-};
-
-Elm.Native.Menu = {};
-Elm.Native.Menu.make = make;
-
 Elm.Material = Elm.Material || {};
 Elm.Material.Menu = Elm.Material.Menu || {};
 Elm.Material.Menu.Oracle = Elm.Material.Menu.Oracle || {};
@@ -14758,15 +14727,71 @@ Elm.Material.Menu.Oracle.make = function (_elm) {
    return _elm.Material.Menu.Oracle.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $DOM = Elm.DOM.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Native$Menu = Elm.Native.Menu.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var decode = $Native$Menu.decode;
+   var element = A5($Json$Decode.object4,
+   F4(function (offsetTop,offsetLeft,offsetHeight,bounds) {
+      return {offsetTop: offsetTop
+             ,offsetLeft: offsetLeft
+             ,offsetHeight: offsetHeight
+             ,bounds: bounds};
+   }),
+   $DOM.offsetTop,
+   $DOM.offsetLeft,
+   $DOM.offsetHeight,
+   $DOM.boundingClientRect);
+   var decode$ = A6($Json$Decode.object5,
+   F5(function (button,container,menu,offsetTops,offsetHeights) {
+      return {button: button
+             ,container: container
+             ,menu: menu
+             ,offsetTops: offsetTops
+             ,offsetHeights: offsetHeights};
+   }),
+   A2($Json$Decode.at,
+   _U.list(["target","parentNode","parentNode","previousSibling"]),
+   element),
+   A2($Json$Decode.at,
+   _U.list(["target","parentNode","parentNode"]),
+   element),
+   A2($Json$Decode.at,_U.list(["target","parentNode"]),element),
+   A2($Json$Decode.at,
+   _U.list(["target","parentNode"]),
+   $DOM.childNodes($DOM.offsetTop)),
+   A2($Json$Decode.at,
+   _U.list(["target","parentNode"]),
+   $DOM.childNodes($DOM.offsetHeight)));
+   var decode = A6($Json$Decode.object5,
+   F5(function (button,container,menu,offsetTops,offsetHeights) {
+      return {button: button
+             ,menu: menu
+             ,container: container
+             ,offsetTops: offsetTops
+             ,offsetHeights: offsetHeights};
+   }),
+   A2($Json$Decode._op[":="],"target",element),
+   A2($Json$Decode.at,_U.list(["target","nextSibling"]),element),
+   A2($Json$Decode.at,
+   _U.list(["target","nextSibling"]),
+   A2($DOM.childNode,1,element)),
+   A2($Json$Decode.at,
+   _U.list(["target","nextSibling"]),
+   A2($DOM.childNode,1,$DOM.childNodes($DOM.offsetTop))),
+   A2($Json$Decode.at,
+   _U.list(["target","nextSibling"]),
+   A2($DOM.childNode,1,$DOM.childNodes($DOM.offsetHeight))));
+   var Element = F4(function (a,b,c,d) {
+      return {offsetTop: a
+             ,offsetLeft: b
+             ,offsetHeight: c
+             ,bounds: d};
+   });
    var Oracle = F5(function (a,b,c,d,e) {
       return {button: a
              ,menu: b
@@ -14774,25 +14799,11 @@ Elm.Material.Menu.Oracle.make = function (_elm) {
              ,offsetTops: d
              ,offsetHeights: e};
    });
-   var Rect = F6(function (a,b,c,d,e,f) {
-      return {top: a
-             ,left: b
-             ,bottom: c
-             ,right: d
-             ,width: e
-             ,height: f};
-   });
-   var Element = F4(function (a,b,c,d) {
-      return {offsetTop: a
-             ,offsetLeft: b
-             ,offsetHeight: c
-             ,bounds: d};
-   });
    return _elm.Material.Menu.Oracle.values = {_op: _op
                                              ,decode: decode
+                                             ,decode$: decode$
                                              ,Oracle: Oracle
-                                             ,Element: Element
-                                             ,Rect: Rect};
+                                             ,Element: Element};
 };
 Elm.Material = Elm.Material || {};
 Elm.Material.Menu = Elm.Material.Menu || {};
@@ -14809,9 +14820,9 @@ Elm.Material.Menu.make = function (_elm) {
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
    $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
-   $Material$Component = Elm.Material.Component.make(_elm),
    $Material$Helpers = Elm.Material.Helpers.make(_elm),
    $Material$Menu$Oracle = Elm.Material.Menu.Oracle.make(_elm),
    $Material$Ripple = Elm.Material.Ripple.make(_elm),
@@ -14826,7 +14837,7 @@ Elm.Material.Menu.make = function (_elm) {
       var _p0 = x;
       if (_p0.ctor === "Nothing") {
             return _U.crashCase("Material.Menu",
-            {start: {line: 520,column: 3},end: {line: 522,column: 17}},
+            {start: {line: 521,column: 3},end: {line: 523,column: 17}},
             _p0)(crash);
          } else {
             return _p0._0;
@@ -14840,50 +14851,27 @@ Elm.Material.Menu.make = function (_elm) {
             return true;
          }
    };
-   var onShow = F3(function (preventDefault,addr,action) {
+   var onClick = F3(function (addr,decoder,action) {
       return A4($Html$Events.onWithOptions,
-      "load",
+      "click",
       $Html$Events.defaultOptions,
-      $Html$Events.targetValue,
+      decoder,
       function (_p3) {
-         return A2($Signal.message,addr,action);
-      });
-   });
-   var onKeyDown = F3(function (preventDefault,addr,action) {
-      return A4($Html$Events.onWithOptions,
-      "click",
-      _U.update($Html$Events.defaultOptions,
-      {preventDefault: preventDefault}),
-      $Html$Events.keyCode,
-      function (_p4) {
-         return A2($Signal.message,addr,action(_p4));
-      });
-   });
-   var onClick$ = F3(function (preventDefault,addr,action) {
-      return A4($Html$Events.onWithOptions,
-      "click",
-      _U.update($Html$Events.defaultOptions,
-      {preventDefault: preventDefault}),
-      $Material$Menu$Oracle.decode,
-      function (_p5) {
-         return A2($Signal.message,addr,action(_p5));
-      });
-   });
-   var onClick = F3(function (preventDefault,addr,action) {
-      return A4($Html$Events.onWithOptions,
-      "click",
-      _U.update($Html$Events.defaultOptions,
-      {preventDefault: preventDefault}),
-      $Html$Events.targetValue,
-      function (_p6) {
-         return A2($Signal.message,addr,action);
+         return A2($Signal.message,addr,action(_p3));
       });
    });
    var Ripple = F2(function (a,b) {
       return {ctor: "Ripple",_0: a,_1: b};
    });
-   var Hide = {ctor: "Hide"};
-   var Close = function (a) {    return {ctor: "Close",_0: a};};
+   var Close = {ctor: "Close"};
+   var Open = {ctor: "Open"};
+   var Select = function (a) {    return {ctor: "Select",_0: a};};
+   var Hide = F2(function (a,b) {
+      return {ctor: "Hide",_0: a,_1: b};
+   });
+   var Close$ = F2(function (a,b) {
+      return {ctor: "Close\'",_0: a,_1: b};
+   });
    var Toggle = function (a) {    return {ctor: "Toggle",_0: a};};
    var item = F3(function (divider,enabled,html) {
       return {html: html,enabled: enabled,divider: divider};
@@ -14912,34 +14900,22 @@ Elm.Material.Menu.make = function (_elm) {
              ,closing: e
              ,oracle: f};
    });
-   var keycodes = {enter: 13
-                  ,escape: 27
-                  ,space: 32
-                  ,upArrow: 38
-                  ,downArrow: 40};
    var constant = {transitionDurationSeconds: 0.3
                   ,transitionDurationFraction: 0.8
                   ,closeTimeout: 150};
    var update = F2(function (action,model) {
-      var _p7 = action;
-      switch (_p7.ctor)
-      {case "Hide": return $Material$Helpers.pure(_U.update(model,
-           {open: $Maybe.Nothing,closing: false}));
-         case "Close": return A2($Material$Helpers.effect,
-           $Effects.task(function (_p8) {
-              return A2($Task.andThen,
-              $Task.sleep(constant.closeTimeout),
-              $Basics.always(_p8));
-           }($Task.succeed(Hide))),
-           _U.update(model,{closing: true}));
-         case "Toggle": var _p12 = _p7._0;
-           return $Material$Helpers.pure(_U.update(model,
+      var _p4 = action;
+      switch (_p4.ctor)
+      {case "Toggle": var _p8 = _p4._0;
+           return A2($Material$Helpers.effect,
+           $Effects.tick(function (_p5) {    return Open;}),
+           _U.update(model,
            {open: function () {
-              var _p9 = model.open;
-              if (_p9.ctor === "Nothing") {
-                    return $Maybe.Just(true);
+              var _p6 = model.open;
+              if (_p6.ctor === "Nothing") {
+                    return $Maybe.Just(false);
                  } else {
-                    if (_p9._0 === true) {
+                    if (_p6._0 === true) {
                           return $Maybe.Nothing;
                        } else {
                           return model.open;
@@ -14947,62 +14923,82 @@ Elm.Material.Menu.make = function (_elm) {
                  }
            }()
            ,oracle: function () {
-              var _p10 = model.open;
-              if (_p10.ctor === "Nothing") {
-                    var _p11 = model.oracle;
-                    if (_p11.ctor === "Nothing") {
-                          return $Maybe.Just(_p12);
-                       } else {
-                          return $Maybe.Just(_p11._0);
-                       }
+              var _p7 = model.open;
+              if (_p7.ctor === "Nothing") {
+                    return $Maybe.Just(_p8);
                  } else {
-                    return model.oracle;
+                    if (_p7._0 === true) {
+                          return $Maybe.Just(_p8);
+                       } else {
+                          return model.oracle;
+                       }
                  }
            }()
            ,items: $Dict.fromList(A2($List.map,
            function (i) {
               return {ctor: "_Tuple2",_0: i,_1: $Material$Ripple.model};
            },
-           _U.range(1,$List.length(_p12.offsetTops))))}));
-         default: var _p14 = _p7._0;
-           var _p13 = A2($Material$Ripple.update,
-           _p7._1,
+           _U.range(1,$List.length(_p8.offsetTops))))}));
+         case "Open": return $Material$Helpers.pure(_U.update(model,
+           {open: _U.eq(model.open,
+           $Maybe.Just(false)) ? $Maybe.Just(true) : model.open}));
+         case "Hide": return A2($Material$Helpers.effect,
+           $Effects.tick(function (_p9) {    return Select(_p4._0);}),
+           _U.update(model,
+           {open: $Maybe.Nothing
+           ,closing: false
+           ,oracle: $Maybe.Just(_p4._1)}));
+         case "Close\'": return A2($Material$Helpers.effect,
+           $Effects.task(function (_p10) {
+              return A2($Task.andThen,
+              $Task.sleep(constant.closeTimeout),
+              $Basics.always(_p10));
+           }($Task.succeed(A2(Hide,_p4._0,_p4._1)))),
+           _U.update(model,{closing: true}));
+         case "Ripple": var _p12 = _p4._0;
+           var _p11 = A2($Material$Ripple.update,
+           _p4._1,
            A2($Maybe.withDefault,
            $Material$Ripple.model,
-           A2($Dict.get,_p14,model.items)));
-           var model$ = _p13._0;
-           var effects = _p13._1;
+           A2($Dict.get,_p12,model.items)));
+           var model$ = _p11._0;
+           var effects = _p11._1;
            return A2($Material$Helpers.effect,
-           A2($Effects.map,Ripple(_p14),effects),
+           A2($Effects.map,Ripple(_p12),effects),
            _U.update(model,
-           {items: A3($Dict.insert,_p14,model$,model.items)}));}
+           {items: A3($Dict.insert,_p12,model$,model.items)}));
+         case "Select": return $Material$Helpers.pure(model);
+         default: return $Material$Helpers.pure(model);}
    });
    var view = F3(function (addr,model,items) {
-      return _U.list([A4($Material$Style.styled,
+      return _U.list([A3($Material$Style.styled,
                      $Html.button,
                      _U.list([$Material$Style.cs("mdl-button")
                              ,$Material$Style.cs("mdl-js-button")
-                             ,$Material$Style.cs("mdl-button--icon")]),
-                     _U.list([A3(onClick$,true,addr,Toggle)]),
+                             ,$Material$Style.cs("mdl-button--icon")
+                             ,$Material$Style.attribute(A3(onClick,
+                             addr,
+                             $Material$Menu$Oracle.decode,
+                             Toggle))]),
                      _U.list([A2($Html.i,
                      _U.list([$Html$Attributes.$class("material-icons")]),
                      _U.list([$Html.text("more_vert")]))]))
-                     ,A4($Material$Style.styled,
+                     ,A3($Material$Style.styled,
                      $Html.div,
                      _U.list([$Material$Style.cs("mdl-menu__container")
                              ,$Material$Style.cs("is-upgraded")
                              ,A2($Material$Style.cs$,
                              "is-visible",
-                             A2($Maybe.withDefault,false,model.open))
+                             _U.eq(model.open,$Maybe.Just(true)))
                              ,A3($Material$Style.css$,
                              "width",
                              function () {
-                                var _p15 = model.oracle;
-                                if (_p15.ctor === "Just") {
+                                var _p13 = model.oracle;
+                                if (_p13.ctor === "Just") {
                                       return A3($Basics.flip,
                                       F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                       "px",
-                                      $Basics.toString(_p15._0.menu.bounds.width));
+                                      $Basics.toString(_p13._0.menu.bounds.width));
                                    } else {
                                       return "auto";
                                    }
@@ -15011,12 +15007,12 @@ Elm.Material.Menu.make = function (_elm) {
                              ,A3($Material$Style.css$,
                              "height",
                              function () {
-                                var _p16 = model.oracle;
-                                if (_p16.ctor === "Just") {
+                                var _p14 = model.oracle;
+                                if (_p14.ctor === "Just") {
                                       return A3($Basics.flip,
                                       F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                       "px",
-                                      $Basics.toString(_p16._0.menu.bounds.height));
+                                      $Basics.toString(_p14._0.menu.bounds.height));
                                    } else {
                                       return "auto";
                                    }
@@ -15027,13 +15023,13 @@ Elm.Material.Menu.make = function (_elm) {
                              (_U.eq(model.alignment,bottomRight) || _U.eq(model.alignment,
                              bottomLeft)) && isJust(model.oracle),
                              function () {
-                                var _p17 = model.oracle;
-                                if (_p17.ctor === "Nothing") {
+                                var _p15 = model.oracle;
+                                if (_p15.ctor === "Nothing") {
                                       return "auto";
                                    } else {
-                                      var _p18 = _p17._0;
+                                      var _p16 = _p15._0;
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(_p18.button.offsetTop + _p18.button.offsetHeight),
+                                      $Basics.toString(_p16.button.offsetTop + _p16.button.offsetHeight),
                                       "px");
                                    }
                              }())
@@ -15042,13 +15038,16 @@ Elm.Material.Menu.make = function (_elm) {
                              (_U.eq(model.alignment,bottomRight) || _U.eq(model.alignment,
                              topRight)) && isJust(model.oracle),
                              function () {
-                                var _p19 = model.oracle;
-                                if (_p19.ctor === "Nothing") {
+                                var _p17 = model.oracle;
+                                if (_p17.ctor === "Nothing") {
                                       return "auto";
                                    } else {
-                                      var _p20 = _p19._0;
+                                      var _p18 = _p17._0;
+                                      var right = function (e) {
+                                         return e.bounds.left + e.bounds.width;
+                                      };
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(_p20.container.bounds.right - _p20.menu.bounds.right),
+                                      $Basics.toString(right(_p18.container) - right(_p18.menu)),
                                       "px");
                                    }
                              }())
@@ -15057,13 +15056,14 @@ Elm.Material.Menu.make = function (_elm) {
                              (_U.eq(model.alignment,topLeft) || _U.eq(model.alignment,
                              topRight)) && isJust(model.oracle),
                              function () {
-                                var _p21 = model.oracle;
-                                if (_p21.ctor === "Nothing") {
+                                var _p19 = model.oracle;
+                                if (_p19.ctor === "Nothing") {
                                       return "auto";
                                    } else {
-                                      var _p22 = _p21._0;
+                                      var _p20 = _p19._0;
+                                      var bottom = _p20.container.bounds.top + _p20.container.bounds.height;
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(_p22.container.bounds.bottom - _p22.button.bounds.top),
+                                      $Basics.toString(bottom - _p20.button.bounds.top),
                                       "px");
                                    }
                              }())
@@ -15072,28 +15072,27 @@ Elm.Material.Menu.make = function (_elm) {
                              (_U.eq(model.alignment,topLeft) || _U.eq(model.alignment,
                              bottomLeft)) && isJust(model.oracle),
                              function () {
-                                var _p23 = model.oracle;
-                                if (_p23.ctor === "Nothing") {
+                                var _p21 = model.oracle;
+                                if (_p21.ctor === "Nothing") {
                                       return "auto";
                                    } else {
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(_p23._0.menu.offsetLeft),
+                                      $Basics.toString(_p21._0.menu.offsetLeft),
                                       "px");
                                    }
                              }())]),
-                     _U.list([]),
-                     _U.list([A4($Material$Style.styled,
+                     _U.list([A3($Material$Style.styled,
                              $Html.div,
                              _U.list([$Material$Style.cs("mdl-menu__outline")
                                      ,A3($Material$Style.css$,
                                      "width",
                                      function () {
-                                        var _p24 = model.oracle;
-                                        if (_p24.ctor === "Just") {
+                                        var _p22 = model.oracle;
+                                        if (_p22.ctor === "Just") {
                                               return A3($Basics.flip,
                                               F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                               "px",
-                                              $Basics.toString(_p24._0.menu.bounds.width));
+                                              $Basics.toString(_p22._0.menu.bounds.width));
                                            } else {
                                               return "auto";
                                            }
@@ -15102,21 +15101,20 @@ Elm.Material.Menu.make = function (_elm) {
                                      ,A3($Material$Style.css$,
                                      "height",
                                      function () {
-                                        var _p25 = model.oracle;
-                                        if (_p25.ctor === "Just") {
+                                        var _p23 = model.oracle;
+                                        if (_p23.ctor === "Just") {
                                               return A3($Basics.flip,
                                               F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                               "px",
-                                              $Basics.toString(_p25._0.menu.bounds.height));
+                                              $Basics.toString(_p23._0.menu.bounds.height));
                                            } else {
                                               return "auto";
                                            }
                                      }(),
                                      isJust(model.oracle))
                                      ,model.alignment]),
-                             _U.list([]),
                              _U.list([]))
-                             ,A4($Material$Style.styled,
+                             ,A3($Material$Style.styled,
                              $Html.ul,
                              _U.list([$Material$Style.cs("mdl-menu")
                                      ,$Material$Style.cs("mdl-js-menu")
@@ -15127,13 +15125,13 @@ Elm.Material.Menu.make = function (_elm) {
                                      ,A3($Material$Style.css$,
                                      "clip",
                                      function () {
-                                        var _p26 = model.oracle;
-                                        if (_p26.ctor === "Nothing") {
+                                        var _p24 = model.oracle;
+                                        if (_p24.ctor === "Nothing") {
                                               return "auto";
                                            } else {
-                                              var _p27 = _p26._0;
-                                              var height = _p27.menu.bounds.height;
-                                              var width = _p27.menu.bounds.width;
+                                              var _p25 = _p24._0;
+                                              var height = _p25.menu.bounds.height;
+                                              var width = _p25.menu.bounds.width;
                                               var rect = F4(function (x,y,w,h) {
                                                  return A2($String.join,
                                                  "",
@@ -15167,49 +15165,34 @@ Elm.Material.Menu.make = function (_elm) {
                                            }
                                      }(),
                                      isJust(model.oracle))]),
-                             _U.list([]),
                              function () {
                                 var makeItem = F2(function (n,item) {
                                    var height = function () {
+                                      var _p26 = model.oracle;
+                                      if (_p26.ctor === "Nothing") {
+                                            return 0;
+                                         } else {
+                                            return _p26._0.menu.bounds.height;
+                                         }
+                                   }();
+                                   var offsetHeight = function (n) {
+                                      var _p27 = model.oracle;
+                                      if (_p27.ctor === "Nothing") {
+                                            return 0;
+                                         } else {
+                                            return A2(fromJust,
+                                            "Menu.view offsetHeight",
+                                            $List.head(A2($List.drop,n - 1,_p27._0.offsetHeights)));
+                                         }
+                                   };
+                                   var offsetTop = function (n) {
                                       var _p28 = model.oracle;
                                       if (_p28.ctor === "Nothing") {
                                             return 0;
                                          } else {
-                                            return _p28._0.menu.bounds.height;
-                                         }
-                                   }();
-                                   var offsetHeight = function (n) {
-                                      var _p29 = model.oracle;
-                                      if (_p29.ctor === "Nothing") {
-                                            return 0;
-                                         } else {
-                                            return function (maybe) {
-                                               var _p30 = maybe;
-                                               if (_p30.ctor === "Just") {
-                                                     return _p30._0;
-                                                  } else {
-                                                     return _U.crashCase("Material.Menu",
-                                                     {start: {line: 370,column: 31},end: {line: 373,column: 72}},
-                                                     _p30)("Menu.view: offsetHeight");
-                                                  }
-                                            }($List.head(A2($List.drop,n - 1,_p29._0.offsetHeights)));
-                                         }
-                                   };
-                                   var offsetTop = function (n) {
-                                      var _p32 = model.oracle;
-                                      if (_p32.ctor === "Nothing") {
-                                            return 0;
-                                         } else {
-                                            return function (maybe) {
-                                               var _p33 = maybe;
-                                               if (_p33.ctor === "Just") {
-                                                     return _p33._0;
-                                                  } else {
-                                                     return _U.crashCase("Material.Menu",
-                                                     {start: {line: 357,column: 31},end: {line: 360,column: 69}},
-                                                     _p33)("Menu.view: offsetTop");
-                                                  }
-                                            }($List.head(A2($List.drop,n - 1,_p32._0.offsetTops)));
+                                            return A2(fromJust,
+                                            "Menu.view: offsetTop",
+                                            $List.head(A2($List.drop,n - 1,_p28._0.offsetTops)));
                                          }
                                    };
                                    var transitionDuration = constant.transitionDurationSeconds * constant.transitionDurationFraction;
@@ -15221,44 +15204,33 @@ Elm.Material.Menu.make = function (_elm) {
                                    F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                    "s",
                                    $Basics.toString(offsetTop(n) / height * transitionDuration));
-                                   return A4($Material$Style.styled,
+                                   return A3($Material$Style.styled,
                                    $Html.li,
-                                   _U.list([$Material$Style.cs("mdl-menu__item")
-                                           ,A3($Material$Style.css$,
-                                           "transition-delay",
-                                           itemDelay,
-                                           isJust(model.open))
-                                           ,A2($Material$Style.cs$,"mdl-js-ripple-effect",model.ripple)
-                                           ,A2($Material$Style.cs$,
-                                           "mdl-menu__item--full-bleed-divider",
-                                           item.divider)]),
-                                   A2($Basics._op["++"],
-                                   _U.list([A2($Html$Attributes.property,
-                                           "tabindex",
-                                           $Json$Encode.string("-1"))
-                                           ,A2($Material$Ripple.downOn,
-                                           "mousedown",
-                                           A2($Signal.forwardTo,addr,Ripple(n)))
-                                           ,A2($Material$Ripple.downOn,
-                                           "touchstart",
-                                           A2($Signal.forwardTo,addr,Ripple(n)))
-                                           ,A2($Material$Ripple.upOn,
-                                           "mouseup",
-                                           A2($Signal.forwardTo,addr,Ripple(n)))
-                                           ,A2($Material$Ripple.upOn,
-                                           "mouseleave",
-                                           A2($Signal.forwardTo,addr,Ripple(n)))
-                                           ,A2($Material$Ripple.upOn,
-                                           "touchend",
-                                           A2($Signal.forwardTo,addr,Ripple(n)))
-                                           ,A2($Material$Ripple.upOn,
-                                           "blur",
-                                           A2($Signal.forwardTo,addr,Ripple(n)))]),
-                                   item.enabled ? _U.list([A2($Html$Events.onClick,
+                                   A2($List._op["::"],
+                                   item.enabled ? $Material$Style.attribute(A3(onClick,
                                    addr,
-                                   Close(n))]) : _U.list([A2($Html$Attributes.attribute,
+                                   $Material$Menu$Oracle.decode$,
+                                   Close$(n))) : $Material$Style.attribute(A2($Html$Attributes.attribute,
                                    "disabled",
-                                   "disabled")])),
+                                   "disabled")),
+                                   A2($List._op["::"],
+                                   $Material$Style.cs("mdl-menu__item"),
+                                   A2($List._op["::"],
+                                   A3($Material$Style.css$,
+                                   "transition-delay",
+                                   itemDelay,
+                                   isJust(model.open)),
+                                   A2($List._op["::"],
+                                   A2($Material$Style.cs$,"mdl-js-ripple-effect",model.ripple),
+                                   A2($List._op["::"],
+                                   A2($Material$Style.cs$,
+                                   "mdl-menu__item--full-bleed-divider",
+                                   item.divider),
+                                   A2($List._op["::"],
+                                   $Material$Style.attribute(A2($Html$Attributes.property,
+                                   "tabindex",
+                                   $Json$Encode.string("-1"))),
+                                   _U.list([]))))))),
                                    A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
                                    item.html,
                                    model.ripple ? _U.list([A3($Material$Ripple.view,
@@ -15276,6 +15248,7 @@ Elm.Material.Menu.make = function (_elm) {
    });
    return _elm.Material.Menu.values = {_op: _op
                                       ,model: model
+                                      ,item: item
                                       ,update: update
                                       ,topLeft: topLeft
                                       ,bottomLeft: bottomLeft
@@ -15283,8 +15256,8 @@ Elm.Material.Menu.make = function (_elm) {
                                       ,bottomRight: bottomRight
                                       ,unaligned: unaligned
                                       ,view: view
-                                      ,item: item
-                                      ,Model: Model};
+                                      ,Model: Model
+                                      ,Item: Item};
 };
 Elm.Demo = Elm.Demo || {};
 Elm.Demo.Menus = Elm.Demo.Menus || {};
@@ -15923,40 +15896,40 @@ Elm.Demo.Snackbar.make = function (_elm) {
    "https://www.getmdl.io/components/index.html#snackbar-section",
    "\n> The Material Design Lite (MDL) __snackbar__ component is a container used to\n> notify a user of an operation\'s status. It displays at the bottom of the\n> screen. A snackbar may contain an action button to execute a command for the\n> user. Actions should undo the committed action or retry it if it failed for\n> example. Actions should not be to close the snackbar. By not providing an\n> action, the snackbar becomes a __toast__ component.\n\n");
    var transitionLength = 150 * $Time.millisecond;
-   var transitionInner = {ctor: "_Tuple2"
-                         ,_0: "transition"
-                         ,_1: A2($Basics._op["++"],
-                         "box-shadow 333ms ease-in-out 0s, ",
-                         A2($Basics._op["++"],
-                         "width ",
-                         A2($Basics._op["++"],
-                         $Basics.toString(transitionLength),
-                         A2($Basics._op["++"],
-                         "ms, ",
-                         A2($Basics._op["++"],
-                         "height ",
-                         A2($Basics._op["++"],
-                         $Basics.toString(transitionLength),
-                         A2($Basics._op["++"],
-                         "ms, ",
-                         A2($Basics._op["++"],
-                         "background-color ",
-                         A2($Basics._op["++"],
-                         $Basics.toString(transitionLength),
-                         "ms")))))))))};
-   var transitionOuter = {ctor: "_Tuple2"
-                         ,_0: "transition"
-                         ,_1: A2($Basics._op["++"],
-                         "width ",
-                         A2($Basics._op["++"],
-                         $Basics.toString(transitionLength),
-                         A2($Basics._op["++"],
-                         "ms ease-in-out 0s, ",
-                         A2($Basics._op["++"],
-                         "margin ",
-                         A2($Basics._op["++"],
-                         $Basics.toString(transitionLength),
-                         "ms ease-in-out 0s")))))};
+   var transitionInner = A2($Material$Style.css,
+   "transition",
+   A2($Basics._op["++"],
+   "box-shadow 333ms ease-in-out 0s, ",
+   A2($Basics._op["++"],
+   "width ",
+   A2($Basics._op["++"],
+   $Basics.toString(transitionLength),
+   A2($Basics._op["++"],
+   "ms, ",
+   A2($Basics._op["++"],
+   "height ",
+   A2($Basics._op["++"],
+   $Basics.toString(transitionLength),
+   A2($Basics._op["++"],
+   "ms, ",
+   A2($Basics._op["++"],
+   "background-color ",
+   A2($Basics._op["++"],
+   $Basics.toString(transitionLength),
+   "ms"))))))))));
+   var transitionOuter = A2($Material$Style.css,
+   "transition",
+   A2($Basics._op["++"],
+   "width ",
+   A2($Basics._op["++"],
+   $Basics.toString(transitionLength),
+   A2($Basics._op["++"],
+   "ms ease-in-out 0s, ",
+   A2($Basics._op["++"],
+   "margin ",
+   A2($Basics._op["++"],
+   $Basics.toString(transitionLength),
+   "ms ease-in-out 0s"))))));
    var boxWidth = "64px";
    var boxHeight = "48px";
    var mapSquare = F3(function (k,f,model) {
@@ -16115,36 +16088,31 @@ Elm.Demo.Snackbar.make = function (_elm) {
       $Array.length($Material$Color.hues)),
       $Material$Color.hues));
       var color = A2($Material$Color.color,hue,shade);
-      return A2($Html.div,
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                               ,_0: "height"
-                                               ,_1: boxHeight}
-                                              ,{ctor: "_Tuple2",_0: "width",_1: width}
-                                              ,{ctor: "_Tuple2",_0: "position",_1: "relative"}
-                                              ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                              ,{ctor: "_Tuple2",_0: "margin",_1: margin}
-                                              ,{ctor: "_Tuple2",_0: "z-index",_1: "0"}
-                                              ,transitionOuter]))
-              ,$Html$Attributes.key($Basics.toString(_p11))]),
-      _U.list([A4($Material$Style.styled,
-      $Html.div,
+      return A2($Material$Style.div,
+      _U.list([A2($Material$Style.css,"height",boxHeight)
+              ,A2($Material$Style.css,"width",width)
+              ,A2($Material$Style.css,"position","relative")
+              ,A2($Material$Style.css,"display","inline-block")
+              ,A2($Material$Style.css,"margin",margin)
+              ,A2($Material$Style.css,"z-index","0")
+              ,transitionOuter
+              ,$Material$Style.attribute($Html$Attributes.key($Basics.toString(_p11)))]),
+      _U.list([A2($Material$Style.div,
       _U.list([$Material$Color.background(color)
               ,$Material$Color.text($Material$Color.primaryContrast)
-              ,selected ? $Material$Elevation.e8 : $Material$Elevation.e2]),
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                               ,_0: "display"
-                                               ,_1: "inline-flex"}
-                                              ,{ctor: "_Tuple2",_0: "align-items",_1: "center"}
-                                              ,{ctor: "_Tuple2",_0: "justify-content",_1: "center"}
-                                              ,{ctor: "_Tuple2",_0: "flex",_1: "0 0 auto"}
-                                              ,{ctor: "_Tuple2",_0: "height",_1: height}
-                                              ,{ctor: "_Tuple2",_0: "width",_1: width}
-                                              ,{ctor: "_Tuple2",_0: "border-radius",_1: "2px"}
-                                              ,{ctor: "_Tuple2",_0: "box-sizing",_1: "border-box"}
-                                              ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
-                                              ,{ctor: "_Tuple2",_0: "bottom",_1: "0"}
-                                              ,{ctor: "_Tuple2",_0: "left",_1: "0"}
-                                              ,transitionInner]))]),
+              ,selected ? $Material$Elevation.e8 : $Material$Elevation.e2
+              ,A2($Material$Style.css,"display","inline-flex")
+              ,A2($Material$Style.css,"align-items","center")
+              ,A2($Material$Style.css,"justify-content","center")
+              ,A2($Material$Style.css,"flex","0 0 auto")
+              ,A2($Material$Style.css,"height",height)
+              ,A2($Material$Style.css,"width",width)
+              ,A2($Material$Style.css,"border-radius","2px")
+              ,A2($Material$Style.css,"box-sizing","border-box")
+              ,A2($Material$Style.css,"position","absolute")
+              ,A2($Material$Style.css,"bottom","0")
+              ,A2($Material$Style.css,"left","0")
+              ,transitionInner]),
       _U.list([A2($Html.div,
       _U.list([]),
       _U.list([$Html.text($Basics.toString(_p11))]))]))]));
@@ -17520,11 +17488,11 @@ Elm.Material.Layout.make = function (_elm) {
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
    $Material$Helpers = Elm.Material.Helpers.make(_elm),
    $Material$Icon = Elm.Material.Icon.make(_elm),
    $Material$Ripple = Elm.Material.Ripple.make(_elm),
+   $Material$Style = Elm.Material.Style.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
@@ -17563,34 +17531,38 @@ Elm.Material.Layout.make = function (_elm) {
    var Scroll = {ctor: "Scroll"};
    var Seamed = {ctor: "Seamed"};
    var Standard = {ctor: "Standard"};
-   var row = $Html.div(_U.list([$Html$Attributes.$class("mdl-layout__header-row")]));
-   var link = F2(function (attrs,contents) {
-      return A2($Html.a,
+   var row = function (styles) {
+      return $Material$Style.div(A2($List._op["::"],
+      $Material$Style.cs("mdl-layout__header-row"),
+      styles));
+   };
+   var link = F2(function (styles,contents) {
+      return A3($Material$Style.styled,
+      $Html.a,
       A2($List._op["::"],
-      $Html$Attributes.$class("mdl-navigation__link"),
-      attrs),
+      $Material$Style.cs("mdl-navigation__link"),
+      styles),
       contents);
    });
-   var navigation = function (contents) {
+   var navigation = F2(function (styles,contents) {
       return A2($Html.nav,
       _U.list([$Html$Attributes.$class("mdl-navigation")]),
       contents);
-   };
-   var title = function (t) {
-      return A2($Html.span,
-      _U.list([$Html$Attributes.$class("mdl-layout__title")]),
-      _U.list([$Html.text(t)]));
+   });
+   var title = function (styles) {
+      return $Material$Style.span(A2($List._op["::"],
+      $Material$Style.cs("mdl-layout__title"),
+      styles));
    };
    var spacer = A2($Html.div,
    _U.list([$Html$Attributes.$class("mdl-layout-spacer")]),
    _U.list([]));
-   var TransitionEnd = {ctor: "TransitionEnd"};
-   var Click = {ctor: "Click"};
    var Ripple = F2(function (a,b) {
       return {ctor: "Ripple",_0: a,_1: b};
    });
-   var ScrollContents = function (a) {
-      return {ctor: "ScrollContents",_0: a};
+   var TransitionEnd = {ctor: "TransitionEnd"};
+   var TransitionHeader = function (a) {
+      return {ctor: "TransitionHeader",_0: a};
    };
    var ScrollTab = function (a) {
       return {ctor: "ScrollTab",_0: a};
@@ -17631,7 +17603,8 @@ Elm.Material.Layout.make = function (_elm) {
       var _p2 = model.state;
       return _p2._0;
    };
-   var tabsView = F3(function (addr,model,tabs) {
+   var tabsView = F3(function (addr,model,_p3) {
+      var _p4 = _p3;
       var chevron = F2(function (direction,offset) {
          return A2($Html.div,
          _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2"
@@ -17642,27 +17615,32 @@ Elm.Material.Layout.make = function (_elm) {
                                                       "mdl-layout__tab-bar-",
                                                       A2($Basics._op["++"],direction,"-button"))
                                                       ,_1: true}]))]),
-         _U.list([A3($Material$Icon.view,
+         _U.list([A2($Material$Icon.view,
          A2($Basics._op["++"],"chevron_",direction),
-         _U.list([$Material$Icon.size24]),
-         _U.list([A2($Html$Events.onClick,addr,ScrollTab(offset))]))]));
+         _U.list([$Material$Icon.size24
+                 ,$Material$Style.attribute(A2($Html$Events.onClick,
+                 addr,
+                 ScrollTab(offset)))]))]));
       });
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("mdl-layout__tab-bar-container")]),
+      return A2($Material$Style.div,
+      A2($List._op["::"],
+      $Material$Style.cs("mdl-layout__tab-bar-container"),
+      _U.list([])),
       _U.list([A2(chevron,"left",-100)
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2"
-                                                           ,_0: "mdl-layout__tab-bar"
-                                                           ,_1: true}
-                                                          ,{ctor: "_Tuple2"
-                                                           ,_0: "mdl-js-ripple-effect"
-                                                           ,_1: model.rippleTabs}
-                                                          ,{ctor: "_Tuple2"
-                                                           ,_0: "mds-js-ripple-effect--ignore-events"
-                                                           ,_1: model.rippleTabs}
-                                                          ,{ctor: "_Tuple2"
-                                                           ,_0: "is-casting-shadow"
-                                                           ,_1: _U.eq(model.mode,Standard)}]))]),
+              ,A2($Material$Style.div,
+              A2($List._op["::"],
+              $Material$Style.cs("mdl-layout__tab-bar"),
+              A2($List._op["::"],
+              A2($Material$Style.cs$,"mdl-js-ripple-effect",model.rippleTabs),
+              A2($List._op["::"],
+              A2($Material$Style.cs$,
+              "mds-js-ripple-effect--ignore-events",
+              model.rippleTabs),
+              A2($List._op["::"],
+              A2($Material$Style.cs$,
+              "is-casting-shadow",
+              _U.eq(model.mode,Standard)),
+              _p4._1)))),
               A2($List.indexedMap,
               F2(function (tabIndex,tab) {
                  return A3($Material$Helpers.filter,
@@ -17681,18 +17659,18 @@ Elm.Material.Layout.make = function (_elm) {
                          _U.list([$Html$Attributes.$class("mdl-layout__tab-ripple-container")])),
                          A2($Array.get,tabIndex,s(model).tabs)) : $Maybe.Nothing]));
               }),
-              tabs))
+              _p4._0))
               ,A2(chevron,"right",100)]));
    });
-   var headerView = F3(function (addr,model,_p3) {
-      var _p4 = _p3;
+   var headerView = F3(function (addr,model,_p5) {
+      var _p6 = _p5;
       var mode = function () {
-         var _p5 = model.mode;
-         switch (_p5.ctor)
+         var _p7 = model.mode;
+         switch (_p7.ctor)
          {case "Standard": return "";
             case "Scroll": return "mdl-layout__header--scroll";
             case "Seamed": return "mdl-layout__header--seamed";
-            default: if (_p5._0 === true) {
+            default: if (_p7._0 === true) {
                     return "mdl-layout__header--waterfall mdl-layout__header--waterfall-hide-top";
                  } else {
                     return "mdl-layout__header--waterfall";
@@ -17701,14 +17679,8 @@ Elm.Material.Layout.make = function (_elm) {
       return A2($Html.header,
       A2($List.append,
       isWaterfall(model.mode) ? _U.list([A2($Html$Events.onClick,
-                                        addr,
-                                        Click)
-                                        ,A3($Html$Events.on,
-                                        "transitionend",
-                                        $Json$Decode.value,
-                                        function (_p6) {
-                                           return A2($Signal.message,addr,TransitionEnd);
-                                        })]) : _U.list([]),
+      addr,
+      TransitionHeader(false))]) : _U.list([]),
       _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2"
                                                    ,_0: "mdl-layout__header"
                                                    ,_1: true}
@@ -17723,7 +17695,7 @@ Elm.Material.Layout.make = function (_elm) {
       function (x) {
          return x;
       },
-      _U.list([toList(_p4._0),_p4._1,toList(_p4._2)])));
+      _U.list([toList(_p6._0),_p6._1,toList(_p6._2)])));
    });
    var S = function (a) {    return {ctor: "S",_0: a};};
    var initState = function (no_tabs) {
@@ -17743,56 +17715,53 @@ Elm.Material.Layout.make = function (_elm) {
                             ,mode: Standard
                             ,state: initState(0)};
    var update = F2(function (action,model) {
-      var _p7 = model.state;
-      var state = _p7._0;
-      var _p8 = action;
-      switch (_p8.ctor)
-      {case "SmallScreen": var _p9 = _p8._0;
+      var _p8 = model.state;
+      var state = _p8._0;
+      var _p9 = action;
+      switch (_p9.ctor)
+      {case "SmallScreen": var _p10 = _p9._0;
            return $Material$Helpers.pure(_U.update(model,
-           {state: S(_U.update(state,{isSmallScreen: _p9}))
-           ,isDrawerOpen: $Basics.not(_p9) && model.isDrawerOpen}));
+           {state: S(_U.update(state,{isSmallScreen: _p10}))
+           ,isDrawerOpen: $Basics.not(_p10) && model.isDrawerOpen}));
          case "SwitchTab": return $Material$Helpers.pure(_U.update(model,
-           {selectedTab: _p8._0}));
+           {selectedTab: _p9._0}));
          case "ToggleDrawer":
          return $Material$Helpers.pure(_U.update(model,
            {isDrawerOpen: $Basics.not(model.isDrawerOpen)}));
-         case "Ripple": var _p13 = _p8._0;
-           var _p10 = A2($Maybe.withDefault,
+         case "Ripple": var _p14 = _p9._0;
+           var _p11 = A2($Maybe.withDefault,
            $Material$Helpers.pure(state),
            A2($Maybe.map,
-           function (_p11) {
-              var _p12 = _p11;
+           function (_p12) {
+              var _p13 = _p12;
               return {ctor: "_Tuple2"
                      ,_0: _U.update(state,
-                     {tabs: A3($Array.set,_p13,_p12._0,s(model).tabs)})
-                     ,_1: A2($Effects.map,Ripple(_p13),_p12._1)};
+                     {tabs: A3($Array.set,_p14,_p13._0,s(model).tabs)})
+                     ,_1: A2($Effects.map,Ripple(_p14),_p13._1)};
            },
            A2($Maybe.map,
-           $Material$Ripple.update(_p8._1),
-           A2($Array.get,_p13,s(model).tabs))));
-           var state$ = _p10._0;
-           var effect = _p10._1;
+           $Material$Ripple.update(_p9._1),
+           A2($Array.get,_p14,s(model).tabs))));
+           var state$ = _p11._0;
+           var effect = _p11._1;
            return {ctor: "_Tuple2"
                   ,_0: _U.update(model,{state: S(state$)})
                   ,_1: effect};
          case "ScrollTab": return {ctor: "_Tuple2"
                                   ,_0: model
                                   ,_1: $Effects.none};
-         case "ScrollContents":
-         var headerVisible = state.isSmallScreen || model.fixedHeader;
+         case "TransitionHeader":
+         var headerVisible = $Basics.not(state.isSmallScreen) || model.fixedHeader;
            var state$ = _U.update(state,
-           {isCompact: _p8._0,isAnimating: headerVisible});
-           return {ctor: "_Tuple2"
-                  ,_0: _U.update(model,{state: S(state$)})
-                  ,_1: $Effects.none};
-         case "TransitionEnd": return {ctor: "_Tuple2"
-                                      ,_0: _U.update(model,
-                                      {state: S(_U.update(state,{isAnimating: false}))})
-                                      ,_1: $Effects.none};
+           {isCompact: _p9._0,isAnimating: headerVisible});
+           return $Basics.not(state.isAnimating) ? {ctor: "_Tuple2"
+                                                   ,_0: _U.update(model,{state: S(state$)})
+                                                   ,_1: A2($Material$Helpers.delay,
+                                                   200,
+                                                   TransitionEnd)} : {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          default: return {ctor: "_Tuple2"
                          ,_0: _U.update(model,
-                         {state: S(_U.update(state,
-                         {isAnimating: true,isCompact: false}))})
+                         {state: S(_U.update(state,{isAnimating: false}))})
                          ,_1: $Effects.none};}
    });
    var State$ = F4(function (a,b,c,d) {
@@ -17804,37 +17773,38 @@ Elm.Material.Layout.make = function (_elm) {
    var scrollMailbox = $Signal.mailbox(0.0);
    var setupSignals = function (f) {
       return $Signal.mergeMany(_U.list([A2($Signal.map,
-                                       function (_p14) {
-                                          return f(SmallScreen(_p14));
+                                       function (_p15) {
+                                          return f(SmallScreen(_p15));
                                        },
                                        $Signal.dropRepeats(A2($Signal.map,
                                        F2(function (x,y) {    return _U.cmp(x,y) > 0;})(1024),
                                        $Window.width)))
                                        ,A2($Signal.map,
-                                       function (_p15) {
-                                          return f(ScrollContents(_p15));
+                                       function (_p16) {
+                                          return f(TransitionHeader(_p16));
                                        },
                                        $Signal.dropRepeats(A2($Signal.map,
                                        F2(function (x,y) {    return _U.cmp(x,y) < 0;})(0.0),
                                        scrollMailbox.signal)))]));
    };
-   var view = F3(function (addr,model,_p16) {
-      var _p17 = _p16;
-      var _p22 = _p17.tabs;
-      var _p21 = _p17.header;
-      var _p20 = _p17.drawer;
-      var tabsElems = $List.isEmpty(_p22) ? $Maybe.Nothing : $Maybe.Just(A3(tabsView,
+   var view = F3(function (addr,model,_p17) {
+      var _p18 = _p17;
+      var _p23 = _p18.tabs;
+      var _p22 = _p18.header;
+      var _p21 = _p18.drawer;
+      var hasTabs = $Basics.not($List.isEmpty($Basics.fst(_p23)));
+      var hasHeader = hasTabs || $Basics.not($List.isEmpty(_p22));
+      var tabsElems = $Basics.not(hasTabs) ? $Maybe.Nothing : $Maybe.Just(A3(tabsView,
       addr,
       model,
-      _p22));
-      var hasHeader = $Basics.not($List.isEmpty(_p22) && $List.isEmpty(_p21));
-      var _p18 = function () {
-         var _p19 = {ctor: "_Tuple3"
-                    ,_0: _p20
-                    ,_1: _p21
+      _p23));
+      var _p19 = function () {
+         var _p20 = {ctor: "_Tuple3"
+                    ,_0: _p21
+                    ,_1: _p22
                     ,_2: model.fixedHeader};
-         if (_p19.ctor === "_Tuple3" && _p19._0.ctor === "::") {
-               if (_p19._1.ctor === "::" && _p19._2 === true) {
+         if (_p20.ctor === "_Tuple3" && _p20._0.ctor === "::") {
+               if (_p20._1.ctor === "::" && _p20._2 === true) {
                      return {ctor: "_Tuple2"
                             ,_0: $Maybe.Nothing
                             ,_1: $Maybe.Just(drawerButton(addr))};
@@ -17849,8 +17819,8 @@ Elm.Material.Layout.make = function (_elm) {
                       ,_1: $Maybe.Nothing};
             }
       }();
-      var contentDrawerButton = _p18._0;
-      var headerDrawerButton = _p18._1;
+      var contentDrawerButton = _p19._0;
+      var headerDrawerButton = _p19._1;
       return A2($Html.div,
       _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2"
                                                    ,_0: "mdl-layout__container"
@@ -17867,32 +17837,32 @@ Elm.Material.Layout.make = function (_elm) {
                                                   ,{ctor: "_Tuple2"
                                                    ,_0: "is-small-screen"
                                                    ,_1: s(model).isSmallScreen}
-                                                  ,{ctor: "_Tuple2",_0: "has-drawer",_1: !_U.eq(_p20,_U.list([]))}
-                                                  ,{ctor: "_Tuple2",_0: "has-tabs",_1: !_U.eq(_p22,_U.list([]))}
+                                                  ,{ctor: "_Tuple2",_0: "has-drawer",_1: !_U.eq(_p21,_U.list([]))}
+                                                  ,{ctor: "_Tuple2",_0: "has-tabs",_1: hasTabs}
                                                   ,{ctor: "_Tuple2",_0: "mdl-js-layout",_1: true}
                                                   ,{ctor: "_Tuple2"
                                                    ,_0: "mdl-layout--fixed-drawer"
-                                                   ,_1: model.fixedDrawer && !_U.eq(_p20,_U.list([]))}
+                                                   ,_1: model.fixedDrawer && !_U.eq(_p21,_U.list([]))}
                                                   ,{ctor: "_Tuple2"
                                                    ,_0: "mdl-layout--fixed-header"
                                                    ,_1: model.fixedHeader && hasHeader}
                                                   ,{ctor: "_Tuple2"
                                                    ,_0: "mdl-layout--fixed-tabs"
-                                                   ,_1: model.fixedTabs && !_U.eq(_p22,_U.list([]))}]))]),
+                                                   ,_1: model.fixedTabs && hasTabs}]))]),
       _U.list([hasHeader ? $Maybe.Just(A3(headerView,
               addr,
               model,
               {ctor: "_Tuple3"
               ,_0: headerDrawerButton
-              ,_1: _p21
+              ,_1: _p22
               ,_2: tabsElems})) : $Maybe.Nothing
-              ,$List.isEmpty(_p20) ? $Maybe.Nothing : $Maybe.Just(A2(obfuscator,
+              ,$List.isEmpty(_p21) ? $Maybe.Nothing : $Maybe.Just(A2(obfuscator,
               addr,
               model))
-              ,$List.isEmpty(_p20) ? $Maybe.Nothing : $Maybe.Just(A3(drawerView,
+              ,$List.isEmpty(_p21) ? $Maybe.Nothing : $Maybe.Just(A3(drawerView,
               addr,
               model,
-              _p20))
+              _p21))
               ,contentDrawerButton
               ,$Maybe.Just(A2($Html.main$,
               A2($List._op["::"],
@@ -17905,7 +17875,7 @@ Elm.Material.Layout.make = function (_elm) {
               "scroll",
               $DOM.target($DOM.scrollTop),
               $Signal.message(scrollMailbox.address))]) : _U.list([]))),
-              _p17.main))]))]));
+              _p18.main))]))]));
    });
    return _elm.Material.Layout.values = {_op: _op
                                         ,setupSignals: setupSignals
@@ -18031,30 +18001,39 @@ Elm.Main.make = function (_elm) {
    var e404 = F2(function (_p2,_p1) {
       return A2($Html.div,
       _U.list([]),
-      _U.list([A4($Material$Style.styled,
+      _U.list([A3($Material$Style.styled,
       $Html.h1,
       _U.list([$Material$Style.cs("mdl-typography--display-4")
               ,$Material$Color.background($Material$Color.primary)]),
-      _U.list([]),
       _U.list([$Html.text("404")]))]));
    });
-   var header = _U.list([$Material$Layout.row(_U.list([$Material$Layout.title("elm-mdl")
-                                                      ,$Material$Layout.spacer
-                                                      ,$Material$Layout.navigation(_U.list([A2($Material$Layout.link,
-                                                                                           _U.list([$Html$Attributes.href("https://github.com/debois/elm-mdl")]),
-                                                                                           _U.list([A2($Html.span,
-                                                                                           _U.list([]),
-                                                                                           _U.list([$Html.text("github")]))]))
-                                                                                           ,A2($Material$Layout.link,
-                                                                                           _U.list([$Html$Attributes.href("http://package.elm-lang.org/packages/debois/elm-mdl/latest/")]),
-                                                                                           _U.list([$Html.text("elm-package")]))]))]))]);
-   var drawer = _U.list([$Material$Layout.title("Example drawer")
-                        ,$Material$Layout.navigation(_U.list([A2($Material$Layout.link,
-                                                             _U.list([$Html$Attributes.href("https://github.com/debois/elm-mdl")]),
-                                                             _U.list([$Html.text("github")]))
-                                                             ,A2($Material$Layout.link,
-                                                             _U.list([$Html$Attributes.href("http://package.elm-lang.org/packages/debois/elm-mdl/latest/")]),
-                                                             _U.list([$Html.text("elm-package")]))]))]);
+   var header = _U.list([A2($Material$Layout.row,
+   _U.list([]),
+   _U.list([A2($Material$Layout.title,
+           _U.list([]),
+           _U.list([$Html.text("elm-mdl")]))
+           ,$Material$Layout.spacer
+           ,A2($Material$Layout.navigation,
+           _U.list([]),
+           _U.list([A2($Material$Layout.link,
+                   _U.list([$Material$Style.attribute($Html$Attributes.href("https://github.com/debois/elm-mdl"))]),
+                   _U.list([A2($Html.span,
+                   _U.list([]),
+                   _U.list([$Html.text("github")]))]))
+                   ,A2($Material$Layout.link,
+                   _U.list([$Material$Style.attribute($Html$Attributes.href("http://package.elm-lang.org/packages/debois/elm-mdl/latest/"))]),
+                   _U.list([$Html.text("elm-package")]))]))]))]);
+   var drawer = _U.list([A2($Material$Layout.title,
+                        _U.list([]),
+                        _U.list([$Html.text("Example drawer")]))
+                        ,A2($Material$Layout.navigation,
+                        _U.list([]),
+                        _U.list([A2($Material$Layout.link,
+                                _U.list([$Material$Style.attribute($Html$Attributes.href("https://github.com/debois/elm-mdl"))]),
+                                _U.list([$Html.text("github")]))
+                                ,A2($Material$Layout.link,
+                                _U.list([$Material$Style.attribute($Html$Attributes.href("http://package.elm-lang.org/packages/debois/elm-mdl/latest/"))]),
+                                _U.list([$Html.text("elm-package")]))]))]);
    var nth = F2(function (k,xs) {
       return $List.head(A2($List.drop,k,xs));
    });
@@ -18152,14 +18131,18 @@ Elm.Main.make = function (_elm) {
       model.layout,
       {header: header
       ,drawer: drawer
-      ,tabs: tabTitles
+      ,tabs: {ctor: "_Tuple2"
+             ,_0: tabTitles
+             ,_1: _U.list([$Material$Color.background(A2($Material$Color.color,
+             $Material$Color.Teal,
+             $Material$Color.S400))])}
       ,main: _U.list([stylesheet,top])}));
    });
    var HopAction = function (a) {
       return {ctor: "HopAction",_0: a};
    };
    var update = F2(function (action,model) {
-      var _p7 = A2($Debug.log,"Action",action);
+      var _p7 = action;
       switch (_p7.ctor)
       {case "LayoutAction": var _p12 = _p7._0;
            var routeFx = function () {
@@ -18252,8 +18235,8 @@ Elm.Main.make = function (_elm) {
    });
    var layoutModel = _U.update($Material$Layout.defaultLayoutModel,
    {state: $Material$Layout.initState($List.length(tabs))
-   ,mode: $Material$Layout.Waterfall(true)
-   ,fixedHeader: false});
+   ,mode: $Material$Layout.Waterfall(false)
+   ,fixedHeader: true});
    var E404 = {ctor: "E404"};
    var Tab = function (a) {    return {ctor: "Tab",_0: a};};
    var route0 = {ctor: "_Tuple2"
