@@ -9947,6 +9947,12 @@ Elm.DOM.make = function (_elm) {
    var parentElement = function (decoder) {
       return A2($Json$Decode._op[":="],"parentElement",decoder);
    };
+   var previousSibling = function (decoder) {
+      return A2($Json$Decode._op[":="],"previousSibling",decoder);
+   };
+   var nextSibling = function (decoder) {
+      return A2($Json$Decode._op[":="],"nextSibling",decoder);
+   };
    var offsetParent = F2(function (x,decoder) {
       return $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],
                                         "offsetParent",
@@ -9989,6 +9995,8 @@ Elm.DOM.make = function (_elm) {
                             ,target: target
                             ,offsetParent: offsetParent
                             ,parentElement: parentElement
+                            ,nextSibling: nextSibling
+                            ,previousSibling: previousSibling
                             ,childNode: childNode
                             ,childNodes: childNodes
                             ,offsetWidth: offsetWidth
@@ -14717,15 +14725,16 @@ Elm.Demo.Grid.make = function (_elm) {
 };
 Elm.Material = Elm.Material || {};
 Elm.Material.Menu = Elm.Material.Menu || {};
-Elm.Material.Menu.Oracle = Elm.Material.Menu.Oracle || {};
-Elm.Material.Menu.Oracle.make = function (_elm) {
+Elm.Material.Menu.Geometry = Elm.Material.Menu.Geometry || {};
+Elm.Material.Menu.Geometry.make = function (_elm) {
    "use strict";
    _elm.Material = _elm.Material || {};
    _elm.Material.Menu = _elm.Material.Menu || {};
-   _elm.Material.Menu.Oracle = _elm.Material.Menu.Oracle || {};
-   if (_elm.Material.Menu.Oracle.values)
-   return _elm.Material.Menu.Oracle.values;
+   _elm.Material.Menu.Geometry = _elm.Material.Menu.Geometry || {};
+   if (_elm.Material.Menu.Geometry.values)
+   return _elm.Material.Menu.Geometry.values;
    var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $DOM = Elm.DOM.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -14735,75 +14744,64 @@ Elm.Material.Menu.Oracle.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var element = A5($Json$Decode.object4,
-   F4(function (offsetTop,offsetLeft,offsetHeight,bounds) {
-      return {offsetTop: offsetTop
-             ,offsetLeft: offsetLeft
-             ,offsetHeight: offsetHeight
-             ,bounds: bounds};
-   }),
-   $DOM.offsetTop,
-   $DOM.offsetLeft,
-   $DOM.offsetHeight,
-   $DOM.boundingClientRect);
-   var decode$ = A6($Json$Decode.object5,
-   F5(function (button,container,menu,offsetTops,offsetHeights) {
-      return {button: button
-             ,container: container
-             ,menu: menu
-             ,offsetTops: offsetTops
-             ,offsetHeights: offsetHeights};
-   }),
-   A2($Json$Decode.at,
-   _U.list(["target","parentNode","parentNode","previousSibling"]),
-   element),
-   A2($Json$Decode.at,
-   _U.list(["target","parentNode","parentNode"]),
-   element),
-   A2($Json$Decode.at,_U.list(["target","parentNode"]),element),
-   A2($Json$Decode.at,
-   _U.list(["target","parentNode"]),
-   $DOM.childNodes($DOM.offsetTop)),
-   A2($Json$Decode.at,
-   _U.list(["target","parentNode"]),
-   $DOM.childNodes($DOM.offsetHeight)));
-   var decode = A6($Json$Decode.object5,
-   F5(function (button,container,menu,offsetTops,offsetHeights) {
-      return {button: button
-             ,menu: menu
-             ,container: container
-             ,offsetTops: offsetTops
-             ,offsetHeights: offsetHeights};
-   }),
-   A2($Json$Decode._op[":="],"target",element),
-   A2($Json$Decode.at,_U.list(["target","nextSibling"]),element),
-   A2($Json$Decode.at,
-   _U.list(["target","nextSibling"]),
-   A2($DOM.childNode,1,element)),
-   A2($Json$Decode.at,
-   _U.list(["target","nextSibling"]),
-   A2($DOM.childNode,1,$DOM.childNodes($DOM.offsetTop))),
-   A2($Json$Decode.at,
-   _U.list(["target","nextSibling"]),
-   A2($DOM.childNode,1,$DOM.childNodes($DOM.offsetHeight))));
    var Element = F4(function (a,b,c,d) {
       return {offsetTop: a
              ,offsetLeft: b
              ,offsetHeight: c
              ,bounds: d};
    });
-   var Oracle = F5(function (a,b,c,d,e) {
+   var element = A5($Json$Decode.object4,
+   Element,
+   $DOM.offsetTop,
+   $DOM.offsetLeft,
+   $DOM.offsetHeight,
+   $DOM.boundingClientRect);
+   var Geometry = F5(function (a,b,c,d,e) {
       return {button: a
              ,menu: b
              ,container: c
              ,offsetTops: d
              ,offsetHeights: e};
    });
-   return _elm.Material.Menu.Oracle.values = {_op: _op
-                                             ,decode: decode
-                                             ,decode$: decode$
-                                             ,Oracle: Oracle
-                                             ,Element: Element};
+   var decode = A6($Json$Decode.object5,
+   Geometry,
+   $DOM.target(element),
+   $DOM.target($DOM.nextSibling(A2($DOM.childNode,1,element))),
+   $DOM.target($DOM.nextSibling(element)),
+   $DOM.target($DOM.nextSibling(A2($DOM.childNode,
+   1,
+   A2($Json$Decode.andThen,
+   $DOM.childNodes($DOM.offsetTop),
+   function (_p0) {
+      return $Json$Decode.succeed($Array.fromList(_p0));
+   })))),
+   $DOM.target($DOM.nextSibling(A2($DOM.childNode,
+   1,
+   A2($Json$Decode.andThen,
+   $DOM.childNodes($DOM.offsetHeight),
+   function (_p1) {
+      return $Json$Decode.succeed($Array.fromList(_p1));
+   })))));
+   var decode$ = A6($Json$Decode.object5,
+   Geometry,
+   $DOM.target($DOM.parentElement($DOM.parentElement($DOM.previousSibling(element)))),
+   $DOM.target($DOM.parentElement(element)),
+   $DOM.target($DOM.parentElement($DOM.parentElement(element))),
+   $DOM.target($DOM.parentElement(A2($Json$Decode.andThen,
+   $DOM.childNodes($DOM.offsetTop),
+   function (_p2) {
+      return $Json$Decode.succeed($Array.fromList(_p2));
+   }))),
+   $DOM.target($DOM.parentElement(A2($Json$Decode.andThen,
+   $DOM.childNodes($DOM.offsetHeight),
+   function (_p3) {
+      return $Json$Decode.succeed($Array.fromList(_p3));
+   }))));
+   return _elm.Material.Menu.Geometry.values = {_op: _op
+                                               ,decode: decode
+                                               ,decode$: decode$
+                                               ,Geometry: Geometry
+                                               ,Element: Element};
 };
 Elm.Material = Elm.Material || {};
 Elm.Material.Menu = Elm.Material.Menu || {};
@@ -14813,6 +14811,7 @@ Elm.Material.Menu.make = function (_elm) {
    _elm.Material.Menu = _elm.Material.Menu || {};
    if (_elm.Material.Menu.values) return _elm.Material.Menu.values;
    var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Dict = Elm.Dict.make(_elm),
@@ -14824,7 +14823,7 @@ Elm.Material.Menu.make = function (_elm) {
    $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
    $Material$Helpers = Elm.Material.Helpers.make(_elm),
-   $Material$Menu$Oracle = Elm.Material.Menu.Oracle.make(_elm),
+   $Material$Menu$Geometry = Elm.Material.Menu.Geometry.make(_elm),
    $Material$Ripple = Elm.Material.Ripple.make(_elm),
    $Material$Style = Elm.Material.Style.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
@@ -14833,142 +14832,193 @@ Elm.Material.Menu.make = function (_elm) {
    $String = Elm.String.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
-   var fromJust = F2(function (crash,x) {
-      var _p0 = x;
-      if (_p0.ctor === "Nothing") {
-            return _U.crashCase("Material.Menu",
-            {start: {line: 521,column: 3},end: {line: 523,column: 17}},
-            _p0)(crash);
-         } else {
-            return _p0._0;
-         }
-   });
-   var isJust = function (x) {
-      var _p2 = x;
-      if (_p2.ctor === "Nothing") {
-            return false;
-         } else {
-            return true;
-         }
+   var toPx = function (_p0) {
+      return A3($Basics.flip,
+      F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
+      "px",
+      $Basics.toString(_p0));
    };
+   var rect = F4(function (x,y,w,h) {
+      return function (coords) {
+         return A2($Basics._op["++"],
+         "rect(",
+         A2($Basics._op["++"],coords,")"));
+      }(A2($String.join," ",A2($List.map,toPx,_U.list([x,y,w,h]))));
+   });
    var onClick = F3(function (addr,decoder,action) {
       return A4($Html$Events.onWithOptions,
       "click",
       $Html$Events.defaultOptions,
       decoder,
-      function (_p3) {
-         return A2($Signal.message,addr,action(_p3));
+      function (_p1) {
+         return A2($Signal.message,addr,action(_p1));
       });
    });
    var Ripple = F2(function (a,b) {
       return {ctor: "Ripple",_0: a,_1: b};
    });
-   var Close = {ctor: "Close"};
-   var Open = {ctor: "Open"};
-   var Select = function (a) {    return {ctor: "Select",_0: a};};
-   var Hide = F2(function (a,b) {
-      return {ctor: "Hide",_0: a,_1: b};
+   var Close$ = function (a) {    return {ctor: "Close\'",_0: a};};
+   var Select$ = F2(function (a,b) {
+      return {ctor: "Select\'",_0: a,_1: b};
    });
-   var Close$ = F2(function (a,b) {
-      return {ctor: "Close\'",_0: a,_1: b};
-   });
-   var Toggle = function (a) {    return {ctor: "Toggle",_0: a};};
+   var Open$ = function (a) {    return {ctor: "Open\'",_0: a};};
    var item = F3(function (divider,enabled,html) {
       return {html: html,enabled: enabled,divider: divider};
    });
    var Item = F3(function (a,b,c) {
       return {html: a,enabled: b,divider: c};
    });
-   var unaligned = $Material$Style.cs("mdl-menu--unaligned");
-   var topRight = $Material$Style.cs("mdl-menu--top-right");
-   var topLeft = $Material$Style.cs("mdl-menu--top-left");
-   var bottomRight = $Material$Style.cs("mdl-menu--bottom-right");
-   var bottomLeft = $Material$Style.cs("mdl-menu--bottom-left");
+   var Unaligned = {ctor: "Unaligned"};
+   var TopRight = {ctor: "TopRight"};
+   var TopLeft = {ctor: "TopLeft"};
+   var BottomRight = {ctor: "BottomRight"};
+   var BottomLeft = {ctor: "BottomLeft"};
+   var Closing = {ctor: "Closing"};
+   var Opened = {ctor: "Opened"};
+   var Opening = {ctor: "Opening"};
+   var Idle = {ctor: "Idle"};
    var model = F2(function (ripple,alignemnt) {
       return {alignment: alignemnt
              ,ripple: ripple
              ,items: $Dict.empty
-             ,open: $Maybe.Nothing
-             ,closing: false
-             ,oracle: $Maybe.Nothing};
+             ,animationState: Idle
+             ,geometry: $Maybe.Nothing};
    });
-   var Model = F6(function (a,b,c,d,e,f) {
+   var Model = F5(function (a,b,c,d,e) {
       return {alignment: a
              ,ripple: b
              ,items: c
-             ,open: d
-             ,closing: e
-             ,oracle: f};
+             ,animationState: d
+             ,geometry: e};
    });
    var constant = {transitionDurationSeconds: 0.3
                   ,transitionDurationFraction: 0.8
                   ,closeTimeout: 150};
    var update = F2(function (action,model) {
-      var _p4 = action;
-      switch (_p4.ctor)
-      {case "Toggle": var _p8 = _p4._0;
-           return A2($Material$Helpers.effect,
-           $Effects.tick(function (_p5) {    return Open;}),
-           _U.update(model,
-           {open: function () {
-              var _p6 = model.open;
-              if (_p6.ctor === "Nothing") {
-                    return $Maybe.Just(false);
+      var _p2 = action;
+      switch (_p2.ctor)
+      {case "Open\'": var _p4 = _p2._0;
+           return $Material$Helpers.pure(_U.update(model,
+           {animationState: function () {
+              var _p3 = model.animationState;
+              if (_p3.ctor === "Opened") {
+                    return Opened;
                  } else {
-                    if (_p6._0 === true) {
-                          return $Maybe.Nothing;
-                       } else {
-                          return model.open;
-                       }
+                    return Opened;
                  }
            }()
-           ,oracle: function () {
-              var _p7 = model.open;
-              if (_p7.ctor === "Nothing") {
-                    return $Maybe.Just(_p8);
-                 } else {
-                    if (_p7._0 === true) {
-                          return $Maybe.Just(_p8);
-                       } else {
-                          return model.oracle;
-                       }
-                 }
-           }()
+           ,geometry: $Maybe.Just(_p4)
            ,items: $Dict.fromList(A2($List.map,
            function (i) {
               return {ctor: "_Tuple2",_0: i,_1: $Material$Ripple.model};
            },
-           _U.range(1,$List.length(_p8.offsetTops))))}));
-         case "Open": return $Material$Helpers.pure(_U.update(model,
-           {open: _U.eq(model.open,
-           $Maybe.Just(false)) ? $Maybe.Just(true) : model.open}));
-         case "Hide": return A2($Material$Helpers.effect,
-           $Effects.tick(function (_p9) {    return Select(_p4._0);}),
-           _U.update(model,
-           {open: $Maybe.Nothing
-           ,closing: false
-           ,oracle: $Maybe.Just(_p4._1)}));
-         case "Close\'": return A2($Material$Helpers.effect,
-           $Effects.task(function (_p10) {
+           _U.range(1,$Array.length(_p4.offsetTops))))}));
+         case "Close\'": return $Material$Helpers.pure(_U.update(model,
+           {animationState: Idle,geometry: $Maybe.Just(_p2._0)}));
+         case "Select\'": return A2($Material$Helpers.effect,
+           $Effects.task(function (_p5) {
               return A2($Task.andThen,
               $Task.sleep(constant.closeTimeout),
-              $Basics.always(_p10));
-           }($Task.succeed(A2(Hide,_p4._0,_p4._1)))),
-           _U.update(model,{closing: true}));
-         case "Ripple": var _p12 = _p4._0;
-           var _p11 = A2($Material$Ripple.update,
-           _p4._1,
+              $Basics.always(_p5));
+           }($Task.succeed(Close$(_p2._1)))),
+           _U.update(model,{animationState: Closing}));
+         default: var _p7 = _p2._0;
+           var _p6 = A2($Material$Ripple.update,
+           _p2._1,
            A2($Maybe.withDefault,
            $Material$Ripple.model,
-           A2($Dict.get,_p12,model.items)));
-           var model$ = _p11._0;
-           var effects = _p11._1;
+           A2($Dict.get,_p7,model.items)));
+           var model$ = _p6._0;
+           var effects = _p6._1;
            return A2($Material$Helpers.effect,
-           A2($Effects.map,Ripple(_p12),effects),
+           A2($Effects.map,Ripple(_p7),effects),
            _U.update(model,
-           {items: A3($Dict.insert,_p12,model$,model.items)}));
-         case "Select": return $Material$Helpers.pure(model);
-         default: return $Material$Helpers.pure(model);}
+           {items: A3($Dict.insert,_p7,model$,model.items)}));}
+   });
+   var makeItem = F4(function (addr,model,n,item) {
+      var height = function () {
+         var _p8 = model.geometry;
+         if (_p8.ctor === "Nothing") {
+               return 0;
+            } else {
+               return _p8._0.menu.bounds.height;
+            }
+      }();
+      var offsetHeight = function (n) {
+         var _p9 = model.geometry;
+         if (_p9.ctor === "Nothing") {
+               return 0;
+            } else {
+               return A2($Maybe.withDefault,
+               0,
+               A2($Array.get,n - 1,_p9._0.offsetHeights));
+            }
+      };
+      var offsetTop = function (n) {
+         var _p10 = model.geometry;
+         if (_p10.ctor === "Nothing") {
+               return 0;
+            } else {
+               return A2($Maybe.withDefault,
+               0,
+               A2($Array.get,n - 1,_p10._0.offsetTops));
+            }
+      };
+      var transitionDuration = constant.transitionDurationSeconds * constant.transitionDurationFraction;
+      var itemDelay = _U.eq(model.alignment,
+      TopLeft) || _U.eq(model.alignment,TopRight) ? A3($Basics.flip,
+      F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
+      "s",
+      $Basics.toString((height - offsetTop(n) - offsetHeight(n)) / height * transitionDuration)) : A3($Basics.flip,
+      F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
+      "s",
+      $Basics.toString(offsetTop(n) / height * transitionDuration));
+      return A3($Material$Style.styled,
+      $Html.li,
+      _U.list([item.enabled ? $Material$Style.attribute(A3(onClick,
+              addr,
+              $Material$Menu$Geometry.decode$,
+              Select$(n))) : $Material$Style.attribute(A2($Html$Attributes.attribute,
+              "disabled",
+              "disabled"))
+              ,$Material$Style.cs("mdl-menu__item")
+              ,A3($Material$Style.css$,
+              "transition-delay",
+              itemDelay,
+              _U.eq(model.animationState,
+              Opening) || _U.eq(model.animationState,Opened))
+              ,A2($Material$Style.cs$,"mdl-js-ripple-effect",model.ripple)
+              ,A2($Material$Style.cs$,
+              "mdl-menu__item--full-bleed-divider",
+              item.divider)
+              ,$Material$Style.attribute(A2($Html$Attributes.property,
+              "tabindex",
+              $Json$Encode.string("-1")))
+              ,$Material$Style.attribute(A2($Material$Ripple.downOn,
+              "mousedown",
+              A2($Signal.forwardTo,addr,Ripple(n))))
+              ,$Material$Style.attribute(A2($Material$Ripple.downOn,
+              "touchstart",
+              A2($Signal.forwardTo,addr,Ripple(n))))
+              ,$Material$Style.attribute(A2($Material$Ripple.upOn,
+              "mouseup",
+              A2($Signal.forwardTo,addr,Ripple(n))))
+              ,$Material$Style.attribute(A2($Material$Ripple.upOn,
+              "mouseleave",
+              A2($Signal.forwardTo,addr,Ripple(n))))
+              ,$Material$Style.attribute(A2($Material$Ripple.upOn,
+              "touchend",
+              A2($Signal.forwardTo,addr,Ripple(n))))
+              ,$Material$Style.attribute(A2($Material$Ripple.upOn,
+              "blur",
+              A2($Signal.forwardTo,addr,Ripple(n))))]),
+      model.ripple ? _U.list([item.html
+                             ,A3($Material$Ripple.view,
+                             A2($Signal.forwardTo,addr,Ripple(n)),
+                             _U.list([$Html$Attributes.$class("mdl-menu__item-ripple-container")]),
+                             A2($Maybe.withDefault,
+                             $Material$Ripple.model,
+                             A2($Dict.get,n,model.items)))]) : _U.list([item.html]));
    });
    var view = F3(function (addr,model,items) {
       return _U.list([A3($Material$Style.styled,
@@ -14976,12 +15026,23 @@ Elm.Material.Menu.make = function (_elm) {
                      _U.list([$Material$Style.cs("mdl-button")
                              ,$Material$Style.cs("mdl-js-button")
                              ,$Material$Style.cs("mdl-button--icon")
-                             ,$Material$Style.attribute(A3(onClick,
-                             addr,
-                             $Material$Menu$Oracle.decode,
-                             Toggle))]),
-                     _U.list([A2($Html.i,
-                     _U.list([$Html$Attributes.$class("material-icons")]),
+                             ,$Material$Style.attribute(function () {
+                                var _p11 = model.animationState;
+                                if (_p11.ctor === "Opened") {
+                                      return A3(onClick,
+                                      addr,
+                                      $Material$Menu$Geometry.decode,
+                                      Close$);
+                                   } else {
+                                      return A3(onClick,addr,$Material$Menu$Geometry.decode,Open$);
+                                   }
+                             }())]),
+                     _U.list([A3($Material$Style.styled,
+                     $Html.i,
+                     _U.list([$Material$Style.cs("material-icons")
+                             ,$Material$Style.attribute($Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                                                        ,_0: "pointer-events"
+                                                                                        ,_1: "none"}])))]),
                      _U.list([$Html.text("more_vert")]))]))
                      ,A3($Material$Style.styled,
                      $Html.div,
@@ -14989,95 +15050,96 @@ Elm.Material.Menu.make = function (_elm) {
                              ,$Material$Style.cs("is-upgraded")
                              ,A2($Material$Style.cs$,
                              "is-visible",
-                             _U.eq(model.open,$Maybe.Just(true)))
+                             _U.eq(model.animationState,
+                             Opened) || _U.eq(model.animationState,Closing))
                              ,A3($Material$Style.css$,
                              "width",
                              function () {
-                                var _p13 = model.oracle;
+                                var _p12 = model.geometry;
+                                if (_p12.ctor === "Just") {
+                                      return A3($Basics.flip,
+                                      F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
+                                      "px",
+                                      $Basics.toString(_p12._0.menu.bounds.width));
+                                   } else {
+                                      return "auto";
+                                   }
+                             }(),
+                             !_U.eq(model.geometry,$Maybe.Nothing))
+                             ,A3($Material$Style.css$,
+                             "height",
+                             function () {
+                                var _p13 = model.geometry;
                                 if (_p13.ctor === "Just") {
                                       return A3($Basics.flip,
                                       F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                       "px",
-                                      $Basics.toString(_p13._0.menu.bounds.width));
+                                      $Basics.toString(_p13._0.menu.bounds.height));
                                    } else {
                                       return "auto";
                                    }
                              }(),
-                             isJust(model.oracle))
-                             ,A3($Material$Style.css$,
-                             "height",
-                             function () {
-                                var _p14 = model.oracle;
-                                if (_p14.ctor === "Just") {
-                                      return A3($Basics.flip,
-                                      F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
-                                      "px",
-                                      $Basics.toString(_p14._0.menu.bounds.height));
-                                   } else {
-                                      return "auto";
-                                   }
-                             }(),
-                             isJust(model.oracle))
+                             !_U.eq(model.geometry,$Maybe.Nothing))
                              ,A3($Basics.flip,
                              $Material$Style.css$("top"),
-                             (_U.eq(model.alignment,bottomRight) || _U.eq(model.alignment,
-                             bottomLeft)) && isJust(model.oracle),
+                             (_U.eq(model.alignment,BottomRight) || _U.eq(model.alignment,
+                             BottomLeft)) && !_U.eq(model.geometry,$Maybe.Nothing),
                              function () {
-                                var _p15 = model.oracle;
-                                if (_p15.ctor === "Nothing") {
+                                var _p14 = model.geometry;
+                                if (_p14.ctor === "Nothing") {
                                       return "auto";
                                    } else {
-                                      var _p16 = _p15._0;
+                                      var _p15 = _p14._0;
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(_p16.button.offsetTop + _p16.button.offsetHeight),
+                                      $Basics.toString(_p15.button.offsetTop + _p15.button.offsetHeight),
                                       "px");
                                    }
                              }())
                              ,A3($Basics.flip,
                              $Material$Style.css$("right"),
-                             (_U.eq(model.alignment,bottomRight) || _U.eq(model.alignment,
-                             topRight)) && isJust(model.oracle),
+                             (_U.eq(model.alignment,BottomRight) || _U.eq(model.alignment,
+                             TopRight)) && !_U.eq(model.geometry,$Maybe.Nothing),
                              function () {
-                                var _p17 = model.oracle;
-                                if (_p17.ctor === "Nothing") {
+                                var _p16 = model.geometry;
+                                if (_p16.ctor === "Nothing") {
                                       return "auto";
                                    } else {
-                                      var _p18 = _p17._0;
+                                      var _p17 = _p16._0;
                                       var right = function (e) {
                                          return e.bounds.left + e.bounds.width;
                                       };
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(right(_p18.container) - right(_p18.menu)),
+                                      $Basics.toString(right(_p17.container) - right(_p17.menu)),
                                       "px");
                                    }
                              }())
                              ,A3($Basics.flip,
                              $Material$Style.css$("bottom"),
-                             (_U.eq(model.alignment,topLeft) || _U.eq(model.alignment,
-                             topRight)) && isJust(model.oracle),
+                             (_U.eq(model.alignment,TopLeft) || _U.eq(model.alignment,
+                             TopRight)) && !_U.eq(model.geometry,$Maybe.Nothing),
                              function () {
-                                var _p19 = model.oracle;
-                                if (_p19.ctor === "Nothing") {
+                                var _p18 = model.geometry;
+                                if (_p18.ctor === "Nothing") {
                                       return "auto";
                                    } else {
-                                      var _p20 = _p19._0;
-                                      var bottom = _p20.container.bounds.top + _p20.container.bounds.height;
+                                      var _p19 = _p18._0;
+                                      var bottom = _p19.container.bounds.top + _p19.container.bounds.height;
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(bottom - _p20.button.bounds.top),
+                                      $Basics.toString(bottom - _p19.button.bounds.top),
                                       "px");
                                    }
                              }())
                              ,A3($Basics.flip,
                              $Material$Style.css$("left"),
-                             (_U.eq(model.alignment,topLeft) || _U.eq(model.alignment,
-                             bottomLeft)) && isJust(model.oracle),
+                             (_U.eq(model.alignment,TopLeft) || _U.eq(model.alignment,
+                             BottomLeft)) && !_U.eq(model.geometry,$Maybe.Nothing),
                              function () {
-                                var _p21 = model.oracle;
-                                if (_p21.ctor === "Nothing") {
+                                var _p20 = model.geometry;
+                                if (_p20.ctor === "Nothing") {
                                       return "auto";
                                    } else {
                                       return A2($Basics._op["++"],
-                                      $Basics.toString(_p21._0.menu.offsetLeft),
+                                      $Basics.toString(_p20._0.menu.offsetLeft),
                                       "px");
                                    }
                              }())]),
@@ -15087,201 +15149,112 @@ Elm.Material.Menu.make = function (_elm) {
                                      ,A3($Material$Style.css$,
                                      "width",
                                      function () {
-                                        var _p22 = model.oracle;
+                                        var _p21 = model.geometry;
+                                        if (_p21.ctor === "Just") {
+                                              return A3($Basics.flip,
+                                              F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
+                                              "px",
+                                              $Basics.toString(_p21._0.menu.bounds.width));
+                                           } else {
+                                              return "auto";
+                                           }
+                                     }(),
+                                     !_U.eq(model.geometry,$Maybe.Nothing))
+                                     ,A3($Material$Style.css$,
+                                     "height",
+                                     function () {
+                                        var _p22 = model.geometry;
                                         if (_p22.ctor === "Just") {
                                               return A3($Basics.flip,
                                               F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
                                               "px",
-                                              $Basics.toString(_p22._0.menu.bounds.width));
+                                              $Basics.toString(_p22._0.menu.bounds.height));
                                            } else {
                                               return "auto";
                                            }
                                      }(),
-                                     isJust(model.oracle))
-                                     ,A3($Material$Style.css$,
-                                     "height",
-                                     function () {
-                                        var _p23 = model.oracle;
-                                        if (_p23.ctor === "Just") {
-                                              return A3($Basics.flip,
-                                              F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
-                                              "px",
-                                              $Basics.toString(_p23._0.menu.bounds.height));
-                                           } else {
-                                              return "auto";
-                                           }
-                                     }(),
-                                     isJust(model.oracle))
-                                     ,model.alignment]),
+                                     !_U.eq(model.geometry,$Maybe.Nothing))
+                                     ,function () {
+                                        var _p23 = model.alignment;
+                                        switch (_p23.ctor)
+                                        {case "BottomLeft":
+                                           return $Material$Style.cs("mdl-menu--bottom-left");
+                                           case "BottomRight":
+                                           return $Material$Style.cs("mdl-menu--bottom-right");
+                                           case "TopLeft": return $Material$Style.cs("mdl-menu--top-left");
+                                           case "TopRight":
+                                           return $Material$Style.cs("mdl-menu--top-right");
+                                           default: return $Material$Style.cs("mdl-menu--unaligned");}
+                                     }()]),
                              _U.list([]))
                              ,A3($Material$Style.styled,
                              $Html.ul,
                              _U.list([$Material$Style.cs("mdl-menu")
                                      ,$Material$Style.cs("mdl-js-menu")
-                                     ,model.alignment
+                                     ,function () {
+                                        var _p24 = model.alignment;
+                                        switch (_p24.ctor)
+                                        {case "BottomLeft":
+                                           return $Material$Style.cs("mdl-menu--bottom-left");
+                                           case "BottomRight":
+                                           return $Material$Style.cs("mdl-menu--bottom-right");
+                                           case "TopLeft": return $Material$Style.cs("mdl-menu--top-left");
+                                           case "TopRight":
+                                           return $Material$Style.cs("mdl-menu--top-right");
+                                           default: return $Material$Style.cs("mdl-menu--unaligned");}
+                                     }()
                                      ,A2($Material$Style.cs$,
                                      "is-animating",
-                                     _U.eq(model.open,$Maybe.Just(false)))
+                                     _U.eq(model.animationState,
+                                     Opening) || _U.eq(model.animationState,Closing))
                                      ,A3($Material$Style.css$,
                                      "clip",
                                      function () {
-                                        var _p24 = model.oracle;
-                                        if (_p24.ctor === "Nothing") {
+                                        var _p25 = model.geometry;
+                                        if (_p25.ctor === "Nothing") {
                                               return "auto";
                                            } else {
-                                              var _p25 = _p24._0;
-                                              var height = _p25.menu.bounds.height;
-                                              var width = _p25.menu.bounds.width;
-                                              var rect = F4(function (x,y,w,h) {
-                                                 return A2($String.join,
-                                                 "",
-                                                 _U.list(["rect( "
-                                                         ,A2($Basics._op["++"],$Basics.toString(x),"px")
-                                                         ," "
-                                                         ,A2($Basics._op["++"],$Basics.toString(y),"px")
-                                                         ," "
-                                                         ,A2($Basics._op["++"],$Basics.toString(w),"px")
-                                                         ," "
-                                                         ,A2($Basics._op["++"],$Basics.toString(h),"px")
-                                                         ,")"]));
-                                              });
-                                              return _U.eq(model.open,$Maybe.Just(true)) ? A4(rect,
+                                              var _p26 = _p25._0;
+                                              var height = _p26.menu.bounds.height;
+                                              var width = _p26.menu.bounds.width;
+                                              return _U.eq(model.animationState,
+                                              Opened) || _U.eq(model.animationState,Closing) ? A4(rect,
                                               0,
                                               width,
                                               height,
-                                              0) : _U.eq(model.alignment,bottomRight) ? A4(rect,
+                                              0) : _U.eq(model.alignment,BottomRight) ? A4(rect,
                                               0,
                                               width,
                                               0,
-                                              width) : _U.eq(model.alignment,topLeft) ? A4(rect,
+                                              width) : _U.eq(model.alignment,TopLeft) ? A4(rect,
                                               height,
                                               0,
                                               height,
-                                              0) : _U.eq(model.alignment,topRight) ? A4(rect,
+                                              0) : _U.eq(model.alignment,TopRight) ? A4(rect,
                                               height,
                                               width,
                                               height,
                                               width) : "";
                                            }
                                      }(),
-                                     isJust(model.oracle))]),
-                             function () {
-                                var makeItem = F2(function (n,item) {
-                                   var height = function () {
-                                      var _p26 = model.oracle;
-                                      if (_p26.ctor === "Nothing") {
-                                            return 0;
-                                         } else {
-                                            return _p26._0.menu.bounds.height;
-                                         }
-                                   }();
-                                   var offsetHeight = function (n) {
-                                      var _p27 = model.oracle;
-                                      if (_p27.ctor === "Nothing") {
-                                            return 0;
-                                         } else {
-                                            return A2(fromJust,
-                                            "Menu.view offsetHeight",
-                                            $List.head(A2($List.drop,n - 1,_p27._0.offsetHeights)));
-                                         }
-                                   };
-                                   var offsetTop = function (n) {
-                                      var _p28 = model.oracle;
-                                      if (_p28.ctor === "Nothing") {
-                                            return 0;
-                                         } else {
-                                            return A2(fromJust,
-                                            "Menu.view: offsetTop",
-                                            $List.head(A2($List.drop,n - 1,_p28._0.offsetTops)));
-                                         }
-                                   };
-                                   var transitionDuration = constant.transitionDurationSeconds * constant.transitionDurationFraction;
-                                   var itemDelay = _U.eq(model.alignment,
-                                   topLeft) || _U.eq(model.alignment,topRight) ? A3($Basics.flip,
-                                   F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
-                                   "s",
-                                   $Basics.toString((height - offsetTop(n) - offsetHeight(n)) / height * transitionDuration)) : A3($Basics.flip,
-                                   F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),
-                                   "s",
-                                   $Basics.toString(offsetTop(n) / height * transitionDuration));
-                                   return A3($Material$Style.styled,
-                                   $Html.li,
-                                   A2($List._op["::"],
-                                   item.enabled ? $Material$Style.attribute(A3(onClick,
-                                   addr,
-                                   $Material$Menu$Oracle.decode$,
-                                   Close$(n))) : $Material$Style.attribute(A2($Html$Attributes.attribute,
-                                   "disabled",
-                                   "disabled")),
-                                   A2($List._op["::"],
-                                   $Material$Style.cs("mdl-menu__item"),
-                                   A2($List._op["::"],
-                                   A3($Material$Style.css$,
-                                   "transition-delay",
-                                   itemDelay,
-                                   isJust(model.open)),
-                                   A2($List._op["::"],
-                                   A2($Material$Style.cs$,"mdl-js-ripple-effect",model.ripple),
-                                   A2($List._op["::"],
-                                   A2($Material$Style.cs$,
-                                   "mdl-menu__item--full-bleed-divider",
-                                   item.divider),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Html$Attributes.property,
-                                   "tabindex",
-                                   $Json$Encode.string("-1"))),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Material$Ripple.downOn,
-                                   "mousedown",
-                                   A2($Signal.forwardTo,addr,Ripple(n)))),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Material$Ripple.downOn,
-                                   "touchstart",
-                                   A2($Signal.forwardTo,addr,Ripple(n)))),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Material$Ripple.upOn,
-                                   "mouseup",
-                                   A2($Signal.forwardTo,addr,Ripple(n)))),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Material$Ripple.upOn,
-                                   "mouseleave",
-                                   A2($Signal.forwardTo,addr,Ripple(n)))),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Material$Ripple.upOn,
-                                   "touchend",
-                                   A2($Signal.forwardTo,addr,Ripple(n)))),
-                                   A2($List._op["::"],
-                                   $Material$Style.attribute(A2($Material$Ripple.upOn,
-                                   "blur",
-                                   A2($Signal.forwardTo,addr,Ripple(n)))),
-                                   _U.list([]))))))))))))),
-                                   A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
-                                   item.html,
-                                   model.ripple ? _U.list([A3($Material$Ripple.view,
-                                   A2($Signal.forwardTo,addr,Ripple(n)),
-                                   _U.list([$Html$Attributes.$class("mdl-menu__item-ripple-container")]),
-                                   A2($Maybe.withDefault,
-                                   $Material$Ripple.model,
-                                   A2($Dict.get,n,model.items)))]) : _U.list([])));
-                                });
-                                return A3($List.map2,
-                                makeItem,
-                                _U.range(1,$List.length(items)),
-                                items);
-                             }())]))]);
+                                     !_U.eq(model.geometry,$Maybe.Nothing))]),
+                             A3($List.map2,
+                             A2(makeItem,addr,model),
+                             _U.range(1,$List.length(items)),
+                             items))]))]);
    });
    return _elm.Material.Menu.values = {_op: _op
                                       ,model: model
                                       ,item: item
                                       ,update: update
-                                      ,topLeft: topLeft
-                                      ,bottomLeft: bottomLeft
-                                      ,topRight: topRight
-                                      ,bottomRight: bottomRight
-                                      ,unaligned: unaligned
                                       ,view: view
                                       ,Model: Model
-                                      ,Item: Item};
+                                      ,Item: Item
+                                      ,BottomLeft: BottomLeft
+                                      ,BottomRight: BottomRight
+                                      ,TopLeft: TopLeft
+                                      ,TopRight: TopRight
+                                      ,Unaligned: Unaligned};
 };
 Elm.Demo = Elm.Demo || {};
 Elm.Demo.Menus = Elm.Demo.Menus || {};
@@ -15299,6 +15272,8 @@ Elm.Demo.Menus.make = function (_elm) {
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
+   $Material$Color = Elm.Material.Color.make(_elm),
+   $Material$Elevation = Elm.Material.Elevation.make(_elm),
    $Material$Grid = Elm.Material.Grid.make(_elm),
    $Material$Menu = Elm.Material.Menu.make(_elm),
    $Material$Style = Elm.Material.Style.make(_elm),
@@ -15339,77 +15314,79 @@ Elm.Demo.Menus.make = function (_elm) {
    idx,
    model$,
    items) {
-      var background = A2($Html.div,
-      _U.list([$Html$Attributes.$class("background")
-              ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                               ,_0: "height"
-                                               ,_1: "148px"}
-                                              ,{ctor: "_Tuple2",_0: "background",_1: "white"}
-                                              ,{ctor: "_Tuple2",_0: "width",_1: "100%"}]))]),
+      var background = A2($Material$Style.div,
+      _U.list([$Material$Style.cs("background")
+              ,$Material$Style.attribute($Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                                         ,_0: "height"
+                                                                         ,_1: "148px"}
+                                                                        ,{ctor: "_Tuple2",_0: "background",_1: "white"}
+                                                                        ,{ctor: "_Tuple2",_0: "width",_1: "100%"}])))]),
       _U.list([]));
       var bar = function (rightAlign) {
          var align = rightAlign ? {ctor: "_Tuple2"
                                   ,_0: "right"
                                   ,_1: "16px"} : {ctor: "_Tuple2",_0: "left",_1: "16px"};
-         return A2($Html.div,
-         _U.list([$Html$Attributes.$class("bar")
-                 ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                                  ,_0: "box-sizing"
-                                                  ,_1: "border-box"}
-                                                 ,{ctor: "_Tuple2",_0: "background",_1: "#3F51B5"}
-                                                 ,{ctor: "_Tuple2",_0: "color",_1: "white"}
-                                                 ,{ctor: "_Tuple2",_0: "width",_1: "100%"}
-                                                 ,{ctor: "_Tuple2",_0: "padding",_1: "16px"}
-                                                 ,{ctor: "_Tuple2",_0: "position",_1: "relative"}
-                                                 ,{ctor: "_Tuple2",_0: "height",_1: "64px"}]))]),
-         _U.list([A2($Html.div,
-         _U.list([$Html$Attributes.$class("wrapper")
-                 ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                                  ,_0: "position"
-                                                  ,_1: "absolute"}
-                                                 ,align
-                                                 ,{ctor: "_Tuple2",_0: "box-sizing",_1: "border-box"}]))]),
+         return A2($Material$Style.div,
+         _U.list([$Material$Style.cs("bar")
+                 ,$Material$Color.background($Material$Color.accent)
+                 ,$Material$Color.text($Material$Color.white)
+                 ,$Material$Style.attribute($Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                                            ,_0: "box-sizing"
+                                                                            ,_1: "border-box"}
+                                                                           ,{ctor: "_Tuple2",_0: "width",_1: "100%"}
+                                                                           ,{ctor: "_Tuple2",_0: "padding",_1: "16px"}
+                                                                           ,{ctor: "_Tuple2",_0: "position",_1: "relative"}
+                                                                           ,{ctor: "_Tuple2",_0: "height",_1: "64px"}])))]),
+         _U.list([A2($Material$Style.div,
+         _U.list([$Material$Style.cs("wrapper")
+                 ,$Material$Style.attribute($Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                                            ,_0: "position"
+                                                                            ,_1: "absolute"}
+                                                                           ,align
+                                                                           ,{ctor: "_Tuple2",_0: "box-sizing",_1: "border-box"}])))]),
          A3($Material$Menu.view,
          A2($Signal.forwardTo,addr,Action(idx)),
          model$,
          items))]));
       };
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("section")]),
-      _U.list([A2($Html.div,
-              _U.list([$Html$Attributes.$class("container mdl-shadow--2dp")
-                      ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                                       ,_0: "position"
-                                                       ,_1: "relative"}
-                                                      ,{ctor: "_Tuple2",_0: "width",_1: "200px"}
-                                                      ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}
-                                                      ,{ctor: "_Tuple2",_0: "margin-bottom",_1: "40px"}]))]),
+      return A2($Material$Style.div,
+      _U.list([$Material$Style.cs("section")]),
+      _U.list([A2($Material$Style.div,
+              _U.list([$Material$Elevation.e2
+                      ,$Material$Style.attribute($Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                                                 ,_0: "position"
+                                                                                 ,_1: "relative"}
+                                                                                ,{ctor: "_Tuple2",_0: "width",_1: "200px"}
+                                                                                ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}
+                                                                                ,{ctor: "_Tuple2",_0: "margin-bottom",_1: "40px"}])))]),
               _U.cmp(idx,1) > 0 ? _U.list([background
                                           ,bar(_U.eq(A2($Basics._op["%"],idx,2),
                                           1))]) : _U.list([bar(_U.eq(A2($Basics._op["%"],idx,2),1))
                                                           ,background]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                                       ,_0: "margin"
-                                                       ,_1: "0 auto"}
-                                                      ,{ctor: "_Tuple2",_0: "width",_1: "200px"}
-                                                      ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
-                                                      ,{ctor: "_Tuple2",_0: "height",_1: "48px"}
-                                                      ,{ctor: "_Tuple2",_0: "line-height",_1: "48px"}
-                                                      ,{ctor: "_Tuple2",_0: "margin-bottom",_1: "40px"}]))]),
+              ,A2($Material$Style.div,
+              _U.list([$Material$Style.attribute($Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                                                 ,_0: "margin"
+                                                                                 ,_1: "0 auto"}
+                                                                                ,{ctor: "_Tuple2",_0: "width",_1: "200px"}
+                                                                                ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
+                                                                                ,{ctor: "_Tuple2",_0: "height",_1: "48px"}
+                                                                                ,{ctor: "_Tuple2",_0: "line-height",_1: "48px"}
+                                                                                ,{ctor: "_Tuple2",_0: "margin-bottom",_1: "40px"}])))]),
               _U.list([$Html.text(description)]))]));
    });
    var menus = A2($List.indexedMap,
-   F2(function (i,r) {    return {ctor: "_Tuple2",_0: i,_1: r};}),
+   F2(function (v0,v1) {
+      return {ctor: "_Tuple2",_0: v0,_1: v1};
+   }),
    _U.list([{ctor: "_Tuple2"
-            ,_0: $Material$Menu.bottomLeft
+            ,_0: $Material$Menu.BottomLeft
             ,_1: "Lower left"}
            ,{ctor: "_Tuple2"
-            ,_0: $Material$Menu.bottomRight
+            ,_0: $Material$Menu.BottomRight
             ,_1: "Lower right"}
-           ,{ctor: "_Tuple2",_0: $Material$Menu.topLeft,_1: "Top left"}
+           ,{ctor: "_Tuple2",_0: $Material$Menu.TopLeft,_1: "Top left"}
            ,{ctor: "_Tuple2"
-            ,_0: $Material$Menu.topRight
+            ,_0: $Material$Menu.TopRight
             ,_1: "Top right"}]));
    var model = {menus: $Dict.fromList(A2($List.map,
    function (_p3) {
@@ -15448,7 +15425,7 @@ Elm.Demo.Menus.make = function (_elm) {
                              true,
                              $Html.text("Yet Another Action"))]);
          var model$ = A2($Maybe.withDefault,
-         A2($Material$Menu.model,true,$Material$Menu.unaligned),
+         A2($Material$Menu.model,true,$Material$Menu.Unaligned),
          A2($Dict.get,_p7,model.menus));
          return A2($Material$Grid.cell,
          _U.list([A2($Material$Grid.size,$Material$Grid.All,6)]),
@@ -15456,11 +15433,7 @@ Elm.Demo.Menus.make = function (_elm) {
       },
       menus))));
    });
-   var view$ = F5(function (view,coloring,elem,addr,model) {
-      return A4(view,addr,model,coloring,_U.list([elem]));
-   });
    return _elm.Demo.Menus.values = {_op: _op
-                                   ,view$: view$
                                    ,menus: menus
                                    ,model: model
                                    ,Action: Action
