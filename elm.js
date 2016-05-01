@@ -14724,6 +14724,608 @@ Elm.Demo.Grid.make = function (_elm) {
                                   ,references: references};
 };
 Elm.Material = Elm.Material || {};
+Elm.Material.Toggles = Elm.Material.Toggles || {};
+Elm.Material.Toggles.make = function (_elm) {
+   "use strict";
+   _elm.Material = _elm.Material || {};
+   _elm.Material.Toggles = _elm.Material.Toggles || {};
+   if (_elm.Material.Toggles.values)
+   return _elm.Material.Toggles.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Material$Component = Elm.Material.Component.make(_elm),
+   $Material$Helpers = Elm.Material.Helpers.make(_elm),
+   $Material$Ripple = Elm.Material.Ripple.make(_elm),
+   $Material$Style = Elm.Material.Style.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var fwdChange = F2(function (obs,action) {
+      var _p0 = action;
+      if (_p0.ctor === "Change") {
+            return $Maybe.Just(obs);
+         } else {
+            return $Maybe.Nothing;
+         }
+   });
+   var SetFocus = function (a) {
+      return {ctor: "SetFocus",_0: a};
+   };
+   var Ripple = function (a) {    return {ctor: "Ripple",_0: a};};
+   var Change = {ctor: "Change"};
+   var state = function (model) {
+      var _p1 = model.state;
+      return _p1._0;
+   };
+   var top = F5(function (name,addr,model,styles,elems) {
+      return A3($Material$Style.styled,
+      $Html.label,
+      _U.list([$Material$Style.cs(A2($Basics._op["++"],"mdl-",name))
+              ,$Material$Style.cs(A2($Basics._op["++"],"mdl-js-",name))
+              ,A2($Material$Style.cs$,"mdl-js-ripple-effect",model.ripple)
+              ,A2($Material$Style.cs$,
+              "mdl-js-ripple-effect--ignore-events",
+              model.ripple)
+              ,$Material$Style.cs("is-upgraded")
+              ,A2($Material$Style.cs$,"is-checked",model.value)
+              ,$Material$Style.attribute(A3($Html$Events.on,
+              "change",
+              $Json$Decode.value,
+              $Basics.always(A2($Signal.message,addr,Change))))
+              ,$Material$Style.attribute($Material$Helpers.blurOn("mouseup"))
+              ,$Material$Style.attribute(A2($Html$Events.onFocus,
+              addr,
+              SetFocus(true)))
+              ,$Material$Style.attribute(A2($Html$Events.onBlur,
+              addr,
+              SetFocus(false)))
+              ,$Material$Style.multiple(styles)]),
+      model.ripple ? A2($List._op["::"],
+      A3($Material$Ripple.view,
+      A2($Signal.forwardTo,addr,Ripple),
+      _U.list([$Html$Attributes.$class("mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center")]),
+      state(model)),
+      elems) : elems);
+   });
+   var checkbox = F3(function (addr,model,styles) {
+      return A5(top,
+      "checkbox",
+      addr,
+      model,
+      styles,
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.type$("checkbox")
+                      ,$Html$Attributes.$class("mdl-checkbox__input")
+                      ,$Html$Attributes.disabled(model.isDisabled)
+                      ,$Html$Attributes.checked(model.value)]),
+              _U.list([]))
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-checkbox__label")]),
+              _U.list([]))
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-checkbox__focus-helper")]),
+              _U.list([]))
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-checkbox__box-outline")]),
+              _U.list([A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-checkbox__tick-outline")]),
+              _U.list([]))]))]));
+   });
+   var $switch = F3(function (addr,model,styles) {
+      return A5(top,
+      "switch",
+      addr,
+      model,
+      styles,
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.type$("checkbox")
+                      ,$Html$Attributes.$class("mdl-switch__input")
+                      ,$Html$Attributes.disabled(model.isDisabled)
+                      ,$Html$Attributes.checked(model.value)]),
+              _U.list([]))
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-switch__label")]),
+              _U.list([]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("mdl-switch__track")]),
+              _U.list([]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("mdl-switch__thumb")]),
+              _U.list([A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-switch__focus-helper")]),
+              _U.list([]))]))]));
+   });
+   var radio = F5(function (addr,model,styles,_p2,elems) {
+      var _p3 = _p2;
+      return A5(top,
+      "radio",
+      addr,
+      model,
+      styles,
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.type$("radio")
+                      ,$Html$Attributes.$class("mdl-radio__button")
+                      ,$Html$Attributes.disabled(model.isDisabled)
+                      ,$Html$Attributes.checked(model.value)
+                      ,$Html$Attributes.value(_p3._0)
+                      ,$Html$Attributes.name(_p3._1)]),
+              _U.list([]))
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-radio__label")]),
+              elems)
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-radio__outer-circle")]),
+              _U.list([]))
+              ,A2($Html.span,
+              _U.list([$Html$Attributes.$class("mdl-radio__inner-circle")]),
+              _U.list([]))]));
+   });
+   var Model = F5(function (a,b,c,d,e) {
+      return {isFocused: a
+             ,isDisabled: b
+             ,value: c
+             ,ripple: d
+             ,state: e};
+   });
+   var S = function (a) {    return {ctor: "S",_0: a};};
+   var model = {isFocused: false
+               ,isDisabled: false
+               ,value: false
+               ,ripple: true
+               ,state: S($Material$Ripple.model)};
+   var update = F2(function (action,model) {
+      var _p4 = action;
+      switch (_p4.ctor)
+      {case "Change": return {ctor: "_Tuple2"
+                             ,_0: _U.update(model,{value: $Basics.not(model.value)})
+                             ,_1: $Effects.none};
+         case "Ripple": return A2($Material$Helpers.map2nd,
+           $Effects.map(Ripple),
+           A2($Material$Helpers.map1st,
+           function (r) {
+              return _U.update(model,{state: S(r)});
+           },
+           A2($Material$Ripple.update,_p4._0,state(model))));
+         default: return {ctor: "_Tuple2"
+                         ,_0: _U.update(model,{isFocused: _p4._0})
+                         ,_1: $Effects.none};}
+   });
+   var instance = F5(function (id,lift,view,model0,observers) {
+      return A8($Material$Component.instance,
+      view,
+      update,
+      function (_) {
+         return _.toggles;
+      },
+      F2(function (x,y) {    return _U.update(y,{toggles: x});}),
+      id,
+      lift,
+      model0,
+      observers);
+   });
+   return _elm.Material.Toggles.values = {_op: _op
+                                         ,model: model
+                                         ,update: update
+                                         ,$switch: $switch
+                                         ,checkbox: checkbox
+                                         ,radio: radio
+                                         ,instance: instance
+                                         ,fwdChange: fwdChange
+                                         ,Model: Model};
+};
+Elm.Material = Elm.Material || {};
+Elm.Material.Table = Elm.Material.Table || {};
+Elm.Material.Table.make = function (_elm) {
+   "use strict";
+   _elm.Material = _elm.Material || {};
+   _elm.Material.Table = _elm.Material.Table || {};
+   if (_elm.Material.Table.values)
+   return _elm.Material.Table.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Dict = Elm.Dict.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Material$Component = Elm.Material.Component.make(_elm),
+   $Material$Helpers = Elm.Material.Helpers.make(_elm),
+   $Material$Style = Elm.Material.Style.make(_elm),
+   $Material$Toggles = Elm.Material.Toggles.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var descending = function (cell) {
+      return {cell: cell,sorting: $Maybe.Just(false)};
+   };
+   var ascending = function (cell) {
+      return {cell: cell,sorting: $Maybe.Just(true)};
+   };
+   var header = function (cell) {
+      return {cell: cell,sorting: $Maybe.Nothing};
+   };
+   var Header = F2(function (a,b) {
+      return {cell: a,sorting: b};
+   });
+   var numeric = function (text) {
+      return {text: text,nonNumeric: false};
+   };
+   var nonNumeric = function (text) {
+      return {text: text,nonNumeric: true};
+   };
+   var Cell = F2(function (a,b) {
+      return {text: a,nonNumeric: b};
+   });
+   var Toggle = F2(function (a,b) {
+      return {ctor: "Toggle",_0: a,_1: b};
+   });
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      var _p9 = _p0._0;
+      var _p8 = _p0._1;
+      var _p1 = A2($Material$Toggles.fwdChange,{ctor: "_Tuple0"},_p8);
+      if (_p1.ctor === "Just") {
+            var _p2 = A2($Debug.log,"fwdChange",_p8);
+            var _p3 = _p9;
+            if (_p3.ctor === "Just") {
+                  var _p5 = _p3._0;
+                  var def = $Material$Toggles.model;
+                  var _p4 = A2($Material$Toggles.update,
+                  _p8,
+                  A2($Maybe.withDefault,
+                  _U.update(def,{value: model.allSelected}),
+                  A2($Dict.get,_p5,model.toggles)));
+                  var model$ = _p4._0;
+                  var effects = _p4._1;
+                  return A2($Material$Helpers.effect,
+                  A2($Effects.map,Toggle($Maybe.Just(_p5)),effects),
+                  _U.update(model,
+                  {toggles: A3($Dict.insert,_p5,model$,model.toggles)
+                  ,allSelected: model.allSelected}));
+               } else {
+                  var def = $Material$Toggles.model;
+                  var _p6 = A2($Material$Toggles.update,
+                  _p8,
+                  A2($Maybe.withDefault,
+                  _U.update(def,{value: model.allSelected}),
+                  A2($Dict.get,-1,model.toggles)));
+                  var model$ = _p6._0;
+                  var effects = _p6._1;
+                  return model$.value ? A2($Material$Helpers.effect,
+                  A2($Effects.map,Toggle($Maybe.Nothing),effects),
+                  _U.update(model,
+                  {toggles: A3($Dict.insert,
+                  -1,
+                  model$,
+                  A2($Dict.map,
+                  F2(function (idx,model$) {
+                     return _U.update(model$,{value: true});
+                  }),
+                  model.toggles))
+                  ,allSelected: true})) : A2($Material$Helpers.effect,
+                  A2($Effects.map,Toggle($Maybe.Nothing),effects),
+                  _U.update(model,
+                  {toggles: A2($Dict.singleton,-1,model$),allSelected: false}));
+               }
+         } else {
+            var def = $Material$Toggles.model;
+            var idx = A2($Maybe.withDefault,-1,_p9);
+            var _p7 = A2($Material$Toggles.update,
+            _p8,
+            A2($Maybe.withDefault,
+            _U.update(def,{value: model.allSelected}),
+            A2($Dict.get,idx,model.toggles)));
+            var model$ = _p7._0;
+            var effects = _p7._1;
+            return A2($Material$Helpers.effect,
+            A2($Effects.map,Toggle(_p9),effects),
+            _U.update(model,
+            {toggles: A3($Dict.insert,idx,model$,model.toggles)}));
+         }
+   });
+   var view = F4(function (addr,model,hdrs,rows) {
+      return A3($Material$Style.styled,
+      $Html.table,
+      _U.list([$Material$Style.cs("mdl-data-table")
+              ,$Material$Style.cs("mdl-js-data-table")
+              ,$Material$Style.cs("is-upgraded")
+              ,A2($Material$Style.cs$,"mdl-data-table--selectable",true)
+              ,$Material$Style.cs("mdl-shadow--2dp")]),
+      _U.list([A3($Material$Style.styled,
+              $Html.thead,
+              _U.list([]),
+              A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
+              A3($Material$Style.styled,
+              $Html.th,
+              _U.list([]),
+              _U.list([A3($Material$Toggles.checkbox,
+              A2($Signal.forwardTo,addr,Toggle($Maybe.Nothing)),
+              A2($Maybe.withDefault,
+              $Material$Toggles.model,
+              A2($Dict.get,-1,model.toggles)),
+              _U.list([]))])),
+              A3($Basics.flip,
+              $List.map,
+              hdrs,
+              function (header) {
+                 return A3($Material$Style.styled,
+                 $Html.th,
+                 _U.list([A2($Material$Style.cs$,
+                         "mdl-data-table__cell--non-numeric",
+                         header.cell.nonNumeric)
+                         ,A2($Material$Style.cs$,
+                         "mdl-data-table__header--sorted-ascending",
+                         _U.eq(header.sorting,$Maybe.Just(true)))
+                         ,A2($Material$Style.cs$,
+                         "mdl-data-table__header--sorted-descending",
+                         _U.eq(header.sorting,$Maybe.Just(false)))]),
+                 _U.list([$Html.text(header.cell.text)]));
+              })))
+              ,A3($Material$Style.styled,
+              $Html.tbody,
+              _U.list([]),
+              A3($Basics.flip,
+              $List.indexedMap,
+              rows,
+              F2(function (idx,columns) {
+                 return A3($Material$Style.styled,
+                 $Html.tr,
+                 _U.list([A2($Material$Style.cs$,
+                 "is-selected",
+                 A2(F2(function (x,y) {    return x || y;}),
+                 model.allSelected,
+                 A2($Maybe.withDefault,
+                 false,
+                 A2($Maybe.map,
+                 function (_) {
+                    return _.value;
+                 },
+                 A2($Dict.get,idx,model.toggles)))))]),
+                 A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
+                 A3($Material$Style.styled,
+                 $Html.td,
+                 _U.list([]),
+                 _U.list([function () {
+                    var def = $Material$Toggles.model;
+                    return A3($Material$Toggles.checkbox,
+                    A2($Signal.forwardTo,addr,Toggle($Maybe.Just(idx))),
+                    A2($Maybe.withDefault,
+                    _U.update(def,{value: model.allSelected}),
+                    A2($Dict.get,idx,model.toggles)),
+                    _U.list([]));
+                 }()])),
+                 A3($Basics.flip,
+                 $List.map,
+                 columns,
+                 function (column) {
+                    return A3($Material$Style.styled,
+                    $Html.td,
+                    _U.list([A2($Material$Style.cs$,
+                    "mdl-data-table__cell--non-numeric",
+                    column.nonNumeric)]),
+                    _U.list([$Html.text(column.text)]));
+                 })));
+              })))]));
+   });
+   var instance = F4(function (id,lift,model0,observers) {
+      return A8($Material$Component.instance,
+      view,
+      update,
+      function (_) {
+         return _.table;
+      },
+      F2(function (x,y) {    return _U.update(y,{table: x});}),
+      id,
+      lift,
+      model0,
+      observers);
+   });
+   var model = {toggles: A2($Dict.singleton,
+               -1,
+               $Material$Toggles.model)
+               ,allSelected: false};
+   var Model = F2(function (a,b) {
+      return {toggles: a,allSelected: b};
+   });
+   return _elm.Material.Table.values = {_op: _op
+                                       ,Model: Model
+                                       ,model: model
+                                       ,Toggle: Toggle
+                                       ,update: update
+                                       ,Cell: Cell
+                                       ,nonNumeric: nonNumeric
+                                       ,numeric: numeric
+                                       ,Header: Header
+                                       ,header: header
+                                       ,ascending: ascending
+                                       ,descending: descending
+                                       ,view: view
+                                       ,instance: instance};
+};
+Elm.Material = Elm.Material || {};
+Elm.Material.Textfield = Elm.Material.Textfield || {};
+Elm.Material.Textfield.make = function (_elm) {
+   "use strict";
+   _elm.Material = _elm.Material || {};
+   _elm.Material.Textfield = _elm.Material.Textfield || {};
+   if (_elm.Material.Textfield.values)
+   return _elm.Material.Textfield.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Material$Component = Elm.Material.Component.make(_elm),
+   $Material$Helpers = Elm.Material.Helpers.make(_elm),
+   $Material$Style = Elm.Material.Style.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var fwdFocus = F2(function (o,action) {
+      var _p0 = action;
+      if (_p0.ctor === "Focus") {
+            return $Maybe.Just(o);
+         } else {
+            return $Maybe.Nothing;
+         }
+   });
+   var fwdBlur = F2(function (o,action) {
+      var _p1 = action;
+      if (_p1.ctor === "Blur") {
+            return $Maybe.Just(o);
+         } else {
+            return $Maybe.Nothing;
+         }
+   });
+   var fwdInput = F2(function (f,action) {
+      var _p2 = action;
+      if (_p2.ctor === "Input") {
+            return $Maybe.Just(f(_p2._0));
+         } else {
+            return $Maybe.Nothing;
+         }
+   });
+   var update = F2(function (action,model) {
+      var _p3 = action;
+      switch (_p3.ctor)
+      {case "Input": return _U.update(model,{value: _p3._0});
+         case "Blur": return _U.update(model,{isFocused: false});
+         default: return _U.update(model,{isFocused: true});}
+   });
+   var Focus = {ctor: "Focus"};
+   var Blur = {ctor: "Blur"};
+   var Input = function (a) {    return {ctor: "Input",_0: a};};
+   var view = F3(function (addr,model,styles) {
+      var labelText = A2($Maybe.map,
+      function (_) {
+         return _.text;
+      },
+      model.label);
+      var hasError = A2($Maybe.withDefault,
+      false,
+      A2($Maybe.map,$Basics.always(true),model.error));
+      var hasFloat = A2($Maybe.withDefault,
+      false,
+      A2($Maybe.map,function (_) {    return _.$float;},model.label));
+      return A3($Material$Helpers.filter,
+      $Material$Style.div,
+      A2($List._op["::"],
+      $Material$Style.cs("mdl-textfield"),
+      A2($List._op["::"],
+      $Material$Style.cs("mdl-js-textfield"),
+      A2($List._op["::"],
+      $Material$Style.cs("is-upgraded"),
+      A2($List._op["::"],
+      A2($Material$Style.cs$,
+      "mdl-textfield--floating-label",
+      hasFloat),
+      A2($List._op["::"],
+      A2($Material$Style.cs$,"is-invalid",hasError),
+      A2($List._op["::"],
+      A2($Material$Style.cs$,"is-dirty",!_U.eq(model.value,"")),
+      A2($List._op["::"],
+      A2($Material$Style.cs$,
+      "is-focused",
+      model.isFocused && $Basics.not(model.isDisabled)),
+      A2($List._op["::"],
+      A2($Material$Style.cs$,"is-disabled",model.isDisabled),
+      styles)))))))),
+      _U.list([$Maybe.Just(A2($Html.input,
+              _U.list([$Html$Attributes.$class("mdl-textfield__input")
+                      ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
+                                                       ,_0: "outline"
+                                                       ,_1: "none"}]))
+                      ,$Html$Attributes.type$("text")
+                      ,$Html$Attributes.disabled(model.isDisabled)
+                      ,$Html$Attributes.value(model.value)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (s) {
+                         return A2($Signal.message,addr,Input(s));
+                      })
+                      ,A2($Html$Events.onBlur,addr,Blur)
+                      ,A2($Html$Events.onFocus,addr,Focus)]),
+              _U.list([])))
+              ,$Maybe.Just(A2($Html.label,
+              _U.list([$Html$Attributes.$class("mdl-textfield__label")]),
+              function () {
+                 var _p4 = labelText;
+                 if (_p4.ctor === "Just") {
+                       return _U.list([$Html.text(_p4._0)]);
+                    } else {
+                       return _U.list([]);
+                    }
+              }()))
+              ,A2($Maybe.map,
+              function (e) {
+                 return A2($Html.span,
+                 _U.list([$Html$Attributes.$class("mdl-textfield__error")]),
+                 _U.list([$Html.text(e)]));
+              },
+              model.error)]));
+   });
+   var instance = function () {
+      var update$ = F2(function (action,model) {
+         return {ctor: "_Tuple2"
+                ,_0: A2(update,action,model)
+                ,_1: $Effects.none};
+      });
+      return A4($Material$Component.instance,
+      view,
+      update$,
+      function (_) {
+         return _.textfield;
+      },
+      F2(function (x,y) {    return _U.update(y,{textfield: x});}));
+   }();
+   var Model = F6(function (a,b,c,d,e,f) {
+      return {label: a
+             ,error: b
+             ,kind: c
+             ,isDisabled: d
+             ,isFocused: e
+             ,value: f};
+   });
+   var SingleLine = {ctor: "SingleLine"};
+   var model = {label: $Maybe.Nothing
+               ,error: $Maybe.Nothing
+               ,kind: SingleLine
+               ,isDisabled: false
+               ,isFocused: false
+               ,value: ""};
+   var Label = F2(function (a,b) {
+      return {text: a,$float: b};
+   });
+   return _elm.Material.Textfield.values = {_op: _op
+                                           ,Label: Label
+                                           ,SingleLine: SingleLine
+                                           ,Model: Model
+                                           ,model: model
+                                           ,Input: Input
+                                           ,Blur: Blur
+                                           ,Focus: Focus
+                                           ,update: update
+                                           ,view: view
+                                           ,instance: instance
+                                           ,fwdInput: fwdInput
+                                           ,fwdBlur: fwdBlur
+                                           ,fwdFocus: fwdFocus};
+};
+Elm.Material = Elm.Material || {};
 Elm.Material.Menu = Elm.Material.Menu || {};
 Elm.Material.Menu.Geometry = Elm.Material.Menu.Geometry || {};
 Elm.Material.Menu.Geometry.make = function (_elm) {
@@ -15501,378 +16103,6 @@ Elm.Material.Snackbar.make = function (_elm) {
                                           ,Click: Click};
 };
 Elm.Material = Elm.Material || {};
-Elm.Material.Textfield = Elm.Material.Textfield || {};
-Elm.Material.Textfield.make = function (_elm) {
-   "use strict";
-   _elm.Material = _elm.Material || {};
-   _elm.Material.Textfield = _elm.Material.Textfield || {};
-   if (_elm.Material.Textfield.values)
-   return _elm.Material.Textfield.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Material$Component = Elm.Material.Component.make(_elm),
-   $Material$Helpers = Elm.Material.Helpers.make(_elm),
-   $Material$Style = Elm.Material.Style.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var fwdFocus = F2(function (o,action) {
-      var _p0 = action;
-      if (_p0.ctor === "Focus") {
-            return $Maybe.Just(o);
-         } else {
-            return $Maybe.Nothing;
-         }
-   });
-   var fwdBlur = F2(function (o,action) {
-      var _p1 = action;
-      if (_p1.ctor === "Blur") {
-            return $Maybe.Just(o);
-         } else {
-            return $Maybe.Nothing;
-         }
-   });
-   var fwdInput = F2(function (f,action) {
-      var _p2 = action;
-      if (_p2.ctor === "Input") {
-            return $Maybe.Just(f(_p2._0));
-         } else {
-            return $Maybe.Nothing;
-         }
-   });
-   var update = F2(function (action,model) {
-      var _p3 = action;
-      switch (_p3.ctor)
-      {case "Input": return _U.update(model,{value: _p3._0});
-         case "Blur": return _U.update(model,{isFocused: false});
-         default: return _U.update(model,{isFocused: true});}
-   });
-   var Focus = {ctor: "Focus"};
-   var Blur = {ctor: "Blur"};
-   var Input = function (a) {    return {ctor: "Input",_0: a};};
-   var view = F3(function (addr,model,styles) {
-      var labelText = A2($Maybe.map,
-      function (_) {
-         return _.text;
-      },
-      model.label);
-      var hasError = A2($Maybe.withDefault,
-      false,
-      A2($Maybe.map,$Basics.always(true),model.error));
-      var hasFloat = A2($Maybe.withDefault,
-      false,
-      A2($Maybe.map,function (_) {    return _.$float;},model.label));
-      return A3($Material$Helpers.filter,
-      $Material$Style.div,
-      A2($List._op["::"],
-      $Material$Style.cs("mdl-textfield"),
-      A2($List._op["::"],
-      $Material$Style.cs("mdl-js-textfield"),
-      A2($List._op["::"],
-      $Material$Style.cs("is-upgraded"),
-      A2($List._op["::"],
-      A2($Material$Style.cs$,
-      "mdl-textfield--floating-label",
-      hasFloat),
-      A2($List._op["::"],
-      A2($Material$Style.cs$,"is-invalid",hasError),
-      A2($List._op["::"],
-      A2($Material$Style.cs$,"is-dirty",!_U.eq(model.value,"")),
-      A2($List._op["::"],
-      A2($Material$Style.cs$,
-      "is-focused",
-      model.isFocused && $Basics.not(model.isDisabled)),
-      A2($List._op["::"],
-      A2($Material$Style.cs$,"is-disabled",model.isDisabled),
-      styles)))))))),
-      _U.list([$Maybe.Just(A2($Html.input,
-              _U.list([$Html$Attributes.$class("mdl-textfield__input")
-                      ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
-                                                       ,_0: "outline"
-                                                       ,_1: "none"}]))
-                      ,$Html$Attributes.type$("text")
-                      ,$Html$Attributes.disabled(model.isDisabled)
-                      ,$Html$Attributes.value(model.value)
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (s) {
-                         return A2($Signal.message,addr,Input(s));
-                      })
-                      ,A2($Html$Events.onBlur,addr,Blur)
-                      ,A2($Html$Events.onFocus,addr,Focus)]),
-              _U.list([])))
-              ,$Maybe.Just(A2($Html.label,
-              _U.list([$Html$Attributes.$class("mdl-textfield__label")]),
-              function () {
-                 var _p4 = labelText;
-                 if (_p4.ctor === "Just") {
-                       return _U.list([$Html.text(_p4._0)]);
-                    } else {
-                       return _U.list([]);
-                    }
-              }()))
-              ,A2($Maybe.map,
-              function (e) {
-                 return A2($Html.span,
-                 _U.list([$Html$Attributes.$class("mdl-textfield__error")]),
-                 _U.list([$Html.text(e)]));
-              },
-              model.error)]));
-   });
-   var instance = function () {
-      var update$ = F2(function (action,model) {
-         return {ctor: "_Tuple2"
-                ,_0: A2(update,action,model)
-                ,_1: $Effects.none};
-      });
-      return A4($Material$Component.instance,
-      view,
-      update$,
-      function (_) {
-         return _.textfield;
-      },
-      F2(function (x,y) {    return _U.update(y,{textfield: x});}));
-   }();
-   var Model = F6(function (a,b,c,d,e,f) {
-      return {label: a
-             ,error: b
-             ,kind: c
-             ,isDisabled: d
-             ,isFocused: e
-             ,value: f};
-   });
-   var SingleLine = {ctor: "SingleLine"};
-   var model = {label: $Maybe.Nothing
-               ,error: $Maybe.Nothing
-               ,kind: SingleLine
-               ,isDisabled: false
-               ,isFocused: false
-               ,value: ""};
-   var Label = F2(function (a,b) {
-      return {text: a,$float: b};
-   });
-   return _elm.Material.Textfield.values = {_op: _op
-                                           ,Label: Label
-                                           ,SingleLine: SingleLine
-                                           ,Model: Model
-                                           ,model: model
-                                           ,Input: Input
-                                           ,Blur: Blur
-                                           ,Focus: Focus
-                                           ,update: update
-                                           ,view: view
-                                           ,instance: instance
-                                           ,fwdInput: fwdInput
-                                           ,fwdBlur: fwdBlur
-                                           ,fwdFocus: fwdFocus};
-};
-Elm.Material = Elm.Material || {};
-Elm.Material.Toggles = Elm.Material.Toggles || {};
-Elm.Material.Toggles.make = function (_elm) {
-   "use strict";
-   _elm.Material = _elm.Material || {};
-   _elm.Material.Toggles = _elm.Material.Toggles || {};
-   if (_elm.Material.Toggles.values)
-   return _elm.Material.Toggles.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Material$Component = Elm.Material.Component.make(_elm),
-   $Material$Helpers = Elm.Material.Helpers.make(_elm),
-   $Material$Ripple = Elm.Material.Ripple.make(_elm),
-   $Material$Style = Elm.Material.Style.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var fwdChange = F2(function (obs,action) {
-      var _p0 = action;
-      if (_p0.ctor === "Change") {
-            return $Maybe.Just(obs);
-         } else {
-            return $Maybe.Nothing;
-         }
-   });
-   var SetFocus = function (a) {
-      return {ctor: "SetFocus",_0: a};
-   };
-   var Ripple = function (a) {    return {ctor: "Ripple",_0: a};};
-   var Change = {ctor: "Change"};
-   var state = function (model) {
-      var _p1 = model.state;
-      return _p1._0;
-   };
-   var top = F5(function (name,addr,model,styles,elems) {
-      return A3($Material$Style.styled,
-      $Html.label,
-      _U.list([$Material$Style.cs(A2($Basics._op["++"],"mdl-",name))
-              ,$Material$Style.cs(A2($Basics._op["++"],"mdl-js-",name))
-              ,A2($Material$Style.cs$,"mdl-js-ripple-effect",model.ripple)
-              ,A2($Material$Style.cs$,
-              "mdl-js-ripple-effect--ignore-events",
-              model.ripple)
-              ,$Material$Style.cs("is-upgraded")
-              ,A2($Material$Style.cs$,"is-checked",model.value)
-              ,$Material$Style.attribute(A3($Html$Events.on,
-              "change",
-              $Json$Decode.value,
-              $Basics.always(A2($Signal.message,addr,Change))))
-              ,$Material$Style.attribute($Material$Helpers.blurOn("mouseup"))
-              ,$Material$Style.attribute(A2($Html$Events.onFocus,
-              addr,
-              SetFocus(true)))
-              ,$Material$Style.attribute(A2($Html$Events.onBlur,
-              addr,
-              SetFocus(false)))
-              ,$Material$Style.multiple(styles)]),
-      model.ripple ? A2($List._op["::"],
-      A3($Material$Ripple.view,
-      A2($Signal.forwardTo,addr,Ripple),
-      _U.list([$Html$Attributes.$class("mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center")]),
-      state(model)),
-      elems) : elems);
-   });
-   var checkbox = F3(function (addr,model,styles) {
-      return A5(top,
-      "checkbox",
-      addr,
-      model,
-      styles,
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.type$("checkbox")
-                      ,$Html$Attributes.$class("mdl-checkbox__input")
-                      ,$Html$Attributes.disabled(model.isDisabled)
-                      ,$Html$Attributes.checked(model.value)]),
-              _U.list([]))
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-checkbox__label")]),
-              _U.list([]))
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-checkbox__focus-helper")]),
-              _U.list([]))
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-checkbox__box-outline")]),
-              _U.list([A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-checkbox__tick-outline")]),
-              _U.list([]))]))]));
-   });
-   var $switch = F3(function (addr,model,styles) {
-      return A5(top,
-      "switch",
-      addr,
-      model,
-      styles,
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.type$("checkbox")
-                      ,$Html$Attributes.$class("mdl-switch__input")
-                      ,$Html$Attributes.disabled(model.isDisabled)
-                      ,$Html$Attributes.checked(model.value)]),
-              _U.list([]))
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-switch__label")]),
-              _U.list([]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("mdl-switch__track")]),
-              _U.list([]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("mdl-switch__thumb")]),
-              _U.list([A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-switch__focus-helper")]),
-              _U.list([]))]))]));
-   });
-   var radio = F5(function (addr,model,styles,_p2,elems) {
-      var _p3 = _p2;
-      return A5(top,
-      "radio",
-      addr,
-      model,
-      styles,
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.type$("radio")
-                      ,$Html$Attributes.$class("mdl-radio__button")
-                      ,$Html$Attributes.disabled(model.isDisabled)
-                      ,$Html$Attributes.checked(model.value)
-                      ,$Html$Attributes.value(_p3._0)
-                      ,$Html$Attributes.name(_p3._1)]),
-              _U.list([]))
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-radio__label")]),
-              elems)
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-radio__outer-circle")]),
-              _U.list([]))
-              ,A2($Html.span,
-              _U.list([$Html$Attributes.$class("mdl-radio__inner-circle")]),
-              _U.list([]))]));
-   });
-   var Model = F5(function (a,b,c,d,e) {
-      return {isFocused: a
-             ,isDisabled: b
-             ,value: c
-             ,ripple: d
-             ,state: e};
-   });
-   var S = function (a) {    return {ctor: "S",_0: a};};
-   var model = {isFocused: false
-               ,isDisabled: false
-               ,value: false
-               ,ripple: true
-               ,state: S($Material$Ripple.model)};
-   var update = F2(function (action,model) {
-      var _p4 = action;
-      switch (_p4.ctor)
-      {case "Change": return {ctor: "_Tuple2"
-                             ,_0: _U.update(model,{value: $Basics.not(model.value)})
-                             ,_1: $Effects.none};
-         case "Ripple": return A2($Material$Helpers.map2nd,
-           $Effects.map(Ripple),
-           A2($Material$Helpers.map1st,
-           function (r) {
-              return _U.update(model,{state: S(r)});
-           },
-           A2($Material$Ripple.update,_p4._0,state(model))));
-         default: return {ctor: "_Tuple2"
-                         ,_0: _U.update(model,{isFocused: _p4._0})
-                         ,_1: $Effects.none};}
-   });
-   var instance = F5(function (id,lift,view,model0,observers) {
-      return A8($Material$Component.instance,
-      view,
-      update,
-      function (_) {
-         return _.toggles;
-      },
-      F2(function (x,y) {    return _U.update(y,{toggles: x});}),
-      id,
-      lift,
-      model0,
-      observers);
-   });
-   return _elm.Material.Toggles.values = {_op: _op
-                                         ,model: model
-                                         ,update: update
-                                         ,$switch: $switch
-                                         ,checkbox: checkbox
-                                         ,radio: radio
-                                         ,instance: instance
-                                         ,fwdChange: fwdChange
-                                         ,Model: Model};
-};
-Elm.Material = Elm.Material || {};
 Elm.Material.make = function (_elm) {
    "use strict";
    _elm.Material = _elm.Material || {};
@@ -15887,6 +16117,7 @@ Elm.Material.make = function (_elm) {
    $Material$Component = Elm.Material.Component.make(_elm),
    $Material$Menu = Elm.Material.Menu.make(_elm),
    $Material$Snackbar = Elm.Material.Snackbar.make(_elm),
+   $Material$Table = Elm.Material.Table.make(_elm),
    $Material$Textfield = Elm.Material.Textfield.make(_elm),
    $Material$Toggles = Elm.Material.Toggles.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
@@ -15895,16 +16126,18 @@ Elm.Material.make = function (_elm) {
    var _op = {};
    var update = $Material$Component.update;
    var model = {button: $Dict.empty
-               ,menu: $Dict.empty
                ,textfield: $Dict.empty
+               ,menu: $Dict.empty
                ,snackbar: $Maybe.Nothing
-               ,toggles: $Dict.empty};
-   var Model = F5(function (a,b,c,d,e) {
+               ,toggles: $Dict.empty
+               ,table: $Dict.empty};
+   var Model = F6(function (a,b,c,d,e,f) {
       return {button: a
              ,textfield: b
              ,menu: c
              ,snackbar: d
-             ,toggles: e};
+             ,toggles: e
+             ,table: f};
    });
    return _elm.Material.values = {_op: _op
                                  ,model: model
@@ -16415,6 +16648,91 @@ Elm.Demo.Snackbar.make = function (_elm) {
                                       ,intro: intro
                                       ,srcUrl: srcUrl
                                       ,references: references};
+};
+Elm.Demo = Elm.Demo || {};
+Elm.Demo.Tables = Elm.Demo.Tables || {};
+Elm.Demo.Tables.make = function (_elm) {
+   "use strict";
+   _elm.Demo = _elm.Demo || {};
+   _elm.Demo.Tables = _elm.Demo.Tables || {};
+   if (_elm.Demo.Tables.values) return _elm.Demo.Tables.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Demo$Page = Elm.Demo.Page.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Material = Elm.Material.make(_elm),
+   $Material$Helpers = Elm.Material.Helpers.make(_elm),
+   $Material$Table = Elm.Material.Table.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var references = _U.list([$Demo$Page.$package("http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE")
+                            ,$Demo$Page.mds("https://www.google.com/design/spec/components/TEMPLATE.html")
+                            ,$Demo$Page.mdl("https://www.getmdl.io/components/index.html#TEMPLATE")]);
+   var srcUrl = "https://github.com/debois/elm-mdl/blob/master/demo/Demo/TEMPLATE.elm";
+   var intro = A2($Demo$Page.fromMDL,
+   "https://www.getmdl.io/components/index.html#TEMPLATE-section",
+   "\n> ...\n");
+   var MDL = function (a) {    return {ctor: "MDL",_0: a};};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      if (_p0.ctor === "TablesAction") {
+            return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         } else {
+            return A2($Material$Helpers.map1st,
+            function (m) {
+               return _U.update(model,{mdl: m});
+            },
+            A3($Material.update,MDL,_p0._0,model.mdl));
+         }
+   });
+   var table = A4($Material$Table.instance,
+   0,
+   MDL,
+   $Material$Table.model,
+   _U.list([]));
+   var view = F2(function (addr,model) {
+      return A5($Demo$Page.body2,
+      "TEMPLATE",
+      srcUrl,
+      intro,
+      references,
+      _U.list([A2($Html.div,
+      _U.list([]),
+      _U.list([A4(table.view,
+      addr,
+      model.mdl,
+      _U.list([$Material$Table.ascending($Material$Table.nonNumeric("Material"))
+              ,$Material$Table.header($Material$Table.numeric("Quantity"))
+              ,$Material$Table.header($Material$Table.numeric("Unit price"))]),
+      _U.list([_U.list([$Material$Table.nonNumeric("Acrylic (Transparent)")
+                       ,$Material$Table.numeric("25")
+                       ,$Material$Table.numeric("$2.90")])
+              ,_U.list([$Material$Table.nonNumeric("Plywood (Birch)")
+                       ,$Material$Table.numeric("50")
+                       ,$Material$Table.numeric("$1.25")])
+              ,_U.list([$Material$Table.nonNumeric("Laminate (Gold on Blue)")
+                       ,$Material$Table.numeric("10")
+                       ,$Material$Table.numeric("$2.35")])]))]))]));
+   });
+   var TablesAction = {ctor: "TablesAction"};
+   var model = {mdl: $Material.model};
+   var Model = function (a) {    return {mdl: a};};
+   return _elm.Demo.Tables.values = {_op: _op
+                                    ,Model: Model
+                                    ,model: model
+                                    ,TablesAction: TablesAction
+                                    ,MDL: MDL
+                                    ,update: update
+                                    ,table: table
+                                    ,view: view
+                                    ,intro: intro
+                                    ,srcUrl: srcUrl
+                                    ,references: references};
 };
 Elm.Demo = Elm.Demo || {};
 Elm.Demo.Textfields = Elm.Demo.Textfields || {};
@@ -18193,6 +18511,7 @@ Elm.Main.make = function (_elm) {
    $Demo$Grid = Elm.Demo.Grid.make(_elm),
    $Demo$Menus = Elm.Demo.Menus.make(_elm),
    $Demo$Snackbar = Elm.Demo.Snackbar.make(_elm),
+   $Demo$Tables = Elm.Demo.Tables.make(_elm),
    $Demo$Textfields = Elm.Demo.Textfields.make(_elm),
    $Effects = Elm.Effects.make(_elm),
    $Hop = Elm.Hop.make(_elm),
@@ -18270,6 +18589,9 @@ Elm.Main.make = function (_elm) {
    var TextfieldAction = function (a) {
       return {ctor: "TextfieldAction",_0: a};
    };
+   var TablesAction = function (a) {
+      return {ctor: "TablesAction",_0: a};
+   };
    var MenusAction = function (a) {
       return {ctor: "MenusAction",_0: a};
    };
@@ -18291,6 +18613,14 @@ Elm.Main.make = function (_elm) {
                           return A2($Demo$Menus.view,
                           A2($Signal.forwardTo,addr,MenusAction),
                           model.menus);
+                       })}
+                      ,{ctor: "_Tuple3"
+                       ,_0: "Tables"
+                       ,_1: "tables"
+                       ,_2: F2(function (addr,model) {
+                          return A2($Demo$Tables.view,
+                          A2($Signal.forwardTo,addr,TablesAction),
+                          model.tables);
                        })}
                       ,{ctor: "_Tuple3"
                        ,_0: "Badges"
@@ -18430,6 +18760,15 @@ Elm.Main.make = function (_elm) {
            $Demo$Menus.update,
            _p7._0,
            model);
+         case "TablesAction": return A6($Material$Helpers.lift,
+           function (_) {
+              return _.tables;
+           },
+           F2(function (m,x) {    return _U.update(m,{tables: x});}),
+           TablesAction,
+           $Demo$Tables.update,
+           _p7._0,
+           model);
          case "TextfieldAction": return A6($Material$Helpers.lift,
            function (_) {
               return _.textfields;
@@ -18452,13 +18791,14 @@ Elm.Main.make = function (_elm) {
    var ApplyRoute = function (a) {
       return {ctor: "ApplyRoute",_0: a};
    };
-   var Model = F6(function (a,b,c,d,e,f) {
+   var Model = F7(function (a,b,c,d,e,f,g) {
       return {layout: a
              ,routing: b
              ,buttons: c
              ,menus: d
              ,textfields: e
-             ,snackbar: f};
+             ,snackbar: f
+             ,tables: g};
    });
    var layoutModel = _U.update($Material$Layout.defaultLayoutModel,
    {state: $Material$Layout.initState($List.length(tabs))
@@ -18474,7 +18814,8 @@ Elm.Main.make = function (_elm) {
                ,buttons: $Demo$Buttons.model
                ,menus: $Demo$Menus.model
                ,textfields: $Demo$Textfields.model
-               ,snackbar: $Demo$Snackbar.model};
+               ,snackbar: $Demo$Snackbar.model
+               ,tables: $Demo$Tables.model};
    var init = {ctor: "_Tuple2",_0: model,_1: $Effects.none};
    var router = $Hop.$new({notFound: E404
                           ,matchers: A2($List._op["::"],
@@ -18510,6 +18851,7 @@ Elm.Main.make = function (_elm) {
                              ,LayoutAction: LayoutAction
                              ,ButtonsAction: ButtonsAction
                              ,MenusAction: MenusAction
+                             ,TablesAction: TablesAction
                              ,TextfieldAction: TextfieldAction
                              ,SnackbarAction: SnackbarAction
                              ,nth: nth
