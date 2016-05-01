@@ -15081,15 +15081,13 @@ Elm.Material.Table.make = function (_elm) {
                  $Html.tr,
                  _U.list([A2($Material$Style.cs$,
                  "is-selected",
-                 A2(F2(function (x,y) {    return x || y;}),
-                 model.allSelected,
                  A2($Maybe.withDefault,
-                 false,
+                 model.allSelected,
                  A2($Maybe.map,
                  function (_) {
                     return _.value;
                  },
-                 A2($Dict.get,idx,model.toggles)))))]),
+                 A2($Dict.get,idx,model.toggles))))]),
                  A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
                  A3($Material$Style.styled,
                  $Html.td,
