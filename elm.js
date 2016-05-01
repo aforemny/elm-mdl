@@ -14944,14 +14944,16 @@ Elm.Material.Table.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var descending = function (cell) {
-      return {cell: cell,sorting: $Maybe.Just(false)};
-   };
-   var ascending = function (cell) {
-      return {cell: cell,sorting: $Maybe.Just(true)};
-   };
    var header = function (cell) {
       return {cell: cell,sorting: $Maybe.Nothing};
+   };
+   var Descending = {ctor: "Descending"};
+   var descending = function (cell) {
+      return {cell: cell,sorting: $Maybe.Just(Descending)};
+   };
+   var Ascending = {ctor: "Ascending"};
+   var ascending = function (cell) {
+      return {cell: cell,sorting: $Maybe.Just(Ascending)};
    };
    var Header = F2(function (a,b) {
       return {cell: a,sorting: b};
@@ -15064,55 +15066,107 @@ Elm.Material.Table.make = function (_elm) {
                          header.cell.nonNumeric)
                          ,A2($Material$Style.cs$,
                          "mdl-data-table__header--sorted-ascending",
-                         _U.eq(header.sorting,$Maybe.Just(true)))
+                         _U.eq(header.sorting,$Maybe.Just(Ascending)))
                          ,A2($Material$Style.cs$,
                          "mdl-data-table__header--sorted-descending",
-                         _U.eq(header.sorting,$Maybe.Just(false)))]),
+                         _U.eq(header.sorting,$Maybe.Just(Descending)))]),
                  _U.list([$Html.text(header.cell.text)]));
               })))
               ,A3($Material$Style.styled,
               $Html.tbody,
               _U.list([]),
-              A3($Basics.flip,
-              $List.indexedMap,
-              rows,
-              F2(function (idx,columns) {
-                 return A3($Material$Style.styled,
-                 $Html.tr,
-                 _U.list([A2($Material$Style.cs$,
-                 "is-selected",
-                 A2($Maybe.withDefault,
-                 model.allSelected,
-                 A2($Maybe.map,
-                 function (_) {
-                    return _.value;
-                 },
-                 A2($Dict.get,idx,model.toggles))))]),
-                 A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
-                 A3($Material$Style.styled,
-                 $Html.td,
-                 _U.list([]),
-                 _U.list([function () {
-                    var def = $Material$Toggles.model;
-                    return A3($Material$Toggles.checkbox,
-                    A2($Signal.forwardTo,addr,Toggle($Maybe.Just(idx))),
-                    A2($Maybe.withDefault,
-                    _U.update(def,{value: model.allSelected}),
-                    A2($Dict.get,idx,model.toggles)),
-                    _U.list([]));
-                 }()])),
-                 A3($Basics.flip,
-                 $List.map,
-                 columns,
-                 function (column) {
+              function () {
+                 var compareMaybe = F2(function (a,b) {
+                    var _p10 = {ctor: "_Tuple2",_0: a,_1: b};
+                    if (_p10._0.ctor === "Just") {
+                          if (_p10._1.ctor === "Just") {
+                                return A2($Basics.compare,_p10._0._0.text,_p10._1._0.text);
+                             } else {
+                                return $Basics.GT;
+                             }
+                       } else {
+                          if (_p10._1.ctor === "Just") {
+                                return $Basics.LT;
+                             } else {
+                                return $Basics.EQ;
+                             }
+                       }
+                 });
+                 var flippedComparison = F2(function (a,b) {
+                    var _p11 = A2(compareMaybe,a,b);
+                    switch (_p11.ctor)
+                    {case "LT": return $Basics.GT;
+                       case "GT": return $Basics.LT;
+                       default: return $Basics.EQ;}
+                 });
+                 var nth = function (n) {
+                    return function (_p12) {
+                       return $List.head(A2($List.drop,n,_p12));
+                    };
+                 };
+                 var fs = A2($List.indexedMap,
+                 F2(function (idx,hdr) {
+                    var _p13 = hdr.sorting;
+                    if (_p13.ctor === "Nothing") {
+                          return $Basics.identity;
+                       } else {
+                          if (_p13._0.ctor === "Ascending") {
+                                return $List.sortWith(F2(function (a,b) {
+                                   return A2(compareMaybe,A2(nth,idx,a),A2(nth,idx,b));
+                                }));
+                             } else {
+                                return $List.sortWith(F2(function (a,b) {
+                                   return A2(flippedComparison,A2(nth,idx,a),A2(nth,idx,b));
+                                }));
+                             }
+                       }
+                 }),
+                 hdrs);
+                 var sortedRows = A3($List.foldr,
+                 F2(function (f,rows) {    return f(rows);}),
+                 rows,
+                 fs);
+                 return A3($Basics.flip,
+                 $List.indexedMap,
+                 sortedRows,
+                 F2(function (idx,columns) {
                     return A3($Material$Style.styled,
-                    $Html.td,
+                    $Html.tr,
                     _U.list([A2($Material$Style.cs$,
-                    "mdl-data-table__cell--non-numeric",
-                    column.nonNumeric)]),
-                    _U.list([$Html.text(column.text)]));
-                 })));
-              })))]));
+                    "is-selected",
+                    A2($Maybe.withDefault,
+                    model.allSelected,
+                    A2($Maybe.map,
+                    function (_) {
+                       return _.value;
+                    },
+                    A2($Dict.get,idx,model.toggles))))]),
+                    A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),
+                    A3($Material$Style.styled,
+                    $Html.td,
+                    _U.list([]),
+                    _U.list([function () {
+                       var def = $Material$Toggles.model;
+                       return A3($Material$Toggles.checkbox,
+                       A2($Signal.forwardTo,addr,Toggle($Maybe.Just(idx))),
+                       A2($Maybe.withDefault,
+                       _U.update(def,{value: model.allSelected}),
+                       A2($Dict.get,idx,model.toggles)),
+                       _U.list([]));
+                    }()])),
+                    A3($Basics.flip,
+                    $List.map,
+                    columns,
+                    function (column) {
+                       return A3($Material$Style.styled,
+                       $Html.td,
+                       _U.list([A2($Material$Style.cs$,
+                       "mdl-data-table__cell--non-numeric",
+                       column.nonNumeric)]),
+                       _U.list([$Html.text(column.text)]));
+                    })));
+                 }));
+              }())]));
    });
    var instance = F4(function (id,lift,model0,observers) {
       return A8($Material$Component.instance,
@@ -15143,6 +15197,8 @@ Elm.Material.Table.make = function (_elm) {
                                        ,nonNumeric: nonNumeric
                                        ,numeric: numeric
                                        ,Header: Header
+                                       ,Ascending: Ascending
+                                       ,Descending: Descending
                                        ,header: header
                                        ,ascending: ascending
                                        ,descending: descending
