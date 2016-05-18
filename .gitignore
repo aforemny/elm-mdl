@@ -1,8 +1,9 @@
-elm-stuff
-.*.sw?
-elm.js
-index.html
+*~
+demo/assets
 docs.json
 documentation.json
+elm.js
+elm-stuff
+index.html
+.*.swp
 .vscode/
-demo/assets
