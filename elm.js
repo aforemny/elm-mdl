@@ -9038,7 +9038,11 @@ var _debois$elm_mdl$Material_Table$cell = F2(
 		};
 	});
 var _debois$elm_mdl$Material_Table$defaultModel = {
-	toggles: A2(_elm_lang$core$Dict$singleton, -1, _debois$elm_mdl$Material_Toggles$model),
+	toggles: A2(
+		_elm_lang$core$Dict$singleton,
+		_elm_lang$core$Native_List.fromArray(
+			[-1]),
+		_debois$elm_mdl$Material_Toggles$model),
 	allSelected: false
 };
 var _debois$elm_mdl$Material_Table$onDeselect = function (f) {
@@ -9164,7 +9168,11 @@ var _debois$elm_mdl$Material_Table$update = F2(
 									_elm_lang$core$Native_Utils.update(
 										def,
 										{value: model.allSelected}),
-									A2(_elm_lang$core$Dict$get, -1, model.toggles)));
+									A2(
+										_elm_lang$core$Dict$get,
+										_elm_lang$core$Native_List.fromArray(
+											[-1]),
+										model.toggles)));
 							var model$ = _p8._0;
 							var effects = _p8._1;
 							return model$.value ? A2(
@@ -9178,7 +9186,8 @@ var _debois$elm_mdl$Material_Table$update = F2(
 									{
 										toggles: A3(
 											_elm_lang$core$Dict$insert,
-											-1,
+											_elm_lang$core$Native_List.fromArray(
+												[-1]),
 											model$,
 											A2(
 												_elm_lang$core$Dict$map,
@@ -9199,13 +9208,21 @@ var _debois$elm_mdl$Material_Table$update = F2(
 								_elm_lang$core$Native_Utils.update(
 									model,
 									{
-										toggles: A2(_elm_lang$core$Dict$singleton, -1, model$),
+										toggles: A2(
+											_elm_lang$core$Dict$singleton,
+											_elm_lang$core$Native_List.fromArray(
+												[-1]),
+											model$),
 										allSelected: false
 									}));
 						}
 					} else {
 						var def = _debois$elm_mdl$Material_Toggles$model;
-						var idx = A2(_elm_lang$core$Maybe$withDefault, -1, _p11);
+						var idx = A2(
+							_elm_lang$core$Maybe$withDefault,
+							_elm_lang$core$Native_List.fromArray(
+								[-1]),
+							_p11);
 						var _p9 = A2(
 							_debois$elm_mdl$Material_Toggles$update,
 							_p10,
@@ -9248,11 +9265,13 @@ var _debois$elm_mdl$Material_Table$sort = F3(
 				return _debois$elm_mdl$Material_Table$defaultCell;
 			});
 		var h = F2(
-			function (cellsA, cellsB) {
+			function (_p13, _p12) {
+				var _p14 = _p13;
+				var _p15 = _p12;
 				return A2(
 					_elm_lang$core$Basics$compare,
-					A2(nth, index, cellsA).string,
-					A2(nth, index, cellsB).string);
+					A2(nth, index, _p14._1).string,
+					A2(nth, index, _p15._1).string);
 			});
 		return (_elm_lang$core$Native_Utils.eq(order, _debois$elm_mdl$Material_Table$Descending) ? _elm_lang$core$List$reverse : function (x) {
 			return x;
@@ -9270,9 +9289,9 @@ var _debois$elm_mdl$Material_Table$ascending = _debois$elm_mdl$Material_Options$
 	});
 var _debois$elm_mdl$Material_Table$view$ = F5(
 	function (lift, model, options, hdrs, rows) {
-		var _p12 = A2(_debois$elm_mdl$Material_Options$collect, _debois$elm_mdl$Material_Table$defaultConfig, options);
-		var summary = _p12;
-		var config = _p12.config;
+		var _p16 = A2(_debois$elm_mdl$Material_Options$collect, _debois$elm_mdl$Material_Table$defaultConfig, options);
+		var summary = _p16;
+		var config = _p16.config;
 		var tableConfig = config;
 		var tableSummary = summary;
 		return A3(
@@ -9314,16 +9333,20 @@ var _debois$elm_mdl$Material_Table$view$ = F5(
 										[
 											A2(
 											_elm_lang$html$Html_App$map,
-											function (_p13) {
+											function (_p17) {
 												return lift(
-													A2(_debois$elm_mdl$Material_Table$Toggle, _elm_lang$core$Maybe$Nothing, _p13));
+													A2(_debois$elm_mdl$Material_Table$Toggle, _elm_lang$core$Maybe$Nothing, _p17));
 											},
 											A2(
 												_debois$elm_mdl$Material_Toggles$checkbox,
 												A2(
 													_elm_lang$core$Maybe$withDefault,
 													_debois$elm_mdl$Material_Toggles$model,
-													A2(_elm_lang$core$Dict$get, -1, model.toggles)),
+													A2(
+														_elm_lang$core$Dict$get,
+														_elm_lang$core$Native_List.fromArray(
+															[-1]),
+														model.toggles)),
 												_elm_lang$core$Native_List.fromArray(
 													[])))
 										])),
@@ -9331,11 +9354,11 @@ var _debois$elm_mdl$Material_Table$view$ = F5(
 									_elm_lang$core$Basics$flip,
 									_elm_lang$core$List$map,
 									hdrs,
-									function (_p14) {
-										var _p15 = _p14;
-										var _p16 = A2(_debois$elm_mdl$Material_Options$collect, _p15._0, _p15._1);
-										var summary = _p16;
-										var config = _p16.config;
+									function (_p18) {
+										var _p19 = _p18;
+										var _p20 = A2(_debois$elm_mdl$Material_Options$collect, _p19._0, _p19._1);
+										var summary = _p20;
+										var config = _p20.config;
 										return A5(
 											_debois$elm_mdl$Material_Options$apply,
 											tableSummary,
@@ -9371,85 +9394,86 @@ var _debois$elm_mdl$Material_Table$view$ = F5(
 						[]),
 					A3(
 						_elm_lang$core$Basics$flip,
-						_elm_lang$core$List$indexedMap,
+						_elm_lang$core$List$map,
 						rows,
-						F2(
-							function (idx, row) {
-								return A3(
-									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$tr,
-									_elm_lang$core$Native_List.fromArray(
-										[
+						function (_p21) {
+							var _p22 = _p21;
+							var _p27 = _p22._0;
+							return A3(
+								_debois$elm_mdl$Material_Options$styled,
+								_elm_lang$html$Html$tr,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_debois$elm_mdl$Material_Table$cs$,
+										'is-selected',
+										A2(
+											_elm_lang$core$Maybe$withDefault,
+											model.allSelected,
 											A2(
-											_debois$elm_mdl$Material_Table$cs$,
-											'is-selected',
-											A2(
-												_elm_lang$core$Maybe$withDefault,
-												model.allSelected,
-												A2(
-													_elm_lang$core$Maybe$map,
-													function (_) {
-														return _.value;
-													},
-													A2(_elm_lang$core$Dict$get, idx, model.toggles))))
-										]),
-									A2(
-										F2(
-											function (x, y) {
-												return A2(_elm_lang$core$List_ops['::'], x, y);
-											}),
-										A3(
-											_debois$elm_mdl$Material_Options$styled,
-											_elm_lang$html$Html$td,
-											_elm_lang$core$Native_List.fromArray(
-												[]),
-											_elm_lang$core$Native_List.fromArray(
-												[
-													function () {
-													var def = _debois$elm_mdl$Material_Toggles$model;
-													return A2(
-														_elm_lang$html$Html_App$map,
-														function (_p17) {
-															return lift(
-																A2(
-																	_debois$elm_mdl$Material_Table$Toggle,
-																	_elm_lang$core$Maybe$Just(idx),
-																	_p17));
-														},
-														A2(
-															_debois$elm_mdl$Material_Toggles$checkbox,
+												_elm_lang$core$Maybe$map,
+												function (_) {
+													return _.value;
+												},
+												A2(_elm_lang$core$Dict$get, _p27, model.toggles))))
+									]),
+								A2(
+									F2(
+										function (x, y) {
+											return A2(_elm_lang$core$List_ops['::'], x, y);
+										}),
+									A3(
+										_debois$elm_mdl$Material_Options$styled,
+										_elm_lang$html$Html$td,
+										_elm_lang$core$Native_List.fromArray(
+											[]),
+										_elm_lang$core$Native_List.fromArray(
+											[
+												function () {
+												var def = _debois$elm_mdl$Material_Toggles$model;
+												return A2(
+													_elm_lang$html$Html_App$map,
+													function (_p23) {
+														return lift(
 															A2(
-																_elm_lang$core$Maybe$withDefault,
-																_elm_lang$core$Native_Utils.update(
-																	def,
-																	{value: model.allSelected}),
-																A2(_elm_lang$core$Dict$get, idx, model.toggles)),
-															_elm_lang$core$Native_List.fromArray(
-																[])));
-												}()
-												])),
-										A3(
-											_elm_lang$core$Basics$flip,
-											_elm_lang$core$List$map,
-											row,
-											function (_p18) {
-												var _p19 = _p18;
-												var _p20 = A2(_debois$elm_mdl$Material_Options$collect, _p19._0, _p19._1);
-												var summary = _p20;
-												var config = _p20.config;
-												return A3(
-													_debois$elm_mdl$Material_Options$styled,
-													_elm_lang$html$Html$td,
-													_elm_lang$core$Native_List.fromArray(
-														[
-															A2(_debois$elm_mdl$Material_Table$cs$, 'mdl-data-table__cell--non-numeric', config.nonNumeric)
-														]),
-													_elm_lang$core$Native_List.fromArray(
-														[
-															_elm_lang$html$Html$text(config.string)
-														]));
-											})));
-							})))
+																_debois$elm_mdl$Material_Table$Toggle,
+																_elm_lang$core$Maybe$Just(_p27),
+																_p23));
+													},
+													A2(
+														_debois$elm_mdl$Material_Toggles$checkbox,
+														A2(
+															_elm_lang$core$Maybe$withDefault,
+															_elm_lang$core$Native_Utils.update(
+																def,
+																{value: model.allSelected}),
+															A2(_elm_lang$core$Dict$get, _p27, model.toggles)),
+														_elm_lang$core$Native_List.fromArray(
+															[])));
+											}()
+											])),
+									A3(
+										_elm_lang$core$Basics$flip,
+										_elm_lang$core$List$map,
+										_p22._1,
+										function (_p24) {
+											var _p25 = _p24;
+											var _p26 = A2(_debois$elm_mdl$Material_Options$collect, _p25._0, _p25._1);
+											var summary = _p26;
+											var config = _p26.config;
+											return A3(
+												_debois$elm_mdl$Material_Options$styled,
+												_elm_lang$html$Html$td,
+												_elm_lang$core$Native_List.fromArray(
+													[
+														A2(_debois$elm_mdl$Material_Table$cs$, 'mdl-data-table__cell--non-numeric', config.nonNumeric)
+													]),
+												_elm_lang$core$Native_List.fromArray(
+													[
+														_elm_lang$html$Html$text(config.string)
+													]));
+										})));
+						}))
 				]));
 	});
 var _debois$elm_mdl$Material_Table$view = _debois$elm_mdl$Material_Table$view$(
@@ -9478,8 +9502,8 @@ var _debois$elm_mdl$Material_Table$render = A5(
 		}),
 	_debois$elm_mdl$Material_Table$defaultModel);
 var _debois$elm_mdl$Material_Table$toggle = function (order) {
-	var _p21 = order;
-	if (_p21.ctor === 'Ascending') {
+	var _p28 = order;
+	if (_p28.ctor === 'Ascending') {
 		return _debois$elm_mdl$Material_Table$Descending;
 	} else {
 		return _debois$elm_mdl$Material_Table$Ascending;
@@ -13949,10 +13973,24 @@ var _debois$elm_mdl$Demo_Tables$view = function (model) {
 						_elm_lang$core$Native_List.fromArray(
 							[_debois$elm_mdl$Material_Table$numeric]))
 					]),
-				A3(
-					_debois$elm_mdl$Material_Table$sort,
-					0,
-					model.sort,
+				function (_p1) {
+					return A3(
+						_debois$elm_mdl$Material_Table$sort,
+						0,
+						model.sort,
+						A2(
+							_elm_lang$core$List$indexedMap,
+							F2(
+								function (i, r) {
+									return {
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$Native_List.fromArray(
+											[i]),
+										_1: r
+									};
+								}),
+							_p1));
+				}(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							_elm_lang$core$Native_List.fromArray(
