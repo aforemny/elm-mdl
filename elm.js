@@ -9079,13 +9079,11 @@ var _debois$elm_mdl$Material_Table$defaultConfig = {
 	onClick: function (_p0) {
 		return _elm_lang$core$Maybe$Nothing;
 	},
-	onSelect: _elm_lang$core$Maybe$Nothing,
-	onDeselect: _elm_lang$core$Maybe$Nothing,
 	selectable: false
 };
-var _debois$elm_mdl$Material_Table$Config = F4(
-	function (a, b, c, d) {
-		return {onClick: a, onSelect: b, onDeselect: c, selectable: d};
+var _debois$elm_mdl$Material_Table$Config = F2(
+	function (a, b) {
+		return {onClick: a, selectable: b};
 	});
 var _debois$elm_mdl$Material_Table$Model = F2(
 	function (a, b) {
