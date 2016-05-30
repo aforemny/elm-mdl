@@ -8734,768 +8734,211 @@ var _debois$elm_mdl$Material_Button$Config = F3(
 		return {ripple: a, onClick: b, disabled: c};
 	});
 
-var _debois$elm_mdl$Material_Toggles$state = function (model) {
-	var _p0 = model.state;
-	return _p0._0;
+var _debois$elm_mdl$Material_Table$sorted = function (order) {
+	return _debois$elm_mdl$Material_Options$set(
+		function (self) {
+			return _elm_lang$core$Native_Utils.update(
+				self,
+				{
+					sorted: _elm_lang$core$Maybe$Just(order)
+				});
+		});
 };
-var _debois$elm_mdl$Material_Toggles$Model = F5(
-	function (a, b, c, d, e) {
-		return {isFocused: a, isDisabled: b, value: c, ripple: d, state: e};
-	});
-var _debois$elm_mdl$Material_Toggles$S = function (a) {
-	return {ctor: 'S', _0: a};
-};
-var _debois$elm_mdl$Material_Toggles$model = {
-	isFocused: false,
-	isDisabled: false,
-	value: false,
-	ripple: true,
-	state: _debois$elm_mdl$Material_Toggles$S(_debois$elm_mdl$Material_Ripple$model)
-};
-var _debois$elm_mdl$Material_Toggles$SetFocus = function (a) {
-	return {ctor: 'SetFocus', _0: a};
-};
-var _debois$elm_mdl$Material_Toggles$Ripple = function (a) {
-	return {ctor: 'Ripple', _0: a};
-};
-var _debois$elm_mdl$Material_Toggles$update = F2(
-	function (action, model) {
-		var _p1 = action;
-		switch (_p1.ctor) {
-			case 'Change':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							value: _elm_lang$core$Basics$not(model.value)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Ripple':
-				return A2(
-					_debois$elm_mdl$Material_Helpers$map2nd,
-					_elm_lang$core$Platform_Cmd$map(_debois$elm_mdl$Material_Toggles$Ripple),
-					A2(
-						_debois$elm_mdl$Material_Helpers$map1st,
-						function (r) {
-							return _elm_lang$core$Native_Utils.update(
-								model,
-								{
-									state: _debois$elm_mdl$Material_Toggles$S(r)
-								});
-						},
-						A2(
-							_debois$elm_mdl$Material_Ripple$update,
-							_p1._0,
-							_debois$elm_mdl$Material_Toggles$state(model))));
-			default:
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{isFocused: _p1._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
-	});
-var _debois$elm_mdl$Material_Toggles$Change = {ctor: 'Change'};
-var _debois$elm_mdl$Material_Toggles$top = F4(
-	function (name, model, styles, elems) {
-		return A3(
-			_debois$elm_mdl$Material_Options$styled,
-			_elm_lang$html$Html$label,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_debois$elm_mdl$Material_Options$cs(
-						A2(_elm_lang$core$Basics_ops['++'], 'mdl-', name)),
-						_debois$elm_mdl$Material_Options$cs(
-						A2(_elm_lang$core$Basics_ops['++'], 'mdl-js-', name)),
-						A2(_debois$elm_mdl$Material_Options$cs$, 'mdl-js-ripple-effect', model.ripple),
-						A2(_debois$elm_mdl$Material_Options$cs$, 'mdl-js-ripple-effect--ignore-events', model.ripple),
-						_debois$elm_mdl$Material_Options$cs('is-upgraded'),
-						A2(_debois$elm_mdl$Material_Options$cs$, 'is-checked', model.value),
-						_debois$elm_mdl$Material_Options$Attribute(
-						A2(
-							_elm_lang$html$Html_Events$on,
-							'change',
-							_elm_lang$core$Json_Decode$succeed(_debois$elm_mdl$Material_Toggles$Change))),
-						_debois$elm_mdl$Material_Options$Attribute(
-						_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
-						_debois$elm_mdl$Material_Options$Attribute(
-						_elm_lang$html$Html_Events$onFocus(
-							_debois$elm_mdl$Material_Toggles$SetFocus(true))),
-						_debois$elm_mdl$Material_Options$Attribute(
-						_elm_lang$html$Html_Events$onBlur(
-							_debois$elm_mdl$Material_Toggles$SetFocus(false)))
-					]),
-				styles),
-			model.ripple ? A2(
-				_elm_lang$core$List_ops['::'],
-				A2(
-					_elm_lang$html$Html_App$map,
-					_debois$elm_mdl$Material_Toggles$Ripple,
-					A2(
-						_debois$elm_mdl$Material_Ripple$view,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center')
-							]),
-						_debois$elm_mdl$Material_Toggles$state(model))),
-				elems) : elems);
-	});
-var _debois$elm_mdl$Material_Toggles$checkbox = F2(
-	function (model, styles) {
-		return A4(
-			_debois$elm_mdl$Material_Toggles$top,
-			'checkbox',
-			model,
-			styles,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$input,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$type$('checkbox'),
-							_elm_lang$html$Html_Attributes$class('mdl-checkbox__input'),
-							_elm_lang$html$Html_Attributes$disabled(model.isDisabled),
-							_elm_lang$html$Html_Attributes$checked(model.value)
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-checkbox__label')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-checkbox__focus-helper')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-checkbox__box-outline')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$span,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Attributes$class('mdl-checkbox__tick-outline')
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[]))
-						]))
-				]));
-	});
-var _debois$elm_mdl$Material_Toggles$switch = F2(
-	function (model, styles) {
-		return A4(
-			_debois$elm_mdl$Material_Toggles$top,
-			'switch',
-			model,
-			styles,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$input,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$type$('checkbox'),
-							_elm_lang$html$Html_Attributes$class('mdl-switch__input'),
-							_elm_lang$html$Html_Attributes$disabled(model.isDisabled),
-							_elm_lang$html$Html_Attributes$checked(model.value)
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-switch__label')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-switch__track')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$div,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-switch__thumb')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A2(
-							_elm_lang$html$Html$span,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Attributes$class('mdl-switch__focus-helper')
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[]))
-						]))
-				]));
-	});
-var _debois$elm_mdl$Material_Toggles$radio = F4(
-	function (model, styles, _p2, elems) {
-		var _p3 = _p2;
-		return A4(
-			_debois$elm_mdl$Material_Toggles$top,
-			'radio',
-			model,
-			styles,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$input,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$type$('radio'),
-							_elm_lang$html$Html_Attributes$class('mdl-radio__button'),
-							_elm_lang$html$Html_Attributes$disabled(model.isDisabled),
-							_elm_lang$html$Html_Attributes$checked(model.value),
-							_elm_lang$html$Html_Attributes$value(_p3._0),
-							_elm_lang$html$Html_Attributes$name(_p3._1)
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-radio__label')
-						]),
-					elems),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-radio__outer-circle')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class('mdl-radio__inner-circle')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[]))
-				]));
-	});
-
-var _debois$elm_mdl$Material_Table$cs$ = F2(
-	function (x, p) {
-		return p ? _debois$elm_mdl$Material_Options$cs(x) : _debois$elm_mdl$Material_Options$nop;
-	});
-var _debois$elm_mdl$Material_Table$defaultHeader = {
-	html: _elm_lang$html$Html$text(''),
-	nonNumeric: true,
-	sorting: _elm_lang$core$Maybe$Nothing
-};
-var _debois$elm_mdl$Material_Table$header = F2(
-	function (html, options) {
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Native_Utils.update(
-				_debois$elm_mdl$Material_Table$defaultHeader,
-				{html: html}),
-			_1: options
-		};
-	});
 var _debois$elm_mdl$Material_Table$numeric = _debois$elm_mdl$Material_Options$set(
 	function (self) {
 		return _elm_lang$core$Native_Utils.update(
 			self,
-			{nonNumeric: false});
+			{numeric: true});
 	});
-var _debois$elm_mdl$Material_Table$defaultCell = {
-	html: _elm_lang$html$Html$text(''),
-	nonNumeric: true
-};
-var _debois$elm_mdl$Material_Table$cell = F2(
-	function (html, options) {
-		return {
-			ctor: '_Tuple2',
-			_0: _elm_lang$core$Native_Utils.update(
-				_debois$elm_mdl$Material_Table$defaultCell,
-				{html: html}),
-			_1: options
-		};
-	});
-var _debois$elm_mdl$Material_Table$defaultModel = {
-	toggles: A2(
-		_elm_lang$core$Dict$singleton,
-		_elm_lang$core$Native_List.fromArray(
-			[-1]),
-		_debois$elm_mdl$Material_Toggles$model),
-	allSelected: false
-};
-var _debois$elm_mdl$Material_Table$selectable = _debois$elm_mdl$Material_Options$set(
-	function (config) {
-		return _elm_lang$core$Native_Utils.update(
-			config,
-			{selectable: true});
-	});
-var _debois$elm_mdl$Material_Table$onClick = function (f) {
+var _debois$elm_mdl$Material_Table$onClick = function (x) {
 	return _debois$elm_mdl$Material_Options$set(
-		function (config) {
+		function (options) {
 			return _elm_lang$core$Native_Utils.update(
-				config,
+				options,
 				{
-					onClick: function (idx) {
-						return _elm_lang$core$Maybe$Just(
-							A2(
-								_elm_lang$html$Html_Events$on,
-								'click',
-								_elm_lang$core$Json_Decode$succeed(
-									f(idx))));
-					}
+					onClick: _elm_lang$core$Maybe$Just(
+						_elm_lang$html$Html_Events$onClick(x))
 				});
 		});
 };
-var _debois$elm_mdl$Material_Table$defaultConfig = {
-	onClick: function (_p0) {
-		return _elm_lang$core$Maybe$Nothing;
-	},
-	selectable: false
-};
-var _debois$elm_mdl$Material_Table$Config = F2(
-	function (a, b) {
-		return {onClick: a, selectable: b};
+var _debois$elm_mdl$Material_Table$selected = _debois$elm_mdl$Material_Options$set(
+	function (self) {
+		return _elm_lang$core$Native_Utils.update(
+			self,
+			{selected: true});
 	});
-var _debois$elm_mdl$Material_Table$Model = F2(
-	function (a, b) {
-		return {toggles: a, allSelected: b};
+var _debois$elm_mdl$Material_Table$td = F2(
+	function (options, html) {
+		var _p0 = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{numeric: false},
+			options);
+		var summary = _p0;
+		var config = _p0.config;
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
+			_elm_lang$html$Html$td,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					config.numeric ? _debois$elm_mdl$Material_Options$nop : _debois$elm_mdl$Material_Options$cs('mdl-data-table__cell--non-numeric')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			html);
 	});
-var _debois$elm_mdl$Material_Table$Cell = F2(
-	function (a, b) {
-		return {html: a, nonNumeric: b};
-	});
-var _debois$elm_mdl$Material_Table$Header = F3(
-	function (a, b, c) {
-		return {html: a, nonNumeric: b, sorting: c};
-	});
-var _debois$elm_mdl$Material_Table$Click = function (a) {
-	return {ctor: 'Click', _0: a};
-};
-var _debois$elm_mdl$Material_Table$Toggle = F2(
-	function (a, b) {
-		return {ctor: 'Toggle', _0: a, _1: b};
-	});
-var _debois$elm_mdl$Material_Table$update = F2(
-	function (action, model) {
-		return function (_p1) {
-			var _p2 = _p1;
-			return _p2._0;
-		}(
-			function () {
-				var _p3 = action;
-				if (_p3.ctor === 'Click') {
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-				} else {
-					var _p11 = _p3._0;
-					var _p10 = _p3._1;
-					var _p4 = _p10;
-					if (_p4.ctor === 'Change') {
-						var _p5 = _p11;
-						if (_p5.ctor === 'Just') {
-							var _p7 = _p5._0;
-							var def = _debois$elm_mdl$Material_Toggles$model;
-							var _p6 = A2(
-								_debois$elm_mdl$Material_Toggles$update,
-								_p10,
-								A2(
-									_elm_lang$core$Maybe$withDefault,
-									_elm_lang$core$Native_Utils.update(
-										def,
-										{value: model.allSelected}),
-									A2(_elm_lang$core$Dict$get, _p7, model.toggles)));
-							var model$ = _p6._0;
-							var effects = _p6._1;
-							return A2(
-								_debois$elm_mdl$Material_Helpers$effect,
-								A2(
-									_elm_lang$core$Platform_Cmd$map,
-									_debois$elm_mdl$Material_Table$Toggle(
-										_elm_lang$core$Maybe$Just(_p7)),
-									effects),
-								_elm_lang$core$Native_Utils.update(
-									model,
-									{
-										toggles: A3(_elm_lang$core$Dict$insert, _p7, model$, model.toggles),
-										allSelected: model.allSelected
-									}));
+var _debois$elm_mdl$Material_Table$th = F2(
+	function (options, html) {
+		var _p1 = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{numeric: false, sorted: _elm_lang$core$Maybe$Nothing, onClick: _elm_lang$core$Maybe$Nothing},
+			options);
+		var summary = _p1;
+		var config = _p1.config;
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
+			_elm_lang$html$Html$th,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					config.numeric ? _debois$elm_mdl$Material_Options$nop : _debois$elm_mdl$Material_Options$cs('mdl-data-table__cell--non-numeric'),
+					function () {
+					var _p2 = config.sorted;
+					if (_p2.ctor === 'Just') {
+						if (_p2._0.ctor === 'Ascending') {
+							return _debois$elm_mdl$Material_Options$cs('mdl-data-table__header--sorted-ascending');
 						} else {
-							var def = _debois$elm_mdl$Material_Toggles$model;
-							var _p8 = A2(
-								_debois$elm_mdl$Material_Toggles$update,
-								_p10,
-								A2(
-									_elm_lang$core$Maybe$withDefault,
-									_elm_lang$core$Native_Utils.update(
-										def,
-										{value: model.allSelected}),
-									A2(
-										_elm_lang$core$Dict$get,
-										_elm_lang$core$Native_List.fromArray(
-											[-1]),
-										model.toggles)));
-							var model$ = _p8._0;
-							var effects = _p8._1;
-							return model$.value ? A2(
-								_debois$elm_mdl$Material_Helpers$effect,
-								A2(
-									_elm_lang$core$Platform_Cmd$map,
-									_debois$elm_mdl$Material_Table$Toggle(_elm_lang$core$Maybe$Nothing),
-									effects),
-								_elm_lang$core$Native_Utils.update(
-									model,
-									{
-										toggles: A3(
-											_elm_lang$core$Dict$insert,
-											_elm_lang$core$Native_List.fromArray(
-												[-1]),
-											model$,
-											A2(
-												_elm_lang$core$Dict$map,
-												F2(
-													function (idx, model$) {
-														return _elm_lang$core$Native_Utils.update(
-															model$,
-															{value: true});
-													}),
-												model.toggles)),
-										allSelected: true
-									})) : A2(
-								_debois$elm_mdl$Material_Helpers$effect,
-								A2(
-									_elm_lang$core$Platform_Cmd$map,
-									_debois$elm_mdl$Material_Table$Toggle(_elm_lang$core$Maybe$Nothing),
-									effects),
-								_elm_lang$core$Native_Utils.update(
-									model,
-									{
-										toggles: A2(
-											_elm_lang$core$Dict$singleton,
-											_elm_lang$core$Native_List.fromArray(
-												[-1]),
-											model$),
-										allSelected: false
-									}));
+							return _debois$elm_mdl$Material_Options$cs('mdl-data-table__header--sorted-descending');
 						}
 					} else {
-						var def = _debois$elm_mdl$Material_Toggles$model;
-						var idx = A2(
-							_elm_lang$core$Maybe$withDefault,
-							_elm_lang$core$Native_List.fromArray(
-								[-1]),
-							_p11);
-						var _p9 = A2(
-							_debois$elm_mdl$Material_Toggles$update,
-							_p10,
-							A2(
-								_elm_lang$core$Maybe$withDefault,
-								_elm_lang$core$Native_Utils.update(
-									def,
-									{value: model.allSelected}),
-								A2(_elm_lang$core$Dict$get, idx, model.toggles)));
-						var model$ = _p9._0;
-						var effects = _p9._1;
-						return A2(
-							_debois$elm_mdl$Material_Helpers$effect,
-							A2(
-								_elm_lang$core$Platform_Cmd$map,
-								_debois$elm_mdl$Material_Table$Toggle(_p11),
-								effects),
-							_elm_lang$core$Native_Utils.update(
-								model,
-								{
-									toggles: A3(_elm_lang$core$Dict$insert, idx, model$, model.toggles)
-								}));
+						return _debois$elm_mdl$Material_Options$nop;
 					}
-				}
-			}());
+				}()
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[config.onClick]),
+			html);
 	});
-var _debois$elm_mdl$Material_Table$Descending = {ctor: 'Descending'};
-var _debois$elm_mdl$Material_Table$descending = _debois$elm_mdl$Material_Options$set(
-	function (self) {
-		return _elm_lang$core$Native_Utils.update(
-			self,
-			{
-				sorting: _elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Table$Descending)
-			});
+var _debois$elm_mdl$Material_Table$tr = F2(
+	function (options, html) {
+		var _p3 = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{selected: false},
+			options);
+		var summary = _p3;
+		var config = _p3.config;
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
+			_elm_lang$html$Html$tr,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					config.selected ? _debois$elm_mdl$Material_Options$cs('is-selected') : _debois$elm_mdl$Material_Options$nop
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			html);
 	});
-var _debois$elm_mdl$Material_Table$sort = F3(
-	function (index, order, cells) {
-		var nth = F2(
-			function (index, xs) {
-				return _debois$elm_mdl$Material_Table$defaultCell;
-			});
-		var h = F2(
-			function (_p13, _p12) {
-				var _p14 = _p13;
-				var _p15 = _p12;
-				return _elm_lang$core$Basics$EQ;
-			});
-		return (_elm_lang$core$Native_Utils.eq(order, _debois$elm_mdl$Material_Table$Descending) ? _elm_lang$core$List$reverse : function (x) {
-			return x;
-		})(
-			A2(_elm_lang$core$List$sortWith, h, cells));
+var _debois$elm_mdl$Material_Table$tfoot = F2(
+	function (options, html) {
+		var summary = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{},
+			options);
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
+			_elm_lang$html$Html$tfoot,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			html);
 	});
-var _debois$elm_mdl$Material_Table$Ascending = {ctor: 'Ascending'};
-var _debois$elm_mdl$Material_Table$ascending = _debois$elm_mdl$Material_Options$set(
-	function (self) {
-		return _elm_lang$core$Native_Utils.update(
-			self,
-			{
-				sorting: _elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Table$Ascending)
-			});
+var _debois$elm_mdl$Material_Table$tbody = F2(
+	function (options, html) {
+		var summary = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{},
+			options);
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
+			_elm_lang$html$Html$tbody,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			html);
 	});
-var _debois$elm_mdl$Material_Table$view$ = F5(
-	function (lift, model, options, hdrs, rows) {
-		var _p16 = A2(_debois$elm_mdl$Material_Options$collect, _debois$elm_mdl$Material_Table$defaultConfig, options);
-		var summary = _p16;
-		var config = _p16.config;
-		var tableConfig = config;
-		var tableSummary = summary;
-		return A3(
-			_debois$elm_mdl$Material_Options$styled,
+var _debois$elm_mdl$Material_Table$thead = F2(
+	function (options, html) {
+		var summary = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{},
+			options);
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
+			_elm_lang$html$Html$thead,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			html);
+	});
+var _debois$elm_mdl$Material_Table$table = F4(
+	function (options, thead, tbody, tfoot) {
+		var summary = A2(
+			_debois$elm_mdl$Material_Options$collect,
+			{},
+			options);
+		return A5(
+			_debois$elm_mdl$Material_Options$apply,
+			summary,
 			_elm_lang$html$Html$table,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_debois$elm_mdl$Material_Options$cs('mdl-data-table'),
 					_debois$elm_mdl$Material_Options$cs('mdl-js-data-table'),
-					_debois$elm_mdl$Material_Options$cs('is-upgraded'),
-					A2(_debois$elm_mdl$Material_Table$cs$, 'mdl-data-table--selectable', config.selectable),
-					_debois$elm_mdl$Material_Options$cs('mdl-shadow--2dp')
+					_debois$elm_mdl$Material_Options$cs('is-upgraded')
 				]),
 			_elm_lang$core$Native_List.fromArray(
-				[
-					A3(
-					_debois$elm_mdl$Material_Options$styled,
-					_elm_lang$html$Html$thead,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							A3(
-							_debois$elm_mdl$Material_Options$styled,
-							_elm_lang$html$Html$tr,
-							_elm_lang$core$Native_List.fromArray(
-								[]),
-							(config.selectable ? F2(
-								function (x, y) {
-									return A2(_elm_lang$core$List_ops['::'], x, y);
-								})(
-								A3(
-									_debois$elm_mdl$Material_Options$styled,
-									_elm_lang$html$Html$th,
-									_elm_lang$core$Native_List.fromArray(
-										[]),
-									_elm_lang$core$Native_List.fromArray(
-										[
-											A2(
-											_elm_lang$html$Html_App$map,
-											function (_p17) {
-												return lift(
-													A2(_debois$elm_mdl$Material_Table$Toggle, _elm_lang$core$Maybe$Nothing, _p17));
-											},
-											A2(
-												_debois$elm_mdl$Material_Toggles$checkbox,
-												A2(
-													_elm_lang$core$Maybe$withDefault,
-													_debois$elm_mdl$Material_Toggles$model,
-													A2(
-														_elm_lang$core$Dict$get,
-														_elm_lang$core$Native_List.fromArray(
-															[-1]),
-														model.toggles)),
-												_elm_lang$core$Native_List.fromArray(
-													[])))
-										]))) : function (x) {
-								return x;
-							})(
-								A3(
-									_elm_lang$core$Basics$flip,
-									_elm_lang$core$List$indexedMap,
-									hdrs,
-									F2(
-										function (idx, _p18) {
-											var _p19 = _p18;
-											var _p20 = A2(_debois$elm_mdl$Material_Options$collect, _p19._0, _p19._1);
-											var summary = _p20;
-											var config = _p20.config;
-											return A5(
-												_debois$elm_mdl$Material_Options$apply,
-												tableSummary,
-												_elm_lang$html$Html$th,
-												_elm_lang$core$Native_List.fromArray(
-													[
-														A2(_debois$elm_mdl$Material_Table$cs$, 'mdl-data-table__cell--non-numeric', config.nonNumeric),
-														A2(
-														_debois$elm_mdl$Material_Table$cs$,
-														'mdl-data-table__header--sorted-ascending',
-														_elm_lang$core$Native_Utils.eq(
-															config.sorting,
-															_elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Table$Ascending))),
-														A2(
-														_debois$elm_mdl$Material_Table$cs$,
-														'mdl-data-table__header--sorted-descending',
-														_elm_lang$core$Native_Utils.eq(
-															config.sorting,
-															_elm_lang$core$Maybe$Just(_debois$elm_mdl$Material_Table$Descending)))
-													]),
-												_elm_lang$core$Native_List.fromArray(
-													[
-														tableConfig.onClick(idx)
-													]),
-												_elm_lang$core$Native_List.fromArray(
-													[config.html]));
-										}))))
-						])),
-					A3(
-					_debois$elm_mdl$Material_Options$styled,
-					_elm_lang$html$Html$tbody,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					A3(
-						_elm_lang$core$Basics$flip,
-						_elm_lang$core$List$map,
-						rows,
-						function (_p21) {
-							var _p22 = _p21;
-							var _p27 = _p22._0;
-							return A3(
-								_debois$elm_mdl$Material_Options$styled,
-								_elm_lang$html$Html$tr,
-								_elm_lang$core$Native_List.fromArray(
-									[
-										A2(
-										_debois$elm_mdl$Material_Table$cs$,
-										'is-selected',
-										A2(
-											_elm_lang$core$Maybe$withDefault,
-											model.allSelected,
-											A2(
-												_elm_lang$core$Maybe$map,
-												function (_) {
-													return _.value;
-												},
-												A2(_elm_lang$core$Dict$get, _p27, model.toggles))))
-									]),
-								(config.selectable ? F2(
-									function (x, y) {
-										return A2(_elm_lang$core$List_ops['::'], x, y);
-									})(
-									A3(
-										_debois$elm_mdl$Material_Options$styled,
-										_elm_lang$html$Html$td,
-										_elm_lang$core$Native_List.fromArray(
-											[]),
-										_elm_lang$core$Native_List.fromArray(
-											[
-												function () {
-												var def = _debois$elm_mdl$Material_Toggles$model;
-												return A2(
-													_elm_lang$html$Html_App$map,
-													function (_p23) {
-														return lift(
-															A2(
-																_debois$elm_mdl$Material_Table$Toggle,
-																_elm_lang$core$Maybe$Just(_p27),
-																_p23));
-													},
-													A2(
-														_debois$elm_mdl$Material_Toggles$checkbox,
-														A2(
-															_elm_lang$core$Maybe$withDefault,
-															_elm_lang$core$Native_Utils.update(
-																def,
-																{value: model.allSelected}),
-															A2(_elm_lang$core$Dict$get, _p27, model.toggles)),
-														_elm_lang$core$Native_List.fromArray(
-															[])));
-											}()
-											]))) : function (x) {
-									return x;
-								})(
-									A3(
-										_elm_lang$core$Basics$flip,
-										_elm_lang$core$List$map,
-										_p22._1,
-										function (_p24) {
-											var _p25 = _p24;
-											var _p26 = A2(_debois$elm_mdl$Material_Options$collect, _p25._0, _p25._1);
-											var summary = _p26;
-											var config = _p26.config;
-											return A3(
-												_debois$elm_mdl$Material_Options$styled,
-												_elm_lang$html$Html$td,
-												_elm_lang$core$Native_List.fromArray(
-													[
-														A2(_debois$elm_mdl$Material_Table$cs$, 'mdl-data-table__cell--non-numeric', config.nonNumeric)
-													]),
-												_elm_lang$core$Native_List.fromArray(
-													[config.html]));
-										})));
-						}))
-				]));
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[thead, tbody, tfoot]));
 	});
-var _debois$elm_mdl$Material_Table$view = _debois$elm_mdl$Material_Table$view$(
-	function (x) {
-		return x;
+var _debois$elm_mdl$Material_Table$view = F6(
+	function (lift, model, options, thead, tbody, tfoot) {
+		return A4(_debois$elm_mdl$Material_Table$table, options, thead, tbody, tfoot);
 	});
+var _debois$elm_mdl$Material_Table$update = F2(
+	function (_p4, model) {
+		return model;
+	});
+var _debois$elm_mdl$Material_Table$defaultModel = {};
 var _debois$elm_mdl$Material_Table$render = A5(
 	_debois$elm_parts$Parts$create,
-	_debois$elm_mdl$Material_Table$view$,
+	_debois$elm_mdl$Material_Table$view,
 	F2(
-		function (msg, model) {
-			return {
-				ctor: '_Tuple2',
-				_0: A2(_debois$elm_mdl$Material_Table$update, msg, model),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
+		function (_p5, model) {
+			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		}),
 	function (_) {
 		return _.table;
 	},
 	F2(
-		function (x, c) {
+		function (x, y) {
 			return _elm_lang$core$Native_Utils.update(
-				c,
+				y,
 				{table: x});
 		}),
 	_debois$elm_mdl$Material_Table$defaultModel);
-var _debois$elm_mdl$Material_Table$toggle = function (order) {
-	var _p28 = order;
-	if (_p28.ctor === 'Ascending') {
-		return _debois$elm_mdl$Material_Table$Descending;
-	} else {
-		return _debois$elm_mdl$Material_Table$Ascending;
-	}
-};
+var _debois$elm_mdl$Material_Table$Model = {};
+var _debois$elm_mdl$Material_Table$Descending = {ctor: 'Descending'};
+var _debois$elm_mdl$Material_Table$descending = _debois$elm_mdl$Material_Table$sorted(_debois$elm_mdl$Material_Table$Descending);
+var _debois$elm_mdl$Material_Table$Ascending = {ctor: 'Ascending'};
+var _debois$elm_mdl$Material_Table$ascending = _debois$elm_mdl$Material_Table$sorted(_debois$elm_mdl$Material_Table$Ascending);
 
 var _debois$elm_mdl$Material_Textfield$update = F2(
 	function (action, model) {
@@ -13883,6 +13326,277 @@ var _debois$elm_mdl$Demo_Snackbar$view = function (model) {
 			]));
 };
 
+var _debois$elm_mdl$Material_Toggles$state = function (model) {
+	var _p0 = model.state;
+	return _p0._0;
+};
+var _debois$elm_mdl$Material_Toggles$Model = F5(
+	function (a, b, c, d, e) {
+		return {isFocused: a, isDisabled: b, value: c, ripple: d, state: e};
+	});
+var _debois$elm_mdl$Material_Toggles$S = function (a) {
+	return {ctor: 'S', _0: a};
+};
+var _debois$elm_mdl$Material_Toggles$model = {
+	isFocused: false,
+	isDisabled: false,
+	value: false,
+	ripple: true,
+	state: _debois$elm_mdl$Material_Toggles$S(_debois$elm_mdl$Material_Ripple$model)
+};
+var _debois$elm_mdl$Material_Toggles$SetFocus = function (a) {
+	return {ctor: 'SetFocus', _0: a};
+};
+var _debois$elm_mdl$Material_Toggles$Ripple = function (a) {
+	return {ctor: 'Ripple', _0: a};
+};
+var _debois$elm_mdl$Material_Toggles$update = F2(
+	function (action, model) {
+		var _p1 = action;
+		switch (_p1.ctor) {
+			case 'Change':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							value: _elm_lang$core$Basics$not(model.value)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Ripple':
+				return A2(
+					_debois$elm_mdl$Material_Helpers$map2nd,
+					_elm_lang$core$Platform_Cmd$map(_debois$elm_mdl$Material_Toggles$Ripple),
+					A2(
+						_debois$elm_mdl$Material_Helpers$map1st,
+						function (r) {
+							return _elm_lang$core$Native_Utils.update(
+								model,
+								{
+									state: _debois$elm_mdl$Material_Toggles$S(r)
+								});
+						},
+						A2(
+							_debois$elm_mdl$Material_Ripple$update,
+							_p1._0,
+							_debois$elm_mdl$Material_Toggles$state(model))));
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{isFocused: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _debois$elm_mdl$Material_Toggles$Change = {ctor: 'Change'};
+var _debois$elm_mdl$Material_Toggles$top = F4(
+	function (name, model, styles, elems) {
+		return A3(
+			_debois$elm_mdl$Material_Options$styled,
+			_elm_lang$html$Html$label,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_debois$elm_mdl$Material_Options$cs(
+						A2(_elm_lang$core$Basics_ops['++'], 'mdl-', name)),
+						_debois$elm_mdl$Material_Options$cs(
+						A2(_elm_lang$core$Basics_ops['++'], 'mdl-js-', name)),
+						A2(_debois$elm_mdl$Material_Options$cs$, 'mdl-js-ripple-effect', model.ripple),
+						A2(_debois$elm_mdl$Material_Options$cs$, 'mdl-js-ripple-effect--ignore-events', model.ripple),
+						_debois$elm_mdl$Material_Options$cs('is-upgraded'),
+						A2(_debois$elm_mdl$Material_Options$cs$, 'is-checked', model.value),
+						_debois$elm_mdl$Material_Options$Attribute(
+						A2(
+							_elm_lang$html$Html_Events$on,
+							'change',
+							_elm_lang$core$Json_Decode$succeed(_debois$elm_mdl$Material_Toggles$Change))),
+						_debois$elm_mdl$Material_Options$Attribute(
+						_debois$elm_mdl$Material_Helpers$blurOn('mouseup')),
+						_debois$elm_mdl$Material_Options$Attribute(
+						_elm_lang$html$Html_Events$onFocus(
+							_debois$elm_mdl$Material_Toggles$SetFocus(true))),
+						_debois$elm_mdl$Material_Options$Attribute(
+						_elm_lang$html$Html_Events$onBlur(
+							_debois$elm_mdl$Material_Toggles$SetFocus(false)))
+					]),
+				styles),
+			model.ripple ? A2(
+				_elm_lang$core$List_ops['::'],
+				A2(
+					_elm_lang$html$Html_App$map,
+					_debois$elm_mdl$Material_Toggles$Ripple,
+					A2(
+						_debois$elm_mdl$Material_Ripple$view,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('mdl-switch__ripple-container mdl-js-ripple-effect mdl-ripple--center')
+							]),
+						_debois$elm_mdl$Material_Toggles$state(model))),
+				elems) : elems);
+	});
+var _debois$elm_mdl$Material_Toggles$checkbox = F2(
+	function (model, styles) {
+		return A4(
+			_debois$elm_mdl$Material_Toggles$top,
+			'checkbox',
+			model,
+			styles,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$type$('checkbox'),
+							_elm_lang$html$Html_Attributes$class('mdl-checkbox__input'),
+							_elm_lang$html$Html_Attributes$disabled(model.isDisabled),
+							_elm_lang$html$Html_Attributes$checked(model.value)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-checkbox__label')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-checkbox__focus-helper')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-checkbox__box-outline')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$span,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('mdl-checkbox__tick-outline')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[]))
+						]))
+				]));
+	});
+var _debois$elm_mdl$Material_Toggles$switch = F2(
+	function (model, styles) {
+		return A4(
+			_debois$elm_mdl$Material_Toggles$top,
+			'switch',
+			model,
+			styles,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$type$('checkbox'),
+							_elm_lang$html$Html_Attributes$class('mdl-switch__input'),
+							_elm_lang$html$Html_Attributes$disabled(model.isDisabled),
+							_elm_lang$html$Html_Attributes$checked(model.value)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-switch__label')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-switch__track')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-switch__thumb')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$span,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Attributes$class('mdl-switch__focus-helper')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[]))
+						]))
+				]));
+	});
+var _debois$elm_mdl$Material_Toggles$radio = F4(
+	function (model, styles, _p2, elems) {
+		var _p3 = _p2;
+		return A4(
+			_debois$elm_mdl$Material_Toggles$top,
+			'radio',
+			model,
+			styles,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$type$('radio'),
+							_elm_lang$html$Html_Attributes$class('mdl-radio__button'),
+							_elm_lang$html$Html_Attributes$disabled(model.isDisabled),
+							_elm_lang$html$Html_Attributes$checked(model.value),
+							_elm_lang$html$Html_Attributes$value(_p3._0),
+							_elm_lang$html$Html_Attributes$name(_p3._1)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-radio__label')
+						]),
+					elems),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-radio__outer-circle')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$span,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('mdl-radio__inner-circle')
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[]))
+				]));
+	});
+
 var _debois$elm_mdl$Demo_Tables$references = _elm_lang$core$Native_List.fromArray(
 	[
 		_debois$elm_mdl$Demo_Page$package('http://package.elm-lang.org/packages/debois/elm-mdl/latest/Material-TEMPLATE'),
@@ -13891,405 +13605,280 @@ var _debois$elm_mdl$Demo_Tables$references = _elm_lang$core$Native_List.fromArra
 	]);
 var _debois$elm_mdl$Demo_Tables$srcUrl = 'https://github.com/debois/elm-mdl/blob/master/demo/Demo/TEMPLATE.elm';
 var _debois$elm_mdl$Demo_Tables$intro = A2(_debois$elm_mdl$Demo_Page$fromMDL, 'https://www.getmdl.io/components/index.html#TEMPLATE-section', '\n> ...\n');
-var _debois$elm_mdl$Demo_Tables$model = {
-	mdl: _debois$elm_mdl$Material$model,
-	sort: _debois$elm_mdl$Material_Table$Ascending,
-	toggles: _elm_lang$core$Dict$fromList(
-		_elm_lang$core$Native_List.fromArray(
-			[
+var _debois$elm_mdl$Demo_Tables$data = A2(
+	_elm_lang$core$List$indexedMap,
+	F2(
+		function (i, r) {
+			return _elm_lang$core$Native_Utils.update(
+				r,
 				{
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_List.fromArray(
-					[-1]),
-				_1: _debois$elm_mdl$Material_Toggles$model
-			},
-				{
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_List.fromArray(
-					[0]),
-				_1: _debois$elm_mdl$Material_Toggles$model
-			},
-				{
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_List.fromArray(
-					[1]),
-				_1: _debois$elm_mdl$Material_Toggles$model
-			},
-				{
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_List.fromArray(
-					[2]),
-				_1: _debois$elm_mdl$Material_Toggles$model
-			}
-			]))
-};
-var _debois$elm_mdl$Demo_Tables$Model = F3(
-	function (a, b, c) {
-		return {mdl: a, sort: b, toggles: c};
+					id: _elm_lang$core$Native_List.fromArray(
+						[i])
+				});
+		}),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{
+			id: _elm_lang$core$Native_List.fromArray(
+				[]),
+			material: 'Acrylic (Transparent)',
+			quantity: '25',
+			unitPrice: '$2.90'
+		},
+			{
+			id: _elm_lang$core$Native_List.fromArray(
+				[]),
+			material: 'Plywood (Birch)',
+			quantity: '50',
+			unitPrice: '$1.25'
+		},
+			{
+			id: _elm_lang$core$Native_List.fromArray(
+				[]),
+			material: 'Laminate (Gold on Blue)',
+			quantity: '10',
+			unitPrice: '$2.35'
+		}
+		]));
+var _debois$elm_mdl$Demo_Tables$model = {mdl: _debois$elm_mdl$Material$model, order: _debois$elm_mdl$Material_Table$Ascending, toggles: _elm_lang$core$Dict$empty, allSelected: false};
+var _debois$elm_mdl$Demo_Tables$Model = F4(
+	function (a, b, c, d) {
+		return {mdl: a, order: b, toggles: c, allSelected: d};
 	});
 var _debois$elm_mdl$Demo_Tables$TogglesMsg = F2(
 	function (a, b) {
 		return {ctor: 'TogglesMsg', _0: a, _1: b};
 	});
-var _debois$elm_mdl$Demo_Tables$Click = function (a) {
-	return {ctor: 'Click', _0: a};
-};
+var _debois$elm_mdl$Demo_Tables$Select = {ctor: 'Select'};
+var _debois$elm_mdl$Demo_Tables$Click = {ctor: 'Click'};
 var _debois$elm_mdl$Demo_Tables$MDL = function (a) {
 	return {ctor: 'MDL', _0: a};
 };
 var _debois$elm_mdl$Demo_Tables$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Click':
-				return _debois$elm_mdl$Material_Helpers$pure(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							sort: _elm_lang$core$Native_Utils.eq(_p0._0, 0) ? _debois$elm_mdl$Material_Table$toggle(model.sort) : model.sort
-						}));
-			case 'MDL':
-				return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Tables$MDL, _p0._0, model);
-			default:
-				var _p3 = _p0._1;
-				var _p2 = _p0._0;
-				var select = function (value) {
-					return _elm_lang$core$Dict$map(
-						F2(
-							function (idx, toggle) {
-								return _elm_lang$core$Native_Utils.update(
-									toggle,
-									{value: value});
+		update:
+		while (true) {
+			var _p0 = msg;
+			switch (_p0.ctor) {
+				case 'Select':
+					return _debois$elm_mdl$Material_Helpers$pure(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								allSelected: _elm_lang$core$Basics$not(model.allSelected),
+								toggles: A2(
+									_elm_lang$core$Dict$map,
+									F2(
+										function (_p1, toggle) {
+											return _elm_lang$core$Native_Utils.update(
+												toggle,
+												{
+													value: _elm_lang$core$Basics$not(model.allSelected)
+												});
+										}),
+									model.toggles)
 							}));
-				};
-				var idx = A2(
-					_elm_lang$core$Maybe$withDefault,
-					_elm_lang$core$Native_List.fromArray(
-						[-1]),
-					_p2);
-				var toggle = A2(
-					_elm_lang$core$Maybe$withDefault,
-					_debois$elm_mdl$Material_Toggles$model,
-					A2(_elm_lang$core$Dict$get, idx, model.toggles));
-				var _p1 = A2(_debois$elm_mdl$Material_Toggles$update, _p3, toggle);
-				var toggle$ = _p1._0;
-				var cmd = _p1._1;
-				return A2(
-					_debois$elm_mdl$Material_Helpers$effect,
-					A2(
-						_elm_lang$core$Platform_Cmd$map,
-						_debois$elm_mdl$Demo_Tables$TogglesMsg(_p2),
-						cmd),
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							toggles: ((_elm_lang$core$Native_Utils.eq(_p3, _debois$elm_mdl$Material_Toggles$Change) && _elm_lang$core$Native_Utils.eq(_p2, _elm_lang$core$Maybe$Nothing)) ? select(toggle$.value) : function (x) {
-								return x;
-							})(
-								A3(_elm_lang$core$Dict$insert, idx, toggle$, model.toggles))
-						}));
+				case 'Click':
+					return _debois$elm_mdl$Material_Helpers$pure(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								order: function () {
+									var _p2 = model.order;
+									if (_p2.ctor === 'Ascending') {
+										return _debois$elm_mdl$Material_Table$Descending;
+									} else {
+										return _debois$elm_mdl$Material_Table$Ascending;
+									}
+								}()
+							}));
+				case 'TogglesMsg':
+					var _p5 = _p0._1;
+					var _p4 = _p0._0;
+					var _p3 = {ctor: '_Tuple2', _0: _p4, _1: _p5};
+					if (((((_p3.ctor === '_Tuple2') && (_p3._0.ctor === '::')) && (_p3._0._0 === -1)) && (_p3._0._1.ctor === '[]')) && (_p3._1.ctor === 'Change')) {
+						var _v3 = _debois$elm_mdl$Demo_Tables$Select,
+							_v4 = model;
+						msg = _v3;
+						model = _v4;
+						continue update;
+					} else {
+						var toggle = A2(
+							_elm_lang$core$Maybe$withDefault,
+							_debois$elm_mdl$Material_Toggles$model,
+							A2(_elm_lang$core$Dict$get, _p4, model.toggles));
+						return A2(
+							_debois$elm_mdl$Material_Helpers$map2nd,
+							_elm_lang$core$Platform_Cmd$map(
+								_debois$elm_mdl$Demo_Tables$TogglesMsg(_p4)),
+							A2(
+								_debois$elm_mdl$Material_Helpers$map1st,
+								function (x) {
+									return _elm_lang$core$Native_Utils.update(
+										model,
+										{
+											toggles: A3(_elm_lang$core$Dict$insert, _p4, x, model.toggles)
+										});
+								},
+								A2(_debois$elm_mdl$Material_Toggles$update, _p5, toggle)));
+					}
+				default:
+					return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Tables$MDL, _p0._0, model);
+			}
 		}
 	});
-var _debois$elm_mdl$Demo_Tables$tableA = function (model) {
-	return A6(
+var _debois$elm_mdl$Demo_Tables$table = function (model) {
+	var getToggle = function (idx) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			(model.allSelected ? function (toggle) {
+				return _elm_lang$core$Native_Utils.update(
+					toggle,
+					{value: true});
+			} : function (x) {
+				return x;
+			})(_debois$elm_mdl$Material_Toggles$model),
+			A2(_elm_lang$core$Dict$get, idx, model.toggles));
+	};
+	return A7(
 		_debois$elm_mdl$Material_Table$render,
 		_debois$elm_mdl$Demo_Tables$MDL,
 		_elm_lang$core$Native_List.fromArray(
 			[0]),
 		model.mdl,
 		_elm_lang$core$Native_List.fromArray(
-			[
-				_debois$elm_mdl$Material_Table$selectable,
-				_debois$elm_mdl$Material_Table$onClick(_debois$elm_mdl$Demo_Tables$Click)
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				_elm_lang$html$Html$text('Material'),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$core$Native_Utils.eq(model.sort, _debois$elm_mdl$Material_Table$Ascending) ? _debois$elm_mdl$Material_Table$ascending : _debois$elm_mdl$Material_Table$descending
-					])),
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				_elm_lang$html$Html$text('Quantity'),
-				_elm_lang$core$Native_List.fromArray(
-					[_debois$elm_mdl$Material_Table$numeric])),
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				_elm_lang$html$Html$text('Unit Price'),
-				_elm_lang$core$Native_List.fromArray(
-					[_debois$elm_mdl$Material_Table$numeric]))
-			]),
-		function (_p4) {
-			return A3(
-				_debois$elm_mdl$Material_Table$sort,
-				0,
-				model.sort,
-				A2(
-					_elm_lang$core$List$indexedMap,
-					F2(
-						function (i, r) {
-							return {
-								ctor: '_Tuple2',
-								_0: _elm_lang$core$Native_List.fromArray(
-									[i]),
-								_1: r
-							};
-						}),
-					_p4));
-		}(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('Acrylic (Transparent)'),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('25'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('$2.90'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric]))
-					]),
-					_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('Plywood (Birch)'),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('50'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('$1.25'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric]))
-					]),
-					_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('Laminate (Gold on Blue)'),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('10'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('$2.35'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric]))
-					])
-				])));
-};
-var _debois$elm_mdl$Demo_Tables$tableB = function (model) {
-	return A6(
-		_debois$elm_mdl$Material_Table$render,
-		_debois$elm_mdl$Demo_Tables$MDL,
-		_elm_lang$core$Native_List.fromArray(
-			[1]),
-		model.mdl,
-		_elm_lang$core$Native_List.fromArray(
 			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				function () {
-					var toggle = A2(
-						_elm_lang$core$Maybe$withDefault,
-						_debois$elm_mdl$Material_Toggles$model,
-						A2(
-							_elm_lang$core$Dict$get,
-							_elm_lang$core$Native_List.fromArray(
-								[-1]),
-							model.toggles));
-					return A2(
-						_elm_lang$html$Html_App$map,
-						_debois$elm_mdl$Demo_Tables$TogglesMsg(_elm_lang$core$Maybe$Nothing),
-						A2(
-							_debois$elm_mdl$Material_Toggles$checkbox,
-							toggle,
-							_elm_lang$core$Native_List.fromArray(
-								[])));
-				}(),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				_elm_lang$html$Html$text('Material'),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				_elm_lang$html$Html$text('Quantity'),
-				_elm_lang$core$Native_List.fromArray(
-					[_debois$elm_mdl$Material_Table$numeric])),
-				A2(
-				_debois$elm_mdl$Material_Table$header,
-				_elm_lang$html$Html$text('Unit Price'),
-				_elm_lang$core$Native_List.fromArray(
-					[_debois$elm_mdl$Material_Table$numeric]))
-			]),
 		A2(
-			_elm_lang$core$List$indexedMap,
-			F2(
-				function (i, r) {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_List.fromArray(
-							[i]),
-						_1: r
-					};
-				}),
+			_debois$elm_mdl$Material_Table$thead,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
 			_elm_lang$core$Native_List.fromArray(
 				[
+					A2(
+					_debois$elm_mdl$Material_Table$tr,
 					_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						function () {
-							var toggle = A2(
-								_elm_lang$core$Maybe$withDefault,
-								_debois$elm_mdl$Material_Toggles$model,
-								A2(
-									_elm_lang$core$Dict$get,
-									_elm_lang$core$Native_List.fromArray(
-										[0]),
-									model.toggles));
-							return A2(
-								_elm_lang$html$Html_App$map,
-								_debois$elm_mdl$Demo_Tables$TogglesMsg(
-									_elm_lang$core$Maybe$Just(
-										_elm_lang$core$Native_List.fromArray(
-											[0]))),
-								A2(
-									_debois$elm_mdl$Material_Toggles$checkbox,
-									toggle,
-									_elm_lang$core$Native_List.fromArray(
-										[])));
-						}(),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('Acrylic (Transparent)'),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('25'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('$2.90'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric]))
-					]),
+						[]),
 					_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						function () {
-							var toggle = A2(
-								_elm_lang$core$Maybe$withDefault,
-								_debois$elm_mdl$Material_Toggles$model,
-								A2(
-									_elm_lang$core$Dict$get,
-									_elm_lang$core$Native_List.fromArray(
-										[1]),
-									model.toggles));
-							return A2(
-								_elm_lang$html$Html_App$map,
-								_debois$elm_mdl$Demo_Tables$TogglesMsg(
-									_elm_lang$core$Maybe$Just(
+						[
+							A2(
+							_debois$elm_mdl$Material_Table$th,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html_App$map,
+									_debois$elm_mdl$Demo_Tables$TogglesMsg(
 										_elm_lang$core$Native_List.fromArray(
-											[1]))),
-								A2(
-									_debois$elm_mdl$Material_Toggles$checkbox,
-									toggle,
-									_elm_lang$core$Native_List.fromArray(
-										[])));
-						}(),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('Plywood (Birch)'),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('50'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('$1.25'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric]))
-					]),
-					_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						function () {
-							var toggle = A2(
-								_elm_lang$core$Maybe$withDefault,
-								_debois$elm_mdl$Material_Toggles$model,
-								A2(
-									_elm_lang$core$Dict$get,
-									_elm_lang$core$Native_List.fromArray(
-										[2]),
-									model.toggles));
-							return A2(
-								_elm_lang$html$Html_App$map,
-								_debois$elm_mdl$Demo_Tables$TogglesMsg(
-									_elm_lang$core$Maybe$Just(
+											[-1])),
+									A2(
+										_debois$elm_mdl$Material_Toggles$checkbox,
+										getToggle(
+											_elm_lang$core$Native_List.fromArray(
+												[-1])),
 										_elm_lang$core$Native_List.fromArray(
-											[2]))),
+											[])))
+								])),
+							A2(
+							_debois$elm_mdl$Material_Table$th,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_debois$elm_mdl$Material_Table$sorted(model.order),
+									_debois$elm_mdl$Material_Table$onClick(_debois$elm_mdl$Demo_Tables$Click)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Material')
+								])),
+							A2(
+							_debois$elm_mdl$Material_Table$th,
+							_elm_lang$core$Native_List.fromArray(
+								[_debois$elm_mdl$Material_Table$numeric]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Quantity')
+								])),
+							A2(
+							_debois$elm_mdl$Material_Table$th,
+							_elm_lang$core$Native_List.fromArray(
+								[_debois$elm_mdl$Material_Table$numeric]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Unit Price')
+								]))
+						]))
+				])),
+		A2(
+			_debois$elm_mdl$Material_Table$tbody,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			A2(
+				_elm_lang$core$List$map,
+				function (data) {
+					return A2(
+						_debois$elm_mdl$Material_Table$tr,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								getToggle(data.id).value ? _debois$elm_mdl$Material_Table$selected : _debois$elm_mdl$Material_Options$nop
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
 								A2(
-									_debois$elm_mdl$Material_Toggles$checkbox,
-									toggle,
-									_elm_lang$core$Native_List.fromArray(
-										[])));
-						}(),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('Laminate (Gold on Blue)'),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('10'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric])),
-						A2(
-						_debois$elm_mdl$Material_Table$cell,
-						_elm_lang$html$Html$text('$2.35'),
-						_elm_lang$core$Native_List.fromArray(
-							[_debois$elm_mdl$Material_Table$numeric]))
-					])
-				])));
+								_debois$elm_mdl$Material_Table$td,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_elm_lang$html$Html_App$map,
+										_debois$elm_mdl$Demo_Tables$TogglesMsg(data.id),
+										A2(
+											_debois$elm_mdl$Material_Toggles$checkbox,
+											getToggle(data.id),
+											_elm_lang$core$Native_List.fromArray(
+												[])))
+									])),
+								A2(
+								_debois$elm_mdl$Material_Table$td,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(data.material)
+									])),
+								A2(
+								_debois$elm_mdl$Material_Table$td,
+								_elm_lang$core$Native_List.fromArray(
+									[_debois$elm_mdl$Material_Table$numeric]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(data.quantity)
+									])),
+								A2(
+								_debois$elm_mdl$Material_Table$td,
+								_elm_lang$core$Native_List.fromArray(
+									[_debois$elm_mdl$Material_Table$numeric]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(data.unitPrice)
+									]))
+							]));
+				},
+				(_elm_lang$core$Native_Utils.eq(model.order, _debois$elm_mdl$Material_Table$Descending) ? _elm_lang$core$List$reverse : function (x) {
+					return x;
+				})(
+					A2(
+						_elm_lang$core$List$sortBy,
+						function (_) {
+							return _.material;
+						},
+						_debois$elm_mdl$Demo_Tables$data)))),
+		A2(
+			_debois$elm_mdl$Material_Table$tfoot,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[])));
 };
 var _debois$elm_mdl$Demo_Tables$view = function (model) {
 	return A5(
@@ -14310,21 +13899,11 @@ var _debois$elm_mdl$Demo_Tables$view = function (model) {
 						_debois$elm_mdl$Material_Grid$cell,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$All, 6)
+								A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$All, 12)
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_debois$elm_mdl$Demo_Tables$tableA(model)
-							])),
-						A2(
-						_debois$elm_mdl$Material_Grid$cell,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								A2(_debois$elm_mdl$Material_Grid$size, _debois$elm_mdl$Material_Grid$All, 6)
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_debois$elm_mdl$Demo_Tables$tableB(model)
+								_debois$elm_mdl$Demo_Tables$table(model)
 							]))
 					]))
 			]));
