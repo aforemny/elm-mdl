@@ -22,11 +22,9 @@ import Material.Icon as Icon
 import Demo.Buttons
 import Demo.Menus
 import Demo.Tables
-import Demo.Grid
 import Demo.Textfields
 import Demo.Snackbar
 import Demo.Badges
-import Demo.Elevation
 import Demo.Toggles
 import Demo.Loading
 import Demo.Layout
@@ -34,6 +32,7 @@ import Demo.Footer
 import Demo.Tooltip
 import Demo.Tabs
 import Demo.Slider
+import Demo.Select
 --import Demo.Template
 
 
@@ -56,6 +55,7 @@ type alias Model =
   , tooltip : Demo.Tooltip.Model
   , tabs : Demo.Tabs.Model
   , slider : Demo.Slider.Model
+  , select : Demo.Select.Model
   --, template : Demo.Template.Model
   , selectedTab : Int
   , transparentHeader : Bool
@@ -78,6 +78,7 @@ model =
   , tooltip = Demo.Tooltip.model
   , tabs = Demo.Tabs.model
   , slider = Demo.Slider.model
+  , select = Demo.Select.model
   --, template = Demo.Template.model
   , selectedTab = 0
   , transparentHeader = False
@@ -105,6 +106,7 @@ type Msg
   | TabMsg Demo.Tabs.Msg
   | SliderMsg Demo.Slider.Msg
   | ToggleHeader
+  | SelectMsg Demo.Select.Msg
   --| TemplateMsg Demo.Template.Msg
 
 
@@ -148,6 +150,7 @@ update action model =
 
     TooltipMsg   a -> lift  .tooltip    (\m x->{m|tooltip   =x}) TooltipMsg  Demo.Tooltip.update    a model
     TabMsg   a -> lift  .tabs    (\m x->{m|tabs   =x}) TabMsg  Demo.Tabs.update    a model
+    SelectMsg  a -> lift  .select   (\m x->{m|select  =x}) SelectMsg Demo.Select.update   a model
 
 
     --TemplateMsg  a -> lift  .template   (\m x->{m|template  =x}) TemplateMsg Demo.Template.update   a model
@@ -158,21 +161,22 @@ update action model =
 
 tabs : List (String, String, Model -> Html Msg)
 tabs =
-  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
-  , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
-  , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
-  , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
-  , ("Grid", "grid", \_ -> Demo.Grid.view)
-  , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
-  , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
-  , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
-  , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
-  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
-  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
-  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
-  , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
-  , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
-  , ("Tabs", "tabs", .tabs >> Demo.Tabs.view >> App.map TabMsg)
+--  [ ("Buttons", "buttons", .buttons >> Demo.Buttons.view >> App.map ButtonsMsg)
+--  , ("Badges", "badges", .badges >> Demo.Badges.view >> App.map BadgesMsg)
+--  , ("Elevation", "elevation", \_ -> Demo.Elevation.view)
+--  , ("Footers", "footers", .footers >> Demo.Footer.view >> App.map FooterMsg)
+--  , ("Grid", "grid", \_ -> Demo.Grid.view)
+--  , ("Layout", "layout", .layout >> Demo.Layout.view >> App.map LayoutMsg)
+--  , ("Loading", "loading", .loading >> Demo.Loading.view >> App.map LoadingMsg)
+--  , ("Menus", "menus", .menus >> Demo.Menus.view >> App.map MenusMsg)
+--  , ("Sliders", "sliders", .slider >> Demo.Slider.view >> App.map SliderMsg)
+--  , ("Snackbar", "snackbar", .snackbar >> Demo.Snackbar.view >> App.map SnackbarMsg)
+--  , ("Textfields", "textfields", .textfields >> Demo.Textfields.view >> App.map TextfieldMsg)
+--  , ("Toggles", "toggles", .toggles >> Demo.Toggles.view >> App.map TogglesMsg)
+--  , ("Tables", "tables", .tables >> Demo.Tables.view >> App.map TablesMsg)
+--  , ("Tooltips", "tooltips", .tooltip >> Demo.Tooltip.view >> App.map TooltipMsg)
+--  , ("Tabs", "tabs", .tabs >> Demo.Tabs.view >> App.map TabMsg)
+  [ ("Select", "select", .select >> Demo.Select.view >> App.map SelectMsg)
   --, ("Template", "template", .template >> Demo.Template.view >> App.map TemplateMsg)
   ]
 

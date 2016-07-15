@@ -167,13 +167,14 @@ import Parts exposing (Indexed)
 import Material.Helpers exposing (map1st, map2nd)
 
 import Material.Button as Button
-import Material.Textfield as Textfield
-import Material.Menu as Menu
-import Material.Snackbar as Snackbar
 import Material.Layout as Layout
+import Material.Menu as Menu
+import Material.Select as Select
+import Material.Snackbar as Snackbar
+import Material.Tabs as Tabs
+import Material.Textfield as Textfield
 import Material.Toggles as Toggles
 import Material.Tooltip as Tooltip
-import Material.Tabs as Tabs
 --import Material.Template as Template
 
 
@@ -190,6 +191,7 @@ type alias Model =
   , toggles : Indexed Toggles.Model
   , tooltip : Indexed Tooltip.Model
   , tabs : Indexed Tabs.Model
+  , selects : Indexed Select.Model
 --  , template : Indexed Template.Model
   }
 
@@ -206,6 +208,7 @@ model =
   , toggles = Dict.empty
   , tooltip = Dict.empty
   , tabs = Dict.empty
+  , selects = Dict.empty
 --  , template = Dict.empty
   }
 
