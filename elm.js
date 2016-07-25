@@ -10080,7 +10080,7 @@ var _debois$elm_mdl$Material_Menu$update = F2(
 	function (msg, model) {
 		update:
 		while (true) {
-			var _p1 = msg;
+			var _p1 = A2(_elm_lang$core$Debug$log, 'Material.Menu.update', msg);
 			switch (_p1.ctor) {
 				case 'Open':
 					var _p3 = _p1._0;
