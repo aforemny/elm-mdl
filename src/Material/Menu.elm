@@ -389,15 +389,15 @@ type Alignment =
   | TopRight
 
 
-type alias Config m =
+type alias Config a m =
   { alignment : Alignment
   , ripple : Bool
   , icon : String
-  , toggle : Toggle (Button.Config m) m
+  , toggle : Toggle a m
   }
 
 
-defaultConfig : Config m
+defaultConfig : Config a m
 defaultConfig =
   { alignment = BottomLeft
   , ripple = False
@@ -413,6 +413,8 @@ type alias Toggle a m =
   , childNodes : List (Html m)
   }
 
+
+-- TODO: Use Button.view
 
 defaultToggle : Toggle a m
 defaultToggle =
@@ -434,26 +436,30 @@ defaultToggle =
 
 {-| Type of Menu options
 -}
-type alias Property m =
-  Options.Property (Config m) m
+type alias Property a m =
+  Options.Property (Config a m) m
 
 
 {-| Menu items ripple when clicked
 -}
-ripple : Property m
+ripple : Property a m
 ripple =
   Options.set (\config -> { config | ripple = True })
 
 
 {-| Set the menu icon
 -}
-icon : String -> Property m
+icon : String -> Property a m
 icon name =
   Options.set (\config -> { config | icon = name })
 
 
 {-| Set the menu icon
 -}
+toggle : (List (Options.Property a m) -> List (Html m) -> Html m)
+  -> List (Options.Property a m)
+  -> List (Html m)
+  -> Property a m
 toggle node options childNodes =
   Options.set (\config -> { config | toggle = Toggle node options childNodes })
 
@@ -461,7 +467,7 @@ toggle node options childNodes =
 {-| Menu extends from the bottom-left of the icon.
 (Suitable for the menu-icon sitting in a top-left corner)
 -}
-bottomLeft : Property m
+bottomLeft : Property a m
 bottomLeft =
   Options.set (\config -> { config | alignment = BottomLeft })
 
@@ -469,7 +475,7 @@ bottomLeft =
 {-| Menu extends from the bottom-right of the icon.
 (Suitable for the menu-icon sitting in a top-right corner)
 -}
-bottomRight : Property m
+bottomRight : Property a m
 bottomRight =
   Options.set (\config -> { config | alignment = BottomRight })
 
@@ -477,7 +483,7 @@ bottomRight =
 {-| Menu extends from the top-left of the icon.
 (Suitable for the menu-icon sitting in a lower-left corner)
 -}
-topLeft : Property m
+topLeft : Property a m
 topLeft =
   Options.set (\config -> { config | alignment = TopLeft })
 
@@ -485,7 +491,7 @@ topLeft =
 {-| Menu extends from the rop-right of the icon.
 (Suitable for the menu-icon sitting in a lower-right corner)
 -}
-topRight : Property m
+topRight : Property a m
 topRight =
   Options.set (\config -> { config | alignment = TopRight })
 
@@ -494,14 +500,14 @@ topRight =
 -- VIEW
 
 
-withGeometry : Model -> (Geometry -> Property m) -> Property m
+withGeometry : Model -> (Geometry -> Property a m) -> Property a m
 withGeometry model f = 
   model.geometry 
     |> Maybe.map f 
     |> Maybe.withDefault Options.nop 
 
 
-containerGeometry : Alignment -> Geometry -> Property m
+containerGeometry : Alignment -> Geometry -> Property a m
 containerGeometry alignment geometry =
   [ css "width" <| toPx geometry.menu.bounds.width
   , css "height" <| toPx geometry.menu.bounds.height
@@ -531,7 +537,7 @@ containerGeometry alignment geometry =
   ] |> Options.many
 
 
-clip : Model -> Config m -> Geometry -> Property m
+clip : Model -> Config a m -> Geometry -> Property a m
 clip model config geometry = 
   let
    width  = geometry.menu.bounds.width
@@ -553,7 +559,7 @@ clip model config geometry =
 
 {-| Component view. 
 -} 
-view : (Msg m -> m) -> Model -> List (Property m) -> List (Item m) -> Html m
+view : (Msg m -> m) -> Model -> List (Property a m) -> List (Item m) -> Html m
 view lift model properties items =
   let
     summary = 
@@ -640,7 +646,7 @@ delay alignment height offsetTop offsetHeight =
 
 
 view1
-  : (Msg m -> m) -> Config m -> Model
+  : (Msg m -> m) -> Config a m -> Model
   -> Float -> Float
   -> Int -> Options.Summary (ItemConfig m) m -> Item m
   -> Html m
@@ -741,7 +747,7 @@ render
   : (Parts.Msg (Container c) m -> m)
   -> Parts.Index
   -> Container c
-  -> List (Property m)
+  -> List (Property a m)
   -> List (Item m)
   -> Html m
 render =
