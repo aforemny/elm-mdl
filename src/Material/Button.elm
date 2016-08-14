@@ -1,5 +1,6 @@
 module Material.Button exposing
   ( Model, defaultModel, Msg, update, view
+  , Config, defaultConfig
   , flat, raised, fab, minifab, icon
   , plain, colored, primary, accent
   , ripple, disabled

@@ -4,15 +4,17 @@ import Html exposing (Html, text, p, a)
 import Html.Attributes exposing (href)
 import Set exposing (Set)
 import String
+import Parts
 
 import Material
+import Material.Button as Button
 import Material.Color as Color
 import Material.Elevation as Elevation
 import Material.Grid as Grid
+import Material.Icon as Icon
 import Material.Menu as Menu 
 import Material.Options as Options exposing (cs, css, div, nop, when)
 import Material.Textfield as Textfield
-import Material.Icon as Icon
 
 import Demo.Page as Page
 import Demo.Code as Code
@@ -100,30 +102,37 @@ type alias Align =
   ( String, Menu.Property Msg )
 
 
-options : Model -> Align -> List (Menu.Property Msg)
-options model align = 
+--options : Model -> Align -> Parts.Index -> List (Menu.Property (Button.Property Msg) Msg)
+options model align idx = 
   [ Menu.ripple `when` model.ripple
   , model.icon 
       |> Maybe.map Menu.icon 
       |> Maybe.withDefault nop 
   , snd align
+  , Menu.toggle
+      (Button.render Mdl idx model.mdl)
+      [ Button.icon
+      ]
+      [ Icon.view "more_vert" []
+      ]
   ] 
 
 
 showOptions : Model -> Align -> String
 showOptions model align = 
-  let 
-    inner = 
-      [ if model.ripple then "Menu.ripple" else ""
-      , model.icon 
-          |> Maybe.map (\i -> "Menu.icon \"" ++ i ++ "\"")
-          |> Maybe.withDefault "" 
-      , "Menu." ++ fst align
-      ]
-      |> List.filter ((/=) "")
-      |> String.join ", "
-  in
-    if inner == "" then "[]" else "[ " ++ inner ++ " ]"
+  ""
+--  let 
+--    inner = 
+--      [ if model.ripple then "Menu.ripple" else ""
+--      , model.icon 
+--          |> Maybe.map (\i -> "Menu.icon \"" ++ i ++ "\"")
+--          |> Maybe.withDefault "" 
+--      , "Menu." ++ fst align
+--      ]
+--      |> List.filter ((/=) "")
+--      |> String.join ", "
+--  in
+--    if inner == "" then "[]" else "[ " ++ inner ++ " ]"
 
 
 basic : Model -> Align -> Menu
@@ -131,7 +140,7 @@ basic model align =
   { title = "Basic "
   , menu = 
       Menu.render Mdl [0] model.mdl
-        (options model align)
+        (options model align [0])
         [ Menu.item 
             [ Menu.onSelect (Select 0 0) ] 
             [ text "English (US)" ]
@@ -142,190 +151,191 @@ basic model align =
             [ Menu.onSelect (Select 0 2) ] 
             [ text "中文" ] 
         ]
-  , code = """
-      Menu.render Mdl [0] model.mdl 
-        """ ++ showOptions model align ++ """
-        [ Menu.item 
-            [ Menu.onSelect MySelectMsg0 ] 
-            [ text "English (US)" ]
-        , Menu.item 
-            [ Menu.onSelect MySelectMsg1 ] 
-            [ text "français" ] 
-        , Menu.item
-            [ Menu.onSelect MySelectMsg2 ] 
-            [ text "中文" ] 
-        ]
-        """
+    , code = ""
+--  , code = """
+--      Menu.render Mdl [0] model.mdl 
+--        """ ++ showOptions model align ++ """
+--        [ Menu.item 
+--            [ Menu.onSelect MySelectMsg0 ] 
+--            [ text "English (US)" ]
+--        , Menu.item 
+--            [ Menu.onSelect MySelectMsg1 ] 
+--            [ text "français" ] 
+--        , Menu.item
+--            [ Menu.onSelect MySelectMsg2 ] 
+--            [ text "中文" ] 
+--        ]
+--        """
     , comment = 
         ""
   }
 
 
 
-edit : Model -> Align -> Menu
-edit model align = 
-  { title = "Disabled items and dividers"
-  , menu = 
-      Menu.render Mdl [1] model.mdl 
-        (options model align)
-        [ Menu.item 
-            [ Menu.onSelect (Select 1 0) ] 
-            [ text "Undo" ]
-        , Menu.item 
-            [ Menu.onSelect (Select 1 1)
-            , Menu.divider
-            , Menu.disabled
-            ] 
-            [ text "Redo" ]
-            
-        , Menu.item
-            [ Menu.disabled ] 
-            [ text "Cut" ]
-        , Menu.item 
-            [ Menu.disabled ]
-            [ text "Copy" ]
-        , Menu.item 
-            [ Menu.onSelect (Select 1 4) ]
-            [ text "Paste" ]
-        ]
-  , code = """
-     Menu.render Mdl [1] model.mdl 
-        """ ++ showOptions model align ++ """ 
-        [ Menu.item 
-            [ Menu.onSelect MySelectMsg0 ]
-            [ text "Undo" ]
-        , Menu.item 
-            [ Menu.divider
-            , Menu.disabled
-            ] 
-            [ text "Redo" ]
-        , Menu.item
-            [ Menu.onSelect MySelectMsgWontFire 
-            , Menu.disabled
-            ] 
-            [ text "Cut" ]
-        , Menu.item 
-            [ Menu.disabled ]
-            [ text "Copy" ]
-        , Menu.item 
-            [ Menu.onSelect MySelectMsg4 ]
-            [ text "Paste" ]
-        ]"""
-    , comment =
-        """It doesn't matter whether or not you supply an `onSelect` handler to a
-           `disabled` item. Even if you do, clicks won't register."""
-  }
-
-
-  
-
-icons : Model -> Align -> Menu
-icons model align = 
-  { title = "Icons"
-  , menu = 
-      let
-        i name = 
-          Icon.view name [ css "width" "40px" ] 
-        padding = 
-          css "padding-right" "24px"
-      in
-        Menu.render Mdl [2] model.mdl 
-          (options model align)
-          [ Menu.item 
-              [ Menu.onSelect (Select 1 0), padding ]
-              [ i "remove_red_eye", text "Preview" ]
-          , Menu.item 
-              [ Menu.onSelect (Select 1 1), padding ] 
-              [ i "person_add", text "Share" ] 
-          , Menu.item
-              [ Menu.onSelect (Select 1 2), padding, Menu.divider ]
-              [ i "link", text "Get link" ] 
-          , Menu.item
-              [ Menu.onSelect (Select 1 3), padding ] 
-              [ i "delete", text "Remove" ] 
-          ]
-  , code = """
-      let
-        i name = 
-          Icon.view name [ css "width" "40px" ] 
-        padding = 
-          css "padding-right" "24px"
-      in
-        Menu.render Mdl [2] model.mdl 
-          """ ++ showOptions model align ++ """
-          [ Menu.item 
-              [ Menu.onSelect MySelectMsg0, padding ]
-              [ i "remove_red_eye", text "Preview" ]
-          , Menu.item 
-              [ Menu.onSelect MySelectMsg1, padding ] 
-              [ i "person_add", text "Share" ] 
-          , Menu.item
-              [ Menu.onSelect MySelectMsg2, padding, Menu.divider ]
-              [ i "link", text "Get link" ] 
-          , Menu.item
-              [ Menu.onSelect MySelectMsg3, padding ] 
-              [ i "delete", text "Remove" ] 
-          ]"""
-
-  , comment = 
-      """Note that the item right padding has been increased by 8px to 
-         visually accomodate the perceived extra space to the left of
-         the icons.
-      """
-  }
-      
-
-checkmarks : Model -> Align -> Menu
-checkmarks model align =
-  let
-    isChecked k = 
-      Set.member k model.checked
-
-    checkmark x =  
-      if x then 
-        Icon.view "check" [ css "width" "40px" ]
-      else 
-        Options.span [ css "width" "40px" ] [] 
-  in
-    { title = "Checkmarks"
-    , menu = 
-        Menu.render Mdl [3] model.mdl
-          (options model align)
-          [ Menu.item
-              [ Menu.onSelect (Flip 0) ]
-              [ checkmark (isChecked 0), text "Grid lines" ]
-          , Menu.item
-              [ Menu.onSelect (Flip 1) ]
-              [ checkmark (isChecked 1), text "Page breaks" ]
-          , Menu.item
-              [ Menu.onSelect (Flip 2) ] 
-              [ checkmark (isChecked 2), text "Rules" ] 
-          ]
-    , code = """
-        let
-          checkmark x =  
-            if x then 
-              Icon.view "check" [ css "width" "40px" ]
-            else 
-              Options.span [ css "width" "40px" ] [] 
-        in
-          Menu.render Mdl [3] model.mdl
-            """ ++ showOptions model align ++ """
-            [ Menu.item
-                [ Menu.onSelect MySelectMsg0
-                [ checkmark """ ++ (toString <| isChecked 0) ++ """, text "Grid lines" ]
-            , Menu.item
-                [ Menu.onSelect MySelectMsg1 ]
-                [ checkmark """ ++ (toString <| isChecked 1) ++ """, text "Page breaks" ] 
-            , Menu.item
-                [ Menu.onSelect MySelectMsg2 ]
-                [ checkmark """ ++ (toString <| isChecked 2) ++ """, text "Rules" ] 
-            ]"""
-    , comment = 
-        """ Note the explicit width on `Icon.view` and `Options.span`, which 
-            causes icons to be neatly aligned. 
-        """
-    }
+--edit : Model -> Align -> Menu
+--edit model align = 
+--  { title = "Disabled items and dividers"
+--  , menu = 
+--      Menu.render Mdl [1] model.mdl 
+--        (options model align)
+--        [ Menu.item 
+--            [ Menu.onSelect (Select 1 0) ] 
+--            [ text "Undo" ]
+--        , Menu.item 
+--            [ Menu.onSelect (Select 1 1)
+--            , Menu.divider
+--            , Menu.disabled
+--            ] 
+--            [ text "Redo" ]
+--            
+--        , Menu.item
+--            [ Menu.disabled ] 
+--            [ text "Cut" ]
+--        , Menu.item 
+--            [ Menu.disabled ]
+--            [ text "Copy" ]
+--        , Menu.item 
+--            [ Menu.onSelect (Select 1 4) ]
+--            [ text "Paste" ]
+--        ]
+--  , code = """
+--     Menu.render Mdl [1] model.mdl 
+--        """ ++ showOptions model align ++ """ 
+--        [ Menu.item 
+--            [ Menu.onSelect MySelectMsg0 ]
+--            [ text "Undo" ]
+--        , Menu.item 
+--            [ Menu.divider
+--            , Menu.disabled
+--            ] 
+--            [ text "Redo" ]
+--        , Menu.item
+--            [ Menu.onSelect MySelectMsgWontFire 
+--            , Menu.disabled
+--            ] 
+--            [ text "Cut" ]
+--        , Menu.item 
+--            [ Menu.disabled ]
+--            [ text "Copy" ]
+--        , Menu.item 
+--            [ Menu.onSelect MySelectMsg4 ]
+--            [ text "Paste" ]
+--        ]"""
+--    , comment =
+--        """It doesn't matter whether or not you supply an `onSelect` handler to a
+--           `disabled` item. Even if you do, clicks won't register."""
+--  }
+--
+--
+--  
+--
+--icons : Model -> Align -> Menu
+--icons model align = 
+--  { title = "Icons"
+--  , menu = 
+--      let
+--        i name = 
+--          Icon.view name [ css "width" "40px" ] 
+--        padding = 
+--          css "padding-right" "24px"
+--      in
+--        Menu.render Mdl [2] model.mdl 
+--          (options model align)
+--          [ Menu.item 
+--              [ Menu.onSelect (Select 1 0), padding ]
+--              [ i "remove_red_eye", text "Preview" ]
+--          , Menu.item 
+--              [ Menu.onSelect (Select 1 1), padding ] 
+--              [ i "person_add", text "Share" ] 
+--          , Menu.item
+--              [ Menu.onSelect (Select 1 2), padding, Menu.divider ]
+--              [ i "link", text "Get link" ] 
+--          , Menu.item
+--              [ Menu.onSelect (Select 1 3), padding ] 
+--              [ i "delete", text "Remove" ] 
+--          ]
+--  , code = """
+--      let
+--        i name = 
+--          Icon.view name [ css "width" "40px" ] 
+--        padding = 
+--          css "padding-right" "24px"
+--      in
+--        Menu.render Mdl [2] model.mdl 
+--          """ ++ showOptions model align ++ """
+--          [ Menu.item 
+--              [ Menu.onSelect MySelectMsg0, padding ]
+--              [ i "remove_red_eye", text "Preview" ]
+--          , Menu.item 
+--              [ Menu.onSelect MySelectMsg1, padding ] 
+--              [ i "person_add", text "Share" ] 
+--          , Menu.item
+--              [ Menu.onSelect MySelectMsg2, padding, Menu.divider ]
+--              [ i "link", text "Get link" ] 
+--          , Menu.item
+--              [ Menu.onSelect MySelectMsg3, padding ] 
+--              [ i "delete", text "Remove" ] 
+--          ]"""
+--
+--  , comment = 
+--      """Note that the item right padding has been increased by 8px to 
+--         visually accomodate the perceived extra space to the left of
+--         the icons.
+--      """
+--  }
+--      
+--
+--checkmarks : Model -> Align -> Menu
+--checkmarks model align =
+--  let
+--    isChecked k = 
+--      Set.member k model.checked
+--
+--    checkmark x =  
+--      if x then 
+--        Icon.view "check" [ css "width" "40px" ]
+--      else 
+--        Options.span [ css "width" "40px" ] [] 
+--  in
+--    { title = "Checkmarks"
+--    , menu = 
+--        Menu.render Mdl [3] model.mdl
+--          (options model align)
+--          [ Menu.item
+--              [ Menu.onSelect (Flip 0) ]
+--              [ checkmark (isChecked 0), text "Grid lines" ]
+--          , Menu.item
+--              [ Menu.onSelect (Flip 1) ]
+--              [ checkmark (isChecked 1), text "Page breaks" ]
+--          , Menu.item
+--              [ Menu.onSelect (Flip 2) ] 
+--              [ checkmark (isChecked 2), text "Rules" ] 
+--          ]
+--    , code = """
+--        let
+--          checkmark x =  
+--            if x then 
+--              Icon.view "check" [ css "width" "40px" ]
+--            else 
+--              Options.span [ css "width" "40px" ] [] 
+--        in
+--          Menu.render Mdl [3] model.mdl
+--            """ ++ showOptions model align ++ """
+--            [ Menu.item
+--                [ Menu.onSelect MySelectMsg0
+--                [ checkmark """ ++ (toString <| isChecked 0) ++ """, text "Grid lines" ]
+--            , Menu.item
+--                [ Menu.onSelect MySelectMsg1 ]
+--                [ checkmark """ ++ (toString <| isChecked 1) ++ """, text "Page breaks" ] 
+--            , Menu.item
+--                [ Menu.onSelect MySelectMsg2 ]
+--                [ checkmark """ ++ (toString <| isChecked 2) ++ """, text "Rules" ] 
+--            ]"""
+--    , comment = 
+--        """ Note the explicit width on `Icon.view` and `Options.span`, which 
+--            causes icons to be neatly aligned. 
+--        """
+--    }
 
 
 view1 : Model -> Int -> Menu -> List (Html Msg)
@@ -397,9 +407,9 @@ view1 model idx { title, menu, code, comment } =
 demo1 : Model -> List (Html Msg)
 demo1 model = 
   [ basic model ("bottomLeft", Menu.bottomLeft)
-  , edit model ("bottomRight", Menu.bottomRight)
-  , checkmarks model ("topLeft", Menu.topLeft)
-  , icons model ("topRight", Menu.topRight) 
+--  , edit model ("bottomRight", Menu.bottomRight)
+--  , checkmarks model ("topLeft", Menu.topLeft)
+--  , icons model ("topRight", Menu.topRight) 
   ]
     |> List.indexedMap (view1 model)
     |> List.concatMap identity

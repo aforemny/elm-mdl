@@ -2,7 +2,7 @@ module Material.Menu exposing
   ( Model, defaultModel, Msg, update, view
   , render
   , Property
-  , bottomLeft, bottomRight, topLeft, topRight, ripple, icon
+  , bottomLeft, bottomRight, topLeft, topRight, ripple, icon, toggle
   , subscriptions, subs
   , Item, item
   , divider, disabled, onSelect
@@ -89,6 +89,7 @@ import Json.Encode exposing (string)
 import Mouse
 import String
 
+import Material.Button as Button
 import Material.Helpers as Helpers exposing (pure)
 import Material.Icon as Icon
 import Material.Menu.Geometry as Geometry exposing (Geometry)
@@ -388,25 +389,53 @@ type Alignment =
   | TopRight
 
 
-type alias Config =
+type alias Config m =
   { alignment : Alignment
   , ripple : Bool
   , icon : String
+  , toggle : Toggle (Button.Config m) m
   }
 
 
-defaultConfig : Config
+defaultConfig : Config m
 defaultConfig =
   { alignment = BottomLeft
   , ripple = False
+  -- TODO: remove icon
   , icon = "more_vert"
+  , toggle = defaultToggle
+  }
+
+
+type alias Toggle a m =
+  { node : List (Options.Property a m) -> List (Html m) -> Html m
+  , options : List (Options.Property a m)
+  , childNodes : List (Html m)
+  }
+
+
+defaultToggle : Toggle a m
+defaultToggle =
+  { node =
+      styled button
+  , options =
+      [ cs "mdl-button"
+      , cs "mdl-js-button"
+      , cs "mdl-button--icon"
+      ]
+  , childNodes =
+      [ Icon.view "more_vert"
+        [ cs "material-icons"
+        , css "pointer-events" "none"
+        ]
+      ]
   }
 
 
 {-| Type of Menu options
 -}
 type alias Property m =
-  Options.Property Config m
+  Options.Property (Config m) m
 
 
 {-| Menu items ripple when clicked
@@ -421,6 +450,12 @@ ripple =
 icon : String -> Property m
 icon name =
   Options.set (\config -> { config | icon = name })
+
+
+{-| Set the menu icon
+-}
+toggle node options childNodes =
+  Options.set (\config -> { config | toggle = Toggle node options childNodes })
 
 
 {-| Menu extends from the bottom-left of the icon.
@@ -496,7 +531,7 @@ containerGeometry alignment geometry =
   ] |> Options.many
 
 
-clip : Model -> Config -> Geometry -> Property m
+clip : Model -> Config m -> Geometry -> Property m
 clip model config geometry = 
   let
    width  = geometry.menu.bounds.width
@@ -543,19 +578,14 @@ view lift model properties items =
     Options.apply summary div
       ( css "position" "relative" :: properties)
       []
-      [ styled button
-          [ cs "mdl-button"
-          , cs "mdl-js-button"
-          , cs "mdl-button--icon"
-          , attribute (onKeyDown (Key itemSummaries)) `when` isActive model
-          , attribute (onClick Geometry.decode (Open)) `when` (model.animationState /= Opened)
-          , attribute (Html.Events.onClick Close) `when` isActive model
-          ]
-          [ Icon.view config.icon
-            [ cs "material-icons"
-            , css "pointer-events" "none"
-            ]
-          ] |> Html.App.map lift
+      [ config.toggle.node
+          ( attribute (onKeyDown (Key itemSummaries >> lift)) `when` isActive model
+          :: attribute (onClick Geometry.decode (Open >> lift)) `when` (model.animationState /= Opened)
+          :: attribute (Html.Events.onClick (lift Close)) `when` isActive model
+          :: config.toggle.options)
+          config.toggle.childNodes
+
+      
       , styled div
           [ cs "mdl-menu__container"
           , cs "is-upgraded"
@@ -610,7 +640,7 @@ delay alignment height offsetTop offsetHeight =
 
 
 view1
-  : (Msg m -> m) -> Config -> Model
+  : (Msg m -> m) -> Config m -> Model
   -> Float -> Float
   -> Int -> Options.Summary (ItemConfig m) m -> Item m
   -> Html m
