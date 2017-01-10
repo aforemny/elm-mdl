@@ -15364,6 +15364,25 @@ var _debois$elm_mdl$Material_Select$subs = A3(
 	},
 	_debois$elm_mdl$Material_Select$subscriptions);
 var _debois$elm_mdl$Material_Select$Close = {ctor: 'Close'};
+var _debois$elm_mdl$Material_Select$closeAll = F2(
+	function (lift, store) {
+		return _debois$elm_mdl$Material_Component$Dispatch(
+			A2(
+				_elm_lang$core$List$filterMap,
+				_elm_lang$core$Basics$identity,
+				_elm_lang$core$Dict$values(
+					A2(
+						_elm_lang$core$Dict$map,
+						F2(
+							function (idx, model) {
+								return model.open ? function (_p5) {
+									return _elm_lang$core$Maybe$Just(
+										lift(_p5));
+								}(
+									A2(_debois$elm_mdl$Material_Component$SelectMsg, idx, _debois$elm_mdl$Material_Select$Close)) : _elm_lang$core$Maybe$Nothing;
+							}),
+						store.select))));
+	});
 var _debois$elm_mdl$Material_Select$Select = F2(
 	function (a, b) {
 		return {ctor: 'Select', _0: a, _1: b};
@@ -15372,8 +15391,8 @@ var _debois$elm_mdl$Material_Select$update = F3(
 	function (fwd, msg, model) {
 		update:
 		while (true) {
-			var _p5 = msg;
-			switch (_p5.ctor) {
+			var _p6 = msg;
+			switch (_p6.ctor) {
 				case 'Input':
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
@@ -15386,7 +15405,7 @@ var _debois$elm_mdl$Material_Select$update = F3(
 							model,
 							{
 								open: true,
-								geometry: _elm_lang$core$Maybe$Just(_p5._0),
+								geometry: _elm_lang$core$Maybe$Just(_p6._0),
 								index: _elm_lang$core$Maybe$Nothing
 							}),
 						{ctor: '[]'});
@@ -15403,7 +15422,7 @@ var _debois$elm_mdl$Material_Select$update = F3(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								index: _elm_lang$core$Maybe$Just(_p5._0)
+								index: _elm_lang$core$Maybe$Just(_p6._0)
 							}),
 						A2(
 							_elm_lang$core$List$filterMap,
@@ -15417,62 +15436,62 @@ var _debois$elm_mdl$Material_Select$update = F3(
 										fwd(_debois$elm_mdl$Material_Select$Close))),
 								_1: {
 									ctor: '::',
-									_0: A2(_elm_lang$core$Maybe$map, _debois$elm_mdl$Material_Helpers$cmd, _p5._1),
+									_0: A2(_elm_lang$core$Maybe$map, _debois$elm_mdl$Material_Helpers$cmd, _p6._1),
 									_1: {ctor: '[]'}
 								}
 							}));
 				case 'Ripple':
-					var _p8 = _p5._0;
-					var _p6 = A2(
+					var _p9 = _p6._0;
+					var _p7 = A2(
 						_debois$elm_mdl$Material_Ripple$update,
-						_p5._1,
+						_p6._1,
 						A2(
 							_elm_lang$core$Maybe$withDefault,
 							_debois$elm_mdl$Material_Ripple$model,
-							A2(_elm_lang$core$Dict$get, _p8, model.ripples)));
-					var model_ = _p6._0;
-					var cmd = _p6._1;
+							A2(_elm_lang$core$Dict$get, _p9, model.ripples)));
+					var model_ = _p7._0;
+					var cmd = _p7._1;
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								ripples: A3(_elm_lang$core$Dict$insert, _p8, model_, model.ripples)
+								ripples: A3(_elm_lang$core$Dict$insert, _p9, model_, model.ripples)
 							}),
 						{
 							ctor: '::',
 							_0: A2(
 								_elm_lang$core$Platform_Cmd$map,
-								function (_p7) {
+								function (_p8) {
 									return fwd(
-										A2(_debois$elm_mdl$Material_Select$Ripple, _p8, _p7));
+										A2(_debois$elm_mdl$Material_Select$Ripple, _p9, _p8));
 								},
 								cmd),
 							_1: {ctor: '[]'}
 						});
 				case 'Click':
-					var _p17 = _p5._0;
+					var _p18 = _p6._0;
 					var g = A2(_elm_lang$core$Maybe$withDefault, _debois$elm_mdl$Material_Select$defaultGeometry, model.geometry);
 					var container = _debois$elm_mdl$Material_Select$containerGeometry(g.menu);
 					var inside = F2(
-						function (_p10, _p9) {
-							var _p11 = _p10;
-							var _p16 = _p11.y;
-							var _p15 = _p11.x;
-							var _p12 = _p9;
-							var _p14 = _p12.top;
-							var _p13 = _p12.left;
+						function (_p11, _p10) {
+							var _p12 = _p11;
+							var _p17 = _p12.y;
+							var _p16 = _p12.x;
+							var _p13 = _p10;
+							var _p15 = _p13.top;
+							var _p14 = _p13.left;
 							return (_elm_lang$core$Native_Utils.cmp(
-								_p13,
-								_elm_lang$core$Basics$toFloat(_p15)) < 1) && ((_elm_lang$core$Native_Utils.cmp(
-								_elm_lang$core$Basics$toFloat(_p15),
-								_p13 + _p12.width) < 1) && ((_elm_lang$core$Native_Utils.cmp(
 								_p14,
-								_elm_lang$core$Basics$toFloat(_p16)) < 1) && (_elm_lang$core$Native_Utils.cmp(
+								_elm_lang$core$Basics$toFloat(_p16)) < 1) && ((_elm_lang$core$Native_Utils.cmp(
 								_elm_lang$core$Basics$toFloat(_p16),
-								_p14 + _p12.height) < 1)));
+								_p14 + _p13.width) < 1) && ((_elm_lang$core$Native_Utils.cmp(
+								_p15,
+								_elm_lang$core$Basics$toFloat(_p17)) < 1) && (_elm_lang$core$Native_Utils.cmp(
+								_elm_lang$core$Basics$toFloat(_p17),
+								_p15 + _p13.height) < 1)));
 						});
-					if (model.open && (!(A2(inside, _p17, container) || A2(inside, _p17, g.input)))) {
+					if (model.open && (!(A2(inside, _p18, container) || A2(inside, _p18, g.input)))) {
 						var _v3 = fwd,
 							_v4 = _debois$elm_mdl$Material_Select$Close,
 							_v5 = model;
@@ -15487,29 +15506,29 @@ var _debois$elm_mdl$Material_Select$update = F3(
 							{ctor: '[]'});
 					}
 				default:
-					var _p27 = _p5._1;
-					var _p26 = _p5._0;
-					var _p18 = _p5._2;
-					switch (_p18) {
+					var _p28 = _p6._1;
+					var _p27 = _p6._0;
+					var _p19 = _p6._2;
+					switch (_p19) {
 						case 13:
-							var index = (!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : _p26;
-							var _p19 = index;
-							if (_p19.ctor === 'Just') {
-								var _p21 = _p19._0;
+							var index = (!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : _p27;
+							var _p20 = index;
+							if (_p20.ctor === 'Just') {
+								var _p22 = _p20._0;
 								var cmd = A2(
 									_elm_lang$core$Maybe$andThen,
-									function (_p20) {
+									function (_p21) {
 										return function (_) {
 											return _.onSelect;
 										}(
 											function (_) {
 												return _.config;
-											}(_p20));
+											}(_p21));
 									},
 									_elm_lang$core$List$head(
-										A2(_elm_lang$core$List$drop, _p21, _p27)));
+										A2(_elm_lang$core$List$drop, _p22, _p28)));
 								var _v8 = fwd,
-									_v9 = A2(_debois$elm_mdl$Material_Select$Select, _p21, cmd),
+									_v9 = A2(_debois$elm_mdl$Material_Select$Select, _p22, cmd),
 									_v10 = model;
 								fwd = _v8;
 								msg = _v9;
@@ -15523,7 +15542,7 @@ var _debois$elm_mdl$Material_Select$update = F3(
 							}
 						case 32:
 							var _v11 = fwd,
-								_v12 = A3(_debois$elm_mdl$Material_Select$Key, _p26, _p27, 13),
+								_v12 = A3(_debois$elm_mdl$Material_Select$Key, _p27, _p28, 13),
 								_v13 = model;
 							fwd = _v11;
 							msg = _v12;
@@ -15538,18 +15557,18 @@ var _debois$elm_mdl$Material_Select$update = F3(
 							model = _v16;
 							continue update;
 						case 40:
-							var numItems = _elm_lang$core$List$length(_p27);
+							var numItems = _elm_lang$core$List$length(_p28);
 							var items = A2(
 								_elm_lang$core$List$indexedMap,
 								F2(
 									function (v0, v1) {
 										return {ctor: '_Tuple2', _0: v0, _1: v1};
 									}),
-								_p27);
+								_p28);
 							var index = A2(
 								_elm_lang$core$Maybe$withDefault,
 								-1,
-								(!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : _p26);
+								(!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : _p27);
 							return A3(
 								_elm_lang$core$Basics$flip,
 								F2(
@@ -15562,7 +15581,7 @@ var _debois$elm_mdl$Material_Select$update = F3(
 									model,
 									A2(
 										_elm_lang$core$Maybe$map,
-										function (_p22) {
+										function (_p23) {
 											return function (index_) {
 												return _elm_lang$core$Native_Utils.update(
 													model,
@@ -15570,44 +15589,44 @@ var _debois$elm_mdl$Material_Select$update = F3(
 														index: _elm_lang$core$Maybe$Just(index_)
 													});
 											}(
-												_debois$elm_mdl$Material_Helpers$fst(_p22));
+												_debois$elm_mdl$Material_Helpers$fst(_p23));
 										},
 										_elm_lang$core$List$head(
 											A2(
 												_elm_lang$core$List$filter,
-												function (_p23) {
+												function (_p24) {
 													return function (_) {
 														return _.enabled;
 													}(
 														function (_) {
 															return _.config;
 														}(
-															_debois$elm_mdl$Material_Helpers$snd(_p23)));
+															_debois$elm_mdl$Material_Helpers$snd(_p24)));
 												},
 												A2(
 													_elm_lang$core$List$drop,
 													1 + index,
 													A2(_elm_lang$core$Basics_ops['++'], items, items)))))));
 						case 38:
-							var numItems = _elm_lang$core$List$length(_p27);
+							var numItems = _elm_lang$core$List$length(_p28);
 							var items = A2(
 								_elm_lang$core$List$indexedMap,
 								F2(
 									function (v0, v1) {
 										return {ctor: '_Tuple2', _0: v0, _1: v1};
 									}),
-								_p27);
+								_p28);
 							var index = A2(
 								_elm_lang$core$Maybe$withDefault,
 								0,
-								(!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : _p26);
+								(!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : _p27);
 							return _debois$elm_mdl$Material_Helpers$pure(
 								A2(
 									_elm_lang$core$Maybe$withDefault,
 									model,
 									A2(
 										_elm_lang$core$Maybe$map,
-										function (_p24) {
+										function (_p25) {
 											return function (index_) {
 												return _elm_lang$core$Native_Utils.update(
 													model,
@@ -15615,19 +15634,19 @@ var _debois$elm_mdl$Material_Select$update = F3(
 														index: _elm_lang$core$Maybe$Just(index_)
 													});
 											}(
-												_debois$elm_mdl$Material_Helpers$fst(_p24));
+												_debois$elm_mdl$Material_Helpers$fst(_p25));
 										},
 										_elm_lang$core$List$head(
 											A2(
 												_elm_lang$core$List$filter,
-												function (_p25) {
+												function (_p26) {
 													return function (_) {
 														return _.enabled;
 													}(
 														function (_) {
 															return _.config;
 														}(
-															_debois$elm_mdl$Material_Helpers$snd(_p25)));
+															_debois$elm_mdl$Material_Helpers$snd(_p26)));
 												},
 												A2(
 													_elm_lang$core$List$drop,
@@ -15647,9 +15666,9 @@ var _debois$elm_mdl$Material_Select$react = F4(
 	function (lift, msg, idx, store) {
 		return A2(
 			_debois$elm_mdl$Material_Helpers$map1st,
-			function (_p28) {
+			function (_p29) {
 				return _elm_lang$core$Maybe$Just(
-					A3(_debois$elm_mdl$Material_Select$set, idx, store, _p28));
+					A3(_debois$elm_mdl$Material_Select$set, idx, store, _p29));
 			},
 			A3(
 				_debois$elm_mdl$Material_Select$update,
@@ -15658,16 +15677,16 @@ var _debois$elm_mdl$Material_Select$react = F4(
 				A2(_debois$elm_mdl$Material_Select$get, idx, store)));
 	});
 var _debois$elm_mdl$Material_Select$view1 = F6(
-	function (lift, top, topConfig, numItems, index, _p29) {
-		var _p30 = _p29;
-		var _p33 = _p30._1;
-		var _p31 = A2(_debois$elm_mdl$Material_Options_Internal$collect, _debois$elm_mdl$Material_Select_Item$defaultConfig, _p30._0);
-		var summary = _p31;
-		var config = _p31.config;
+	function (lift, top, topConfig, numItems, index, _p30) {
+		var _p31 = _p30;
+		var _p34 = _p31._1;
+		var _p32 = A2(_debois$elm_mdl$Material_Options_Internal$collect, _debois$elm_mdl$Material_Select_Item$defaultConfig, _p31._0);
+		var summary = _p32;
+		var config = _p32.config;
 		var defaultIndex = (!_elm_lang$core$Native_Utils.eq(top.index, _elm_lang$core$Maybe$Nothing)) ? top.index : topConfig.index;
-		var fwdRipple = function (_p32) {
+		var fwdRipple = function (_p33) {
 			return lift(
-				A2(_debois$elm_mdl$Material_Select$Ripple, index, _p32));
+				A2(_debois$elm_mdl$Material_Select$Ripple, index, _p33));
 		};
 		var ripple = A2(
 			_elm_lang$core$Maybe$withDefault,
@@ -15776,7 +15795,7 @@ var _debois$elm_mdl$Material_Select$view1 = F6(
 						function (x, y) {
 							return A2(_elm_lang$core$Basics_ops['++'], x, y);
 						}),
-					_p33,
+					_p34,
 					{
 						ctor: '::',
 						_0: A2(
@@ -15791,7 +15810,7 @@ var _debois$elm_mdl$Material_Select$view1 = F6(
 								},
 								ripple)),
 						_1: {ctor: '[]'}
-					}) : _p33));
+					}) : _p34));
 	});
 var _debois$elm_mdl$Material_Select$Open = function (a) {
 	return {ctor: 'Open', _0: a};
@@ -15800,28 +15819,28 @@ var _debois$elm_mdl$Material_Select$view = F4(
 	function (lift, model, properties, items) {
 		var itemSummaries = A2(
 			_elm_lang$core$List$map,
-			function (_p34) {
+			function (_p35) {
 				return A2(
 					_debois$elm_mdl$Material_Options_Internal$collect,
 					_debois$elm_mdl$Material_Select_Item$defaultConfig,
-					_debois$elm_mdl$Material_Helpers$fst(_p34));
+					_debois$elm_mdl$Material_Helpers$fst(_p35));
 			},
 			items);
 		var ripple = A2(
 			_elm_lang$core$Maybe$withDefault,
 			_debois$elm_mdl$Material_Ripple$model,
 			A2(_elm_lang$core$Dict$get, -1, model.ripples));
-		var fwdRipple = function (_p35) {
+		var fwdRipple = function (_p36) {
 			return lift(
-				A2(_debois$elm_mdl$Material_Select$Ripple, -1, _p35));
+				A2(_debois$elm_mdl$Material_Select$Ripple, -1, _p36));
 		};
 		var numItems = _elm_lang$core$List$length(items);
 		var g = A2(_elm_lang$core$Maybe$withDefault, _debois$elm_mdl$Material_Select$defaultGeometry, model.geometry);
 		var container = _debois$elm_mdl$Material_Select$containerGeometry(g.menu);
 		var menu = _debois$elm_mdl$Material_Select$menuGeometry(g.menu);
-		var _p36 = A2(_debois$elm_mdl$Material_Options_Internal$collect, _debois$elm_mdl$Material_Select$defaultConfig, properties);
-		var summary = _p36;
-		var config = _p36.config;
+		var _p37 = A2(_debois$elm_mdl$Material_Options_Internal$collect, _debois$elm_mdl$Material_Select$defaultConfig, properties);
+		var summary = _p37;
+		var config = _p37.config;
 		var hasRipple = config.ripple;
 		var defaultIndex = (!_elm_lang$core$Native_Utils.eq(model.index, _elm_lang$core$Maybe$Nothing)) ? model.index : config.index;
 		return A5(
@@ -15957,9 +15976,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 												'keydown',
 												A2(
 													_elm_lang$core$Json_Decode$map,
-													function (_p37) {
+													function (_p38) {
 														return lift(
-															A3(_debois$elm_mdl$Material_Select$Key, defaultIndex, itemSummaries, _p37));
+															A3(_debois$elm_mdl$Material_Select$Key, defaultIndex, itemSummaries, _p38));
 													},
 													_elm_lang$html$Html_Events$keyCode)))),
 									_1: {
@@ -15973,9 +15992,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 													'focus',
 													A2(
 														_elm_lang$core$Json_Decode$map,
-														function (_p38) {
+														function (_p39) {
 															return lift(
-																_debois$elm_mdl$Material_Select$Open(_p38));
+																_debois$elm_mdl$Material_Select$Open(_p39));
 														},
 														_debois$elm_mdl$Material_Select$decodeGeometryAsInput)))),
 										_1: {
@@ -15986,9 +16005,9 @@ var _debois$elm_mdl$Material_Select$view = F4(
 													'input',
 													A2(
 														_elm_lang$core$Json_Decode$map,
-														function (_p39) {
+														function (_p40) {
 															return lift(
-																_debois$elm_mdl$Material_Select$Input(_p39));
+																_debois$elm_mdl$Material_Select$Input(_p40));
 														},
 														_elm_lang$html$Html_Events$targetValue))),
 											_1: {
@@ -16184,11 +16203,11 @@ var _debois$elm_mdl$Material_Select$view = F4(
 									_1: {ctor: '[]'}
 								},
 								function () {
-									var _p40 = config.labelText;
-									if (_p40.ctor === 'Just') {
+									var _p41 = config.labelText;
+									if (_p41.ctor === 'Just') {
 										return {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(_p40._0),
+											_0: _elm_lang$html$Html$text(_p41._0),
 											_1: {ctor: '[]'}
 										};
 									} else {
@@ -28931,6 +28950,7 @@ var _debois$elm_mdl$Demo_Select$Model = F3(
 	function (a, b, c) {
 		return {mdl: a, values: b, indices: c};
 	});
+var _debois$elm_mdl$Demo_Select$Focus = {ctor: 'Focus'};
 var _debois$elm_mdl$Demo_Select$Mdl = function (a) {
 	return {ctor: 'Mdl', _0: a};
 };
@@ -28956,6 +28976,12 @@ var _debois$elm_mdl$Demo_Select$update = F2(
 							indices: A3(_elm_lang$core$Dict$insert, _p0._0, _p0._1, model.indices)
 						}),
 					{ctor: '[]'});
+			case 'Focus':
+				return A3(
+					_debois$elm_mdl$Material$update,
+					_debois$elm_mdl$Demo_Select$Mdl,
+					A2(_debois$elm_mdl$Material_Select$closeAll, _debois$elm_mdl$Demo_Select$Mdl, model.mdl),
+					model);
 			default:
 				return A3(_debois$elm_mdl$Material$update, _debois$elm_mdl$Demo_Select$Mdl, _p0._0, model);
 		}
@@ -29022,7 +29048,11 @@ var _debois$elm_mdl$Demo_Select$view = function (model) {
 															_elm_lang$core$Maybe$withDefault,
 															'',
 															A2(_elm_lang$core$Dict$get, 0, model.values))),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Select$onFocus(_debois$elm_mdl$Demo_Select$Focus),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
@@ -29124,7 +29154,11 @@ var _debois$elm_mdl$Demo_Select$view = function (model) {
 															_elm_lang$core$Maybe$withDefault,
 															'',
 															A2(_elm_lang$core$Dict$get, 1, model.values))),
-													_1: {ctor: '[]'}
+													_1: {
+														ctor: '::',
+														_0: _debois$elm_mdl$Material_Select$onFocus(_debois$elm_mdl$Demo_Select$Focus),
+														_1: {ctor: '[]'}
+													}
 												}
 											},
 											A2(
@@ -29246,7 +29280,11 @@ var _debois$elm_mdl$Demo_Select$view = function (model) {
 																_1: {
 																	ctor: '::',
 																	_0: _debois$elm_mdl$Material_Select$index(index),
-																	_1: {ctor: '[]'}
+																	_1: {
+																		ctor: '::',
+																		_0: _debois$elm_mdl$Material_Select$onFocus(_debois$elm_mdl$Demo_Select$Focus),
+																		_1: {ctor: '[]'}
+																	}
 																}
 															}
 														},
