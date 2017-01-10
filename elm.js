@@ -15084,7 +15084,48 @@ var _debois$elm_mdl$Material_Select_Item$Config = F4(
 		return {onSelect: a, enabled: b, divider: c, ripple: d};
 	});
 
-var _debois$elm_mdl$Material_Select$toPx = function (_p0) {
+var _debois$elm_mdl$Material_Select$on = F2(
+	function (event, decoder) {
+		return _debois$elm_mdl$Material_Options_Internal$option(
+			function (config) {
+				return _elm_lang$core$Native_Utils.update(
+					config,
+					{
+						listeners: A2(
+							_elm_lang$core$Basics_ops['++'],
+							config.listeners,
+							{
+								ctor: '::',
+								_0: function (_p0) {
+									return A2(
+										_elm_lang$html$Html_Events$on,
+										event,
+										decoder(_p0));
+								},
+								_1: {ctor: '[]'}
+							})
+					});
+			});
+	});
+var _debois$elm_mdl$Material_Select$onBlur = function (f) {
+	return A2(
+		_debois$elm_mdl$Material_Select$on,
+		'focus',
+		function (_p1) {
+			return _elm_lang$core$Json_Decode$succeed(
+				f(_p1));
+		});
+};
+var _debois$elm_mdl$Material_Select$onFocus = function (f) {
+	return A2(
+		_debois$elm_mdl$Material_Select$on,
+		'focus',
+		function (_p2) {
+			return _elm_lang$core$Json_Decode$succeed(
+				A2(_elm_lang$core$Basics$always, f, _p2));
+		});
+};
+var _debois$elm_mdl$Material_Select$toPx = function (_p3) {
 	return A3(
 		_elm_lang$core$Basics$flip,
 		F2(
@@ -15092,7 +15133,7 @@ var _debois$elm_mdl$Material_Select$toPx = function (_p0) {
 				return A2(_elm_lang$core$Basics_ops['++'], x, y);
 			}),
 		'px',
-		_elm_lang$core$Basics$toString(_p0));
+		_elm_lang$core$Basics$toString(_p3));
 };
 var _debois$elm_mdl$Material_Select$rect = F4(
 	function (x, y, w, h) {
@@ -15156,51 +15197,6 @@ var _debois$elm_mdl$Material_Select$delay = F2(
 					(0.24 * _elm_lang$core$Basics$toFloat(index)) / _elm_lang$core$Basics$toFloat(numItems)),
 				's'));
 	});
-var _debois$elm_mdl$Material_Select$item = F2(
-	function (v0, v1) {
-		return {ctor: '_Tuple2', _0: v0, _1: v1};
-	});
-var _debois$elm_mdl$Material_Select$on = F2(
-	function (event, decoder) {
-		return _debois$elm_mdl$Material_Options_Internal$option(
-			function (config) {
-				return _elm_lang$core$Native_Utils.update(
-					config,
-					{
-						listeners: A2(
-							_elm_lang$core$Basics_ops['++'],
-							config.listeners,
-							{
-								ctor: '::',
-								_0: function (_p1) {
-									return A2(
-										_elm_lang$html$Html_Events$on,
-										event,
-										decoder(_p1));
-								},
-								_1: {ctor: '[]'}
-							})
-					});
-			});
-	});
-var _debois$elm_mdl$Material_Select$onFocus = function (f) {
-	return A2(
-		_debois$elm_mdl$Material_Select$on,
-		'focusin',
-		function (_p2) {
-			return _elm_lang$core$Json_Decode$succeed(
-				A2(_elm_lang$core$Basics$always, f, _p2));
-		});
-};
-var _debois$elm_mdl$Material_Select$onBlur = function (f) {
-	return A2(
-		_debois$elm_mdl$Material_Select$on,
-		'focusout',
-		function (_p3) {
-			return _elm_lang$core$Json_Decode$succeed(
-				f(_p3));
-		});
-};
 var _debois$elm_mdl$Material_Select$autofocus = _debois$elm_mdl$Material_Options_Internal$option(
 	function (config) {
 		return _elm_lang$core$Native_Utils.update(
@@ -15275,6 +15271,10 @@ var _debois$elm_mdl$Material_Select$defaultConfig = {
 	index: _elm_lang$core$Maybe$Nothing,
 	value: ''
 };
+var _debois$elm_mdl$Material_Select$item = F2(
+	function (v0, v1) {
+		return {ctor: '_Tuple2', _0: v0, _1: v1};
+	});
 var _debois$elm_mdl$Material_Select$defaultModel = {ripples: _elm_lang$core$Dict$empty, open: false, geometry: _elm_lang$core$Maybe$Nothing, index: _elm_lang$core$Maybe$Nothing};
 var _debois$elm_mdl$Material_Select$_p4 = A3(
 	_debois$elm_mdl$Material_Component$indexed,
@@ -29050,7 +29050,7 @@ var _debois$elm_mdl$Demo_Select$view = function (model) {
 															A2(_elm_lang$core$Dict$get, 0, model.values))),
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Select$onFocus(_debois$elm_mdl$Demo_Select$Focus),
+														_0: _debois$elm_mdl$Material_Options$onFocus(_debois$elm_mdl$Demo_Select$Focus),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -29156,7 +29156,7 @@ var _debois$elm_mdl$Demo_Select$view = function (model) {
 															A2(_elm_lang$core$Dict$get, 1, model.values))),
 													_1: {
 														ctor: '::',
-														_0: _debois$elm_mdl$Material_Select$onFocus(_debois$elm_mdl$Demo_Select$Focus),
+														_0: _debois$elm_mdl$Material_Options$onFocus(_debois$elm_mdl$Demo_Select$Focus),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -29282,7 +29282,7 @@ var _debois$elm_mdl$Demo_Select$view = function (model) {
 																	_0: _debois$elm_mdl$Material_Select$index(index),
 																	_1: {
 																		ctor: '::',
-																		_0: _debois$elm_mdl$Material_Select$onFocus(_debois$elm_mdl$Demo_Select$Focus),
+																		_0: _debois$elm_mdl$Material_Options$onFocus(_debois$elm_mdl$Demo_Select$Focus),
 																		_1: {ctor: '[]'}
 																	}
 																}
